@@ -1,0 +1,13 @@
+.vs/                       
+packages/    
+.cache
+WebApplication1/bin/
+WebApplication1/Content/
+WebApplication1/Images/
+WebApplication1/obj/
+WebApplication1/Uploads/
+WebApplication1/Properties/PublishProfiles/
+WebApplication1/Scripts/
+WebApplication1/Web.config
+WebApplication1/WebApplication1.csproj
+WebApplication1/WebApplication1.csproj.user
