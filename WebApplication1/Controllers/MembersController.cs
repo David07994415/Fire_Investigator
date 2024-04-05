@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -42,8 +43,35 @@ namespace WebApplication1.Controllers
         // GET: Members/Create
         public ActionResult Create()
         {
+            List<Permission> PremmsionList = db.Permission.ToList();
+            var firstLevelNodes = PremmsionList.Where(x => x.RecursiveId == null);
+            StringBuilder dataString = new StringBuilder("[");
+            foreach (var firstLevelNode in firstLevelNodes)  //child is pression
+            {
+                GetTreeViewDataString(firstLevelNode, dataString);
+                dataString.Append(",");
+            }
+            dataString.Append("]");
+            ViewBag.TreeViewData = dataString.ToString();
             return View();
         }
+
+        private void GetTreeViewDataString(Permission node, StringBuilder dataString)
+        {
+            dataString.Append($@"{{ 'id': '{node.Value}',  'text': '{node.Title}'");
+            if (node.ChildTable.Count > 0)
+            {
+                dataString.Append(",'children':[");
+                foreach (Permission childNode in node.ChildTable)
+                {
+                    GetTreeViewDataString(childNode, dataString);
+                    dataString.Append(",");
+                }
+                dataString.Append(']');
+            }
+            dataString.Append('}');
+        }
+
 
         // POST: Members/Create
         // 若要避免過量張貼攻擊，請啟用您要繫結的特定屬性。
@@ -74,7 +102,7 @@ namespace WebApplication1.Controllers
                     member.Salt=saltStr;
                     member.NickName=memberCreateViewModel.NickName;
                     member.Guid=Guid.NewGuid();
-                    //member.Permission="" TBC
+                    member.Permission = memberCreateViewModel.Permission;
 
                     db.Member.Add(member);
                     db.SaveChanges();
