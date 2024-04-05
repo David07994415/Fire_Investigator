@@ -68,5 +68,10 @@ namespace WebApplication1.Models
         [MaxLength(100)]
         [Display(Name = "暱稱")]
         public string NickName { get; set; }
+
+        [MaxLength(200)]
+        [Display(Name = "權限")]
+        public string Permission { get; set; }
+
     }
 }
