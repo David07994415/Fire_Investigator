@@ -1,6 +1,10 @@
-﻿using System.Drawing;
+﻿using System.Data.Entity.Infrastructure;
+using System.Drawing;
+using System.Reflection;
 using System.Web;
 using System.Web.Optimization;
+using System.Web.Services.Description;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace WebApplication1
@@ -24,17 +28,32 @@ namespace WebApplication1
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            bundles.Add(new Bundle("~/bundles/SampeJSFolder").Include(
+          "~/Scripts/SampleJS2/jquery.js",
+           "~/Scripts/SampleJS2/bootstrap.min.js",
+             "~/Scripts/SampleJS2/owl.carousel.min.js",
+              "~/Scripts/SampleJS2/jquery.counterup.min.js",
+               "~/Scripts/SampleJS2/waypoints.min.js",
+                "~/Scripts/SampleJS2/jquery.colorbox.js",
+                 "~/Scripts/SampleJS2/isotope.js",
+                "~/Scripts/SampleJS2/ini.isotope.js",
+                "~/Scripts/SampleJS2/gmap3.min.js",
+                "~/Scripts/SampleJS2/custom.js"));
+
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/FireCss").Include(
-          "~/Content/bootstrap.min.css", 
-          "~/Content/style.css",
-          "~/Content/colorbox.css",
-          "~/Content/font-awesome.min.css",
-          "~/Content/responsive.css",
-          "~/Content/Site.css"));
+            bundles.Add(new StyleBundle("~/Content/SampleCSSFolder").Include(
+          "~/Content/SampleCSS2/bootstrap.min.css",
+          "~/Content/SampleCSS2/style.css",
+          "~/Content/SampleCSS2/responsive.css",
+          "~/Content/SampleCSS2/font-awesome.min.css",
+          "~/Content/SampleCSS2/animate.css",
+          "~/Content/SampleCSS2/owl.carousel.css",
+          "~/Content/SampleCSS2/owl.theme.css",
+          "~/Content/SampleCSS2/colorbox.css"));
         }
     }
 }
