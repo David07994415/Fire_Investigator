@@ -17,5 +17,15 @@ namespace WebApplication1
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+        protected void Application_Error()
+        {
+            //Exception exception = Server.GetLastError();
+            //Response.Clear();
+
+            //// Log the exception if necessary
+
+            //// Redirect to a specific error view
+            //Response.Redirect("/Home"); // Assuming "Error" is the action name and "Home" is the controller name
+        }
     }
 }

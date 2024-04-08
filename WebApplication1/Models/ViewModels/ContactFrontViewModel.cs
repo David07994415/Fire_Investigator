@@ -16,6 +16,7 @@ namespace WebApplication1.Models.ViewModels
         [Required]
         public string phone { get; set; }
         [Required]
+        [RegularExpression(@"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]
         public string email { get; set; }
         [Required]
         [MaxLength(500)]
