@@ -21,9 +21,35 @@ namespace WebApplication1.Areas.BackStage.Controllers
     {
         private DbModel db = new DbModel();
 
+        //public DirectoryBackViewModel DirectoryBackLayoutViewData { get; set; }
+
+        //public HomeController()
+        //{
+        //    this.DirectoryBackLayoutViewData = new DirectoryBackViewModel();   //has property PageTitle
+        //    this.DirectoryBackLayoutViewData.DirectoryHTML = DirectoryBackViewModel.GetSideBarDirectoryHtml();
+        //    this.ViewBag.DirectoryHTML = this.DirectoryBackLayoutViewData.DirectoryHTML;
+        //}
+
+
+
+
         // GET: BackStage/Home/Index
         public ActionResult Index()
         {
+            string username = User.Identity.Name;
+            var user = db.Member.Where(x => x.Account == username)?.FirstOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            else 
+            {
+                string permissionString = user.Permission;
+                string[] permissionArray=permissionString.Split(',');
+                string HTMLmenu=DirectoryBackViewModel.GetSideBarDirectoryHtml(permissionArray);
+                ViewBag.DirectoryMenuHTML = HTMLmenu;
+                //這裡傳入上面的參數，進入方法
+            }
             return View();
         }
 
@@ -43,30 +69,30 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
             if (ModelState.IsValid)
             {
-                if (LoginInput.Account == "test" && LoginInput.Password == "test")  // for testing login
+                //if (LoginInput.Account == "test" && LoginInput.Password == "test")  // for testing login
+                //{
+                //    FormsAuthentication.SetAuthCookie("test", false);
+                //    return RedirectToAction("Index","Home");                       
+                //}
+                var account = db.Member.Where(x => x.Account == LoginInput.Account)?.FirstOrDefault();
+                if (account != null)
                 {
-                    FormsAuthentication.SetAuthCookie("test", false);
-                    return RedirectToAction("Index","Home");
+                    string userPasswordInput = LoginInput.Password;
+                    string saltInDB = account.Salt;
+                    byte[] saltInDBtoArray = Convert.FromBase64String(saltInDB);
+                    byte[] HashArray = HashPassword(userPasswordInput, saltInDBtoArray);
+                    string Hashstring = Convert.ToBase64String(HashArray);
+                    if (Hashstring == account.Password)
+                    {
+                        FormsAuthentication.SetAuthCookie(account.Account, false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "登入失敗，請重新登入");
+                        return View();
+                    }
                 }
-                //    var account=db.Member.Where(x=>x.Account== LoginInput.Account)?.FirstOrDefault();
-                //    if (account != null) 
-                //    {
-                //        string userPasswordInput = LoginInput.Password;
-                //        string saltInDB = account.Salt;
-                //        byte[] saltInDBtoArray=Convert.FromBase64String(saltInDB);
-                //        byte[] HashArray = HashPassword(userPasswordInput, saltInDBtoArray);
-                //        string Hashstring = Convert.ToBase64String(HashArray);
-                //        if (Hashstring == account.Password)
-                //        {
-                //            FormsAuthentication.SetAuthCookie(account.Account, false);
-                //            RedirectToAction("Index","Home");
-                //        }
-                //        else
-                //        {
-                //            ModelState.AddModelError("", "登入失敗，請重新登入");
-                //            return View();
-                //        }
-                //    }
                 ModelState.AddModelError("", "登入失敗，請重新登入");
                 return View();
             }
@@ -118,7 +144,39 @@ namespace WebApplication1.Areas.BackStage.Controllers
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("Login");
+                if (RegisterInput.Password != RegisterInput.PasswordAgain) 
+                {
+                    ModelState.AddModelError("Password", "帳號不同，請再次確認！");
+                    return View();
+                }
+
+                var User = db.Member.Any(x => x.Account == RegisterInput.Account);
+                if (User == false)  // 帳號未曾註冊過
+                {
+                    string userPasswordInput = RegisterInput.Password;
+                    byte[] saltArray = CreateSalt();
+                    byte[] passwordArray = HashPassword(userPasswordInput, saltArray);
+                    string saltString = Convert.ToBase64String(saltArray);
+                    string passwordString = Convert.ToBase64String(passwordArray);
+
+                    var register = new Member
+                    {
+                        Account = RegisterInput.Account,
+                        Password = passwordString,
+                        Salt = saltString,
+                        Guid = Guid.NewGuid(),
+                        NickName = RegisterInput.NickName
+                    };
+                    db.Member.Add(register);
+                    db.SaveChanges();
+
+                    return RedirectToAction("Login");
+                }
+                else 
+                {
+                    ModelState.AddModelError("Account", "帳號已存在，請再次確認！");
+                    return View();
+                }
             }
             return View();
         }

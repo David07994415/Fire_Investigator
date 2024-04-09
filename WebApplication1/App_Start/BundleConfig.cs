@@ -41,6 +41,16 @@ namespace WebApplication1
                 "~/Scripts/SampleJS2/custom.js"));
 
 
+            bundles.Add(new Bundle("~/bundles/BackStageJSFolder").Include(
+                 "~/Scripts/jquery.js",
+                "~/Scripts/BackStageJS/bootstrap.min.js",
+                 "~/Scripts/BackStageJS/custom.js"));
+
+            bundles.Add(new StyleBundle("~/Content/BackStageCSSFolder").Include(
+          "~/Content/BackStageCSS/bootstrap.min.css",
+          "~/Content/BackStageCSS/styles.css"));
+
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
