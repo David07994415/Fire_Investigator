@@ -31,7 +31,26 @@ namespace WebApplication1.Areas.BackStage.Controllers
         //}
 
 
-
+        // Return PartialMenuView
+        public ActionResult _PartialMenuView()  // 他怎麼知道我要鏈結哪個partialview
+        {
+            string username = User.Identity.Name;
+            var user = db.Member.Where(x => x.Account == username)?.FirstOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                string permissionString = user.Permission;
+                string[] permissionArray = permissionString.Split(',');
+                string HTMLmenu = DirectoryBackViewModel.GetSideBarDirectoryHtml(permissionArray);
+                ViewBag.HHH = HTMLmenu;
+                return PartialView();
+                //ViewBag.DirectoryMenuHTML = HTMLmenu;
+                //這裡傳入上面的參數，進入方法
+            } 
+        }
 
         // GET: BackStage/Home/Index
         public ActionResult Index()

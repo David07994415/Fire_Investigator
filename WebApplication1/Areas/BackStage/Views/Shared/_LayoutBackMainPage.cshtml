@@ -59,6 +59,9 @@
                     <ul class="nav">
                         <!-- Main menu -->
 
+
+                        @*@Html.Partial("_LayoutBackMainPage")*@
+                        @{Html.RenderAction("_PartialMenuView", "Home");}
                         @Html.Raw(@ViewBag.DirectoryMenuHTML)
 
                         <!--<li class="current"><a href="index.html"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
