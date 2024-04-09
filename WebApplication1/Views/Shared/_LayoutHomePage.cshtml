@@ -1,4 +1,5 @@
-﻿@model WebApplication1.Models.ViewModels.DirectoryFrontViewModel
+﻿@*@model WebApplication1.Models.ViewModels.DirectoryFrontViewModel*@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +31,7 @@
             <div class="container">
                 <div class="row">
                     <div class="logo col-md-6 col-sm-7 col-xs-12 ">
-                        <a href="/">
+                        <a href="/Home/Index">
                             <img src="/images/logo.png" alt="國際縱火調查人員協會臺灣分會" title="國際縱火調查人員協會臺灣分會">
                         </a>
                     </div><!-- logo end -->
@@ -79,7 +80,8 @@
 
                             <div class="collapse navbar-collapse navbar-responsive-collapse">
 
-                            @Html.Raw(@Model.DirectoryHTML)
+                            @Html.Raw(@ViewBag.DirectoryHTML)
+                                @*@Html.Raw(@Model.DirectoryHTML)*@
                                 <!--<ul class="nav navbar-nav">
                                     <li class="dropdown active">
                                         <a href="about.html" class="dropdown-toggle" data-toggle="dropdown" title="關於我們">關於我們 <i class="fa fa-angle-down"></i></a>
@@ -126,7 +128,8 @@
                                             <li><a href="contact.html">聯絡我們</a></li>
                                         </ul>
                                     </li>
-                                </ul>--><!--/ Nav ul end -->
+                                </ul>-->
+                                <!--/ Nav ul end -->
 
                             </div><!--/ Collapse end -->
                         </div><!-- Site Navbar inner end -->

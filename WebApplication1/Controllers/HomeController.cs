@@ -20,20 +20,52 @@ namespace WebApplication1.Controllers
     public class HomeController : Controller
     {
         private DbModel db = new DbModel();
+
+        public DirectoryFrontViewModel DirectoryLayoutViewData { get; set; }
+
+        public HomeController()
+        {
+            this.DirectoryLayoutViewData = new DirectoryFrontViewModel();   //has property PageTitle
+            this.DirectoryLayoutViewData.DirectoryHTML = DirectoryFrontViewModel.GetDirectoryHtml();
+            this.ViewBag.DirectoryHTML = this.DirectoryLayoutViewData.DirectoryHTML;
+        }
+
+
         public ActionResult Index()
         {
+            //RedirectToAction("Index", "Home");
             return View();
         }
 
         public ActionResult About()
         {
-            string directoryhtml=DirectoryFrontViewModel.GetDirectoryHtml();
-            return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
+            //string directoryhtml=DirectoryFrontViewModel.GetDirectoryHtml();
+            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
+
+
+            return View();
         }
+
+        public ActionResult Master()
+        {
+            //string directoryhtml = DirectoryFrontViewModel.GetDirectoryHtml();
+            //ViewBag.directoryhtml= directoryhtml;
+            
+            
+            
+            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
+            //還有其他master data
+            return View();
+        }
+
+
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+            //string directoryhtml = DirectoryFrontViewModel.GetDirectoryHtml();
+            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
+            ////還有其他contact data?
 
             return View();
         }
