@@ -48,7 +48,9 @@ namespace WebApplication1
 
             bundles.Add(new StyleBundle("~/Content/BackStageCSSFolder").Include(
           "~/Content/BackStageCSS/bootstrap.min.css",
-          "~/Content/BackStageCSS/styles.css"));
+          "~/Content/BackStageCSS/styles.css",
+          "~/Content/BackStageCSS/Paging.css"
+          ));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

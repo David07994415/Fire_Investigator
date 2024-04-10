@@ -29,7 +29,6 @@ namespace WebApplication1.Models
         public string PhotoPath { get; set; }
 
         [Display(Name = "CKeditor內容")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string PersonCkContent { get; set; }
 
         [Display(Name = "更新資料之使用者")]
