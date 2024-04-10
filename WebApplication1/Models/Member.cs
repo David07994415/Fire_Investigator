@@ -7,6 +7,7 @@ using System.Web;
 
 namespace WebApplication1.Models
 {
+    [Table("Member")]
     public class Member
     {
         [Key]
