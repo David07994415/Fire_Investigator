@@ -3,11 +3,42 @@
 @model MvcPaging.IPagedList<WebApplication1.Models.Master>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "專家 Index 頁面";
     Layout = "~/Areas/BackStage/Views/Shared/_LayoutBackMainPage.cshtml";
 }
+<h2>專家 Index 頁面</h2>
 
-<h2>Index</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h2>搜尋：</h2>
+
+    <div class="form-horizontal">
+
+
+    <p>
+        Name: @Html.TextBox("nameName")
+        <input type="submit" value="搜尋" class="btn btn-default"  />
+        @ViewBag.ErrorMassage
+        @if (ViewBag.ErrorMassage != null) 
+        {
+            @ViewBag.ErrorMassage
+        }
+    </p>
+        
+
+
+
+
+
+
+
+
+    </div>
+
+}
 
 <p>
     @Html.ActionLink("Create New", "Create")

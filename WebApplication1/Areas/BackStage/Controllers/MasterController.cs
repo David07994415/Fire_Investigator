@@ -19,14 +19,35 @@ namespace WebApplication1.Areas.BackStage.Controllers
         private const int DataSizeInPage = 2;   //設定一頁幾筆
 
         // GET: BackStage/Master
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page,string nameName)    // 包含搜尋和分頁
         {
             int currentPageIndex = page.HasValue ? page.Value - 1 : 0;   // 現在第幾頁(當前頁面的索引值)
 
-            ViewBag.Count = db.Master.Count();   //總資料筆數
+            if (nameName != null)    // 有搜尋 string 的資料
+            {
+                var matchedRecords = db.Master.Where(x => x.Name.Contains(nameName)).OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
+                if (matchedRecords.TotalItemCount != 0) // 搜尋後資料庫內有資料
+                {
+                    ViewBag.Count = matchedRecords.TotalItemCount;
+                    return View(matchedRecords);
+                }
+                else     // 搜尋後資料庫內沒有資料
+                {
+                    ViewBag.ErrorMassage = "沒有找到資料";
+                    ViewBag.Count = db.Master.Count();
+                    return View(db.Master.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
+                }
+            }
+            else                                 // 沒有搜尋 string 的資料
+            {
+                ViewBag.Count = db.Master.Count();
+                return View(db.Master.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
+            }
 
-            //返回結果.ToPageList(現在第幾頁,一頁幾筆)
-            return View(db.Master.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
+
+            //ViewBag.Count = db.Master.Count();   //總資料筆數
+            ////返回結果.ToPageList(現在第幾頁,一頁幾筆)
+            //return View(db.Master.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
 
 
            // return View(db.Master.ToList());
