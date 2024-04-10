@@ -76,42 +76,42 @@ namespace WebApplication1.Controllers
         // POST: Members/Create
         // 若要避免過量張貼攻擊，請啟用您要繫結的特定屬性。
         // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(MemberCreateViewModel memberCreateViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                if (db.Member.Any(x => x.Account == memberCreateViewModel.Account))
-                {
-                    ModelState.AddModelError("Account", "帳號重複，請重新輸入");
-                    return View(memberCreateViewModel);
-                }
-                else 
-                {
-                    Member member = new Member();
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(MemberCreateViewModel memberCreateViewModel)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (db.Member.Any(x => x.Account == memberCreateViewModel.Account))
+        //        {
+        //            ModelState.AddModelError("Account", "帳號重複，請重新輸入");
+        //            return View(memberCreateViewModel);
+        //        }
+        //        else 
+        //        {
+        //            Member member = new Member();
 
-                    string password = memberCreateViewModel.Password;
-                    byte[] salt = CreateSalt();
-                    string saltStr = Convert.ToBase64String(salt); //將 byte 改回字串存回資料表
-                    byte[] hash = HashPassword(password, salt);
-                    string hashPasswordStr = Convert.ToBase64String(hash);
+        //            string password = memberCreateViewModel.Password;
+        //            byte[] salt = CreateSalt();
+        //            string saltStr = Convert.ToBase64String(salt); //將 byte 改回字串存回資料表
+        //            byte[] hash = HashPassword(password, salt);
+        //            string hashPasswordStr = Convert.ToBase64String(hash);
 
-                    member.Account = memberCreateViewModel.Account;
-                    member.Password = hashPasswordStr;
-                    member.Salt=saltStr;
-                    member.NickName=memberCreateViewModel.NickName;
-                    member.Guid=Guid.NewGuid();
-                    member.Permission = memberCreateViewModel.Permission;
+        //            member.Account = memberCreateViewModel.Account;
+        //            member.Password = hashPasswordStr;
+        //            member.Salt=saltStr;
+        //            member.NickName=memberCreateViewModel.NickName;
+        //            member.Guid=Guid.NewGuid();
+        //            member.Permission = memberCreateViewModel.Permission;
 
-                    db.Member.Add(member);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-            }
+        //            db.Member.Add(member);
+        //            db.SaveChanges();
+        //            return RedirectToAction("Index");
+        //        }
+        //    }
 
-            return View(memberCreateViewModel);
-        }
+        //    return View(memberCreateViewModel);
+        //}
 
         // GET: Members/Edit/5
         public ActionResult Edit(int? id)

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@*@model WebApplication1.Models.ViewModels.DirectoryFrontViewModel*@
+
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -29,7 +31,7 @@
             <div class="container">
                 <div class="row">
                     <div class="logo col-md-6 col-sm-7 col-xs-12 ">
-                        <a href="/">
+                        <a href="/Home/Index">
                             <img src="/images/logo.png" alt="國際縱火調查人員協會臺灣分會" title="國際縱火調查人員協會臺灣分會">
                         </a>
                     </div><!-- logo end -->
@@ -63,7 +65,6 @@
             </div><!-- Container end -->
         </header>
         <!--/ Header end -->
-
         <!--Navigation start -->
         <nav class="site-navigation navigation">
             <div class="container">
@@ -79,7 +80,9 @@
 
                             <div class="collapse navbar-collapse navbar-responsive-collapse">
 
-                                <ul class="nav navbar-nav">
+                            @Html.Raw(@ViewBag.DirectoryHTML)
+                                @*@Html.Raw(@Model.DirectoryHTML)*@
+                                <!--<ul class="nav navbar-nav">
                                     <li class="dropdown active">
                                         <a href="about.html" class="dropdown-toggle" data-toggle="dropdown" title="關於我們">關於我們 <i class="fa fa-angle-down"></i></a>
                                         <ul class="dropdown-menu" role="menu">
@@ -125,7 +128,9 @@
                                             <li><a href="contact.html">聯絡我們</a></li>
                                         </ul>
                                     </li>
-                                </ul><!--/ Nav ul end -->
+                                </ul>-->
+                                <!--/ Nav ul end -->
+
                             </div><!--/ Collapse end -->
                         </div><!-- Site Navbar inner end -->
                     </div><!--/ Col end -->
@@ -368,7 +373,7 @@
             </div><!--/ Container end -->
         </footer><!-- Footer end -->
         <!-- Javascript Files
-    ================================================== -->
+        ================================================== -->
         @Scripts.Render("~/bundles/SampeJSFolder")
         @RenderSection("scripts", required: false)
 

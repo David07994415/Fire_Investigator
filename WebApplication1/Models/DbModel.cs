@@ -16,6 +16,7 @@ namespace WebApplication1.Models
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Business> Business { get; set; }
         public virtual DbSet<BusinessCategory> BusinessCategory { get; set; }
+        public virtual DbSet<Directory> Directory { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

@@ -1,8 +1,12 @@
 ﻿using MailKit.Net.Smtp;
+using Microsoft.Ajax.Utilities;
 using MimeKit;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
+using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Helpers;
@@ -15,21 +19,53 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
+        private DbModel db = new DbModel();
+
+        public DirectoryFrontViewModel DirectoryLayoutViewData { get; set; }
+
+        public HomeController()
+        {
+            this.DirectoryLayoutViewData = new DirectoryFrontViewModel();   //has property PageTitle
+            this.DirectoryLayoutViewData.DirectoryHTML = DirectoryFrontViewModel.GetDirectoryHtml();
+            this.ViewBag.DirectoryHTML = this.DirectoryLayoutViewData.DirectoryHTML;
+        }
+
+
         public ActionResult Index()
         {
+            //RedirectToAction("Index", "Home");
             return View();
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            //string directoryhtml=DirectoryFrontViewModel.GetDirectoryHtml();
+            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
+
 
             return View();
         }
 
+        public ActionResult Master()
+        {
+            //string directoryhtml = DirectoryFrontViewModel.GetDirectoryHtml();
+            //ViewBag.directoryhtml= directoryhtml;
+            
+            
+            
+            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
+            //還有其他master data
+            return View();
+        }
+
+
+
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+            //string directoryhtml = DirectoryFrontViewModel.GetDirectoryHtml();
+            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
+            ////還有其他contact data?
 
             return View();
         }
@@ -38,7 +74,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Contact(ContactFrontViewModel ContactSubmitViewModel)
         {
-            try 
+            try
             {
                 if (ModelState.IsValid)
                 {
@@ -50,7 +86,7 @@ namespace WebApplication1.Controllers
                     ModelState.Clear();  // 清空模型中的error數據
                     return View(); //返回沒有清空資料
                 }
-                else 
+                else
                 {
                     return View(ContactSubmitViewModel);
                 }
@@ -63,7 +99,7 @@ namespace WebApplication1.Controllers
 
             //return View(ContactSubmitViewModel);
         }
-        public static void sendGmail(string name, string mail,string content)
+        public static void sendGmail(string name, string mail, string content)
         {
             //宣告使用 MimeMessage
             var message = new MimeMessage();

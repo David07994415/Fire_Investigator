@@ -52,26 +52,26 @@ namespace WebApplication1.Models
         //[DataType(DataType.DateTime)]//送出時驗證是不是時間格式
         public DateTime? UpdateTime { get; set; }
     }
-    public class MemberCreateViewModel
-    {
-        [Required(ErrorMessage = "{0}必填")]
-        [MaxLength(400)]
-        [Display(Name = "帳號")]
-        public string Account { get; set; }
+    //public class MemberCreateViewModel
+    //{
+    //    [Required(ErrorMessage = "{0}必填")]
+    //    [MaxLength(400)]
+    //    [Display(Name = "帳號")]
+    //    public string Account { get; set; }
 
-        [Required(ErrorMessage = "{0}必填")]
-        [MaxLength(400)]
-        [Display(Name = "密碼")]
-        public string Password { get; set; }
+    //    [Required(ErrorMessage = "{0}必填")]
+    //    [MaxLength(400)]
+    //    [Display(Name = "密碼")]
+    //    public string Password { get; set; }
 
-        [Required(ErrorMessage = "{0}必填")]
-        [MaxLength(100)]
-        [Display(Name = "暱稱")]
-        public string NickName { get; set; }
+    //    [Required(ErrorMessage = "{0}必填")]
+    //    [MaxLength(100)]
+    //    [Display(Name = "暱稱")]
+    //    public string NickName { get; set; }
 
-        [MaxLength(200)]
-        [Display(Name = "權限")]
-        public string Permission { get; set; }
+    //    [MaxLength(200)]
+    //    [Display(Name = "權限")]
+    //    public string Permission { get; set; }
 
-    }
+    //}
 }
