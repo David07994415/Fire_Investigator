@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace WebApplication1.Models
 {
@@ -28,6 +29,7 @@ namespace WebApplication1.Models
         [Display(Name = "相片路徑")]
         public string PhotoPath { get; set; }
 
+        [AllowHtml]
         [Display(Name = "CKeditor內容")]
         public string PersonCkContent { get; set; }
 

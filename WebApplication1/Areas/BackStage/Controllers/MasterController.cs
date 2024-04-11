@@ -25,7 +25,9 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
             if (nameName != null)    // 有搜尋 string 的資料
             {
-                var matchedRecords = db.Master.Where(x => x.Name.Contains(nameName)).OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
+                var matchedRecords = db.Master.Where(x => x.Name.Contains(nameName) || x.Ocupation.Contains(nameName))// or的搜尋
+                    //.Where(x=> x.Ocupation.Contains(nameName))  //這樣會變成 and 搜尋
+                    .OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
                 if (matchedRecords.TotalItemCount != 0) // 搜尋後資料庫內有資料
                 {
                     ViewBag.Count = matchedRecords.TotalItemCount;
