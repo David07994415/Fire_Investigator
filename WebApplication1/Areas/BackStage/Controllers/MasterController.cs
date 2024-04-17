@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModels;
+using WebApplication1.Areas.BackStage.Filter;
 
 namespace WebApplication1.Areas.BackStage.Controllers
 {
@@ -19,6 +22,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
         private const int DataSizeInPage = 2;   //設定一頁幾筆
 
         // GET: BackStage/Master
+        [CheckPremission("P02")]
         public ActionResult Index(int? page,string nameName)    // 包含搜尋和分頁
         {
             int currentPageIndex = page.HasValue ? page.Value - 1 : 0;   // 現在第幾頁(當前頁面的索引值)
@@ -81,17 +85,31 @@ namespace WebApplication1.Areas.BackStage.Controllers
         // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Ocupation,PhotoPath,PersonCkContent,UpdateUser,UpdateTime,CreateUser,CreateTime")] Master master)
+        public ActionResult Create(CreateMasterProfileViewModel Profile)
         {
             if (ModelState.IsValid)
             {
-                db.Master.Add(master);
+                String UserName = User.Identity.Name;
+                var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+
+                Master NewCreateMaster=new Master();
+                NewCreateMaster.Name = Profile.Name;
+                NewCreateMaster.Ocupation =  Profile.Ocupation;
+                NewCreateMaster.CreateUser= UserId;
+                NewCreateMaster.UpdateUser= UserId;
+                
+                db.Master.Add(NewCreateMaster);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                int newId = NewCreateMaster.Id;
+
+                return RedirectToAction("Edit",new { id= newId });
+                //return RedirectToAction("Index");
             }
 
-            return View(master);
+            return View();
         }
+
+        //public ActionResult UploadPhoto(FileContentResult){ get; set; }
 
         // GET: BackStage/Master/Edit/5
         public ActionResult Edit(int? id)
@@ -113,16 +131,125 @@ namespace WebApplication1.Areas.BackStage.Controllers
         // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Ocupation,PhotoPath,PersonCkContent,UpdateUser,UpdateTime,CreateUser,CreateTime")] Master master)
+        public ActionResult Edit(int id,EditMasterProfileViewModel EditProfile)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(master).State = EntityState.Modified;
+                String UserName = User.Identity.Name;
+                var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+                //int MasterId = Convert.ToInt32(RouteData.Values["id"].ToString());
+
+                Master MasterData = db.Master.FirstOrDefault(x => x.Id == id);
+                MasterData.UpdateTime = DateTime.Now;
+                MasterData.UpdateUser= UserId;
+                MasterData.Name = EditProfile.Name;
+                MasterData.Ocupation = EditProfile.Ocupation;
+                MasterData.PersonCkContent = EditProfile.PersonCkContent;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(master);
+            return View(EditProfile);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UploadPhoto(HttpPostedFileBase PhotoFile)
+        {
+            String UserName = User.Identity.Name;
+            var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+            int MasterId = Convert.ToInt32(RouteData.Values["id"].ToString());
+
+            if (PhotoFile != null && PhotoFile.ContentLength > 0)
+            {
+                // 確認檔案的型別
+                string fileType = PhotoFile.ContentType;
+                string fileName = Path.GetFileName(PhotoFile.FileName);
+                string fileExtent= Path.GetExtension(PhotoFile.FileName);
+                if (fileExtent == ".png" || fileExtent == ".jpg") 
+                {
+                    var MasterData=db.Master.FirstOrDefault(x => x.Id == MasterId);
+                    MasterData.PhotoPath = fileName;
+                    MasterData.UpdateUser = UserId;
+                    MasterData.UpdateTime=DateTime.Now;
+                    db.SaveChanges();
+
+                    string targetPath = Server.MapPath("~/Uploads/master/"); // 將檔案保存到 "Uploads" 資料夾中
+                    string uploadPath = Path.Combine(targetPath, fileName);
+                    PhotoFile.SaveAs(uploadPath);
+                    return RedirectToAction("Edit", new { id = MasterId });
+
+                }
+                ModelState.AddModelError("PhotoPath", "檔案不吻合格式");
+                return RedirectToAction("Edit", new { id = MasterId });
+                // 執行相應的處理邏輯...
+
+                // 返回適當的視圖或其他操作
+            }
+            ModelState.AddModelError("PhotoPath", "檔案為空");
+            return RedirectToAction("Edit", new { id= MasterId });
+
+            // 如果檔案無效，返回相應的視圖或其他操作
+        }
+
+        [HttpPost]
+
+        public ActionResult UploadPhotockeditor()
+        {
+            if (Request.Files.Count > 0) 
+            {
+                try
+                {
+                    HttpFileCollectionBase files = Request.Files;
+                    for (int i = 0; i < files.Count;i++)
+                    {
+                        HttpPostedFileBase file = files[i];
+                        string fileName = Path.GetFileName(file.FileName);
+                        string fileExtent = Path.GetExtension(file.FileName);
+                        if (fileExtent == ".png" || fileExtent == ".jpg")
+                        {
+                            string targetPath = Server.MapPath("~/Uploads/master/"); // 將檔案保存到 "Uploads" 資料夾中
+                            string uploadPath = Path.Combine(targetPath, fileName);
+                            file.SaveAs(uploadPath);
+                            return Json(new { uploaded = true, url = $"/Uploads/master/{fileName}", JsonRequestBehavior.AllowGet });
+                        }
+                        return Json(new { uploaded = true, JsonRequestBehavior.AllowGet });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { uploaded = true, error =ex.Message, JsonRequestBehavior.AllowGet }); 
+                }
+            }
+            return Json(new { uploaded = true, error = "沒有檔案", JsonRequestBehavior.AllowGet });
+            //if (PhotoFile != null && PhotoFile.ContentLength > 0)
+            //{
+            //    // 確認檔案的型別
+            //    string fileType = PhotoFile.ContentType;
+            //    string fileName = Path.GetFileName(PhotoFile.FileName);
+            //    string fileExtent = Path.GetExtension(PhotoFile.FileName);
+            //    if (fileExtent == ".png" || fileExtent == ".jpg")
+            //    {
+
+
+            //        string targetPath = Server.MapPath("~/Uploads/master/"); // 將檔案保存到 "Uploads" 資料夾中
+            //        string uploadPath = Path.Combine(targetPath, fileName);
+            //        PhotoFile.SaveAs(uploadPath);
+            //        return RedirectToAction("index");
+
+            //    }
+            //    ModelState.AddModelError("PhotoPath", "檔案不吻合格式");
+            //    return RedirectToAction("index");
+            //    // 執行相應的處理邏輯...
+
+            //    // 返回適當的視圖或其他操作
+            //}
+            //ModelState.AddModelError("PhotoPath", "檔案為空");
+            //return RedirectToAction("index");
+
+
+        }
+
+
 
         // GET: BackStage/Master/Delete/5
         public ActionResult Delete(int? id)

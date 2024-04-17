@@ -33,16 +33,11 @@ namespace WebApplication1.Controllers
 
         public ActionResult Index()
         {
-            //RedirectToAction("Index", "Home");
             return View();
         }
 
         public ActionResult About()
         {
-            //string directoryhtml=DirectoryFrontViewModel.GetDirectoryHtml();
-            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
-
-
             return View();
         }
 
@@ -50,10 +45,10 @@ namespace WebApplication1.Controllers
         {
             if (id != null)  // 如果有路由有指定Id => 要看 Master Detail
             {
-                var MasterOne=db.Master.Where(x=>x.Id==id)?.FirstOrDefault();
-                if(MasterOne!=null)  // 如果資料庫有 Id
+                var MasterDetail=db.Master.Where(x=>x.Id==id)?.FirstOrDefault();
+                if(MasterDetail != null)  // 如果資料庫有 Id
                 {
-                    return View("MasterDetail", "_LayoutPage", MasterOne);  // 返回至新的 View => MasterDeatil View
+                    return View("MasterDetail", "_LayoutPage", MasterDetail);  // 返回至新的 View => MasterDeatil View
                 }
                 else                           // 如果資料庫內沒有Id
                 {
@@ -67,6 +62,20 @@ namespace WebApplication1.Controllers
             }
         }
 
+
+        public ActionResult _PartialBanner(string action) 
+        {
+            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
+            var NodeDirectoryList = db.Directory.Where( x=>x.Id== ParentDirectoryId || x.Value == action).ToList();
+            return PartialView(NodeDirectoryList);
+        }
+
+        public ActionResult _PartialSideBar(string action)
+        {
+            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
+            var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
+            return PartialView(NodeDirectoryList);
+        }
 
 
 

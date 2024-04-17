@@ -1,6 +1,7 @@
 ﻿@{
-    Layout = "~/Views/Shared/_LayoutHomePage.cshtml";
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "About";
+    ViewBag.PageTitle = "協會介紹";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
 
 <h2 class="page-title">關於我們</h2>
@@ -9,3 +10,11 @@
 <div class="clearfix _2pi4">
     YES 關於我們
 </div>
+
+@section bannerText {
+    @Html.Action("_PartialBanner", "Home", new { action = ViewBag.Title })
+}
+
+@section sidebar {
+    @Html.Action("_PartialSideBar", "Home", new { action = ViewBag.Title })
+}

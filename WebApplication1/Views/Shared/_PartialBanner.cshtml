@@ -1,0 +1,14 @@
+﻿@model  IEnumerable<WebApplication1.Models.Directory>
+
+
+@foreach (var item in Model)
+{
+    if (item.RecursiveId == null)
+    {
+        <li>@item.Title</li>
+    }
+    else
+    {
+        <li><a href="/Home/@item.Value">@item.Title</a></li>
+    }
+}
