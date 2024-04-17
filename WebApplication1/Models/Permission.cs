@@ -26,6 +26,10 @@ namespace WebApplication1.Models
         [Display(Name = "表單代號")]
         public string Value { get; set; }
 
+        [MaxLength(400)]
+        [Display(Name = "路由代號")]
+        public string URL { get; set; }
+
         [Display(Name = "權限迴圈編號")]
         public int? RecursiveId { get; set; } //可以沒有
         [ForeignKey("RecursiveId")]

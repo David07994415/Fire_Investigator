@@ -15,7 +15,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
     {
         private DbModel db = new DbModel();
         // GET: BackStage/Master/Edit/5
-        public ActionResult Edit()
+        public ActionResult Index()
         {
             string controllerName = RouteData.Values["controller"].ToString();
             var WebContentObj=db.Directory.FirstOrDefault(x=>x.Value== controllerName).WebContentTable.FirstOrDefault();   
@@ -24,7 +24,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(EditBackAboutViewModel editBackAboutViewModel)
+        public ActionResult Index(EditBackAboutViewModel editBackAboutViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -38,9 +38,9 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 WebContentObj.UpdateTime = DateTime.Now;
                 WebContentObj.UpdateUser = UserId;
                 db.SaveChanges();
-                return RedirectToAction("Edit");
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Edit");
+            return RedirectToAction("Index");
         }
     }
 }
