@@ -16,7 +16,6 @@ namespace WebApplication1.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required]
         [AllowHtml]
         [Display(Name = "HTML內容")]
         public string HTMLContent { get; set; }
@@ -32,7 +31,6 @@ namespace WebApplication1.Models
         [Display(Name = "更新資料之使用者")]
         public int UpdateUser { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Display(Name = "更新資料之時間")]
         public DateTime? UpdateTime { get; set; }
 
