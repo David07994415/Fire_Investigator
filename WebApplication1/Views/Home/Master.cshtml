@@ -1,9 +1,32 @@
-﻿@{
+﻿@model IEnumerable<WebApplication1.Models.Master>
+@{
     ViewBag.Title = "Master";
+    ViewBag.PageTitle = "專家介紹";
     Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
 
 <div class="row">
+
+    @*已經寫好了*@
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="ts-service-wrapper">
+                <div class="ts-service-image-wrapper">
+                    <span class="ts-service-image">
+                        <a href="@Url.Action("Master", "Home", new {Id=item.Id})" title='@item.Name'><img class="img-responsive" src="~/Uploads/master/@item.PhotoPath" alt="@item.Name"></a>
+                    </span>
+                </div>
+                <div class="ts-service-info">
+                    <h3><a href="master_show.html">@item.Name</a></h3>
+                    <p>現職：@item.Ocupation </p>
+                </div>
+            </div>
+        </div><!-- Col 1 end -->
+    }
+
+    @*已經寫好了*@
 
     <div class="col-md-4">
         <div class="ts-service-wrapper">
@@ -88,6 +111,9 @@
             </div>
         </div>
     </div><!-- Col 6 end -->
+
+
+
 
 </div><!-- Content row 1 end -->
 

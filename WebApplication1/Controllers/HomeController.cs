@@ -33,30 +33,51 @@ namespace WebApplication1.Controllers
 
         public ActionResult Index()
         {
-            //RedirectToAction("Index", "Home");
             return View();
         }
 
         public ActionResult About()
         {
-            //string directoryhtml=DirectoryFrontViewModel.GetDirectoryHtml();
-            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
-
-
             return View();
         }
 
-        public ActionResult Master()
+        public ActionResult Master(int? id)
         {
-            //string directoryhtml = DirectoryFrontViewModel.GetDirectoryHtml();
-            //ViewBag.directoryhtml= directoryhtml;
-            
-            
-            
-            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
-            //還有其他master data
-            return View();
+            if (id != null)  // 如果有路由有指定Id => 要看 Master Detail
+            {
+                var MasterDetail=db.Master.Where(x=>x.Id==id)?.FirstOrDefault();
+                if(MasterDetail != null)  // 如果資料庫有 Id
+                {
+                    return View("MasterDetail", "_LayoutPage", MasterDetail);  // 返回至新的 View => MasterDeatil View
+                }
+                else                           // 如果資料庫內沒有Id
+                {
+                    return RedirectToAction("Master", "Home");  // 返回至原本 Master 網址
+                }
+            }
+            else     // 如果有路由沒有指定 Id=> 要看 Master 總覽
+            {
+                var MasterList = db.Master.ToList();
+                return View(MasterList);
+            }
         }
+
+
+        public ActionResult _PartialBanner(string action) 
+        {
+            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
+            var NodeDirectoryList = db.Directory.Where( x=>x.Id== ParentDirectoryId || x.Value == action).ToList();
+            return PartialView(NodeDirectoryList);
+        }
+
+        public ActionResult _PartialSideBar(string action)
+        {
+            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
+            var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
+            return PartialView(NodeDirectoryList);
+        }
+
+
 
 
 

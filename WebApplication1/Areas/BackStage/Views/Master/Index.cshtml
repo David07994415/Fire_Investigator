@@ -1,0 +1,122 @@
+﻿@*@model IEnumerable<WebApplication1.Models.Master>*@
+@using MvcPaging;
+@model MvcPaging.IPagedList<WebApplication1.Models.Master>
+
+@{
+    ViewBag.Title = "專家 Index 頁面";
+    Layout = "~/Areas/BackStage/Views/Shared/_LayoutBackMainPage.cshtml";
+}
+<h2>專家 Index 頁面</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h2>搜尋：</h2>
+
+    <div class="form-horizontal">
+
+
+    <p>
+        Name: @Html.TextBox("nameName")
+        <input type="submit" value="搜尋" class="btn btn-default"  />
+        @ViewBag.ErrorMassage
+        @if (ViewBag.ErrorMassage != null) 
+        {
+            @ViewBag.ErrorMassage
+        }
+    </p>
+        
+
+
+
+
+
+
+
+
+    </div>
+
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Name)   @*標題欄位要加入FirstOrDefault()*@
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Ocupation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().PhotoPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().PersonCkContent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().UpdateUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().UpdateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().CreateUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().CreateTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ocupation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoPath)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonCkContent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateTime)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<!--分頁開始-->
+<div class="pager">
+    <div class="pages">
+        <div class="pagination">
+            @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+        </div>
+        <div class="page_boxR"> 資料筆數：@ViewBag.count  　</div>
+    </div>
+</div>
+<!--分頁結束-->

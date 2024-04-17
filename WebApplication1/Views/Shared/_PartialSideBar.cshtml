@@ -1,0 +1,19 @@
+﻿@model  IEnumerable<WebApplication1.Models.Directory>
+
+
+@foreach (var item in Model)
+{
+    if (item.RecursiveId == null)
+    {
+        <h2 class="widget-title"><i class="fa fa-folder-open-o">&nbsp;</i>@item.Title</h2>
+    }
+}
+<ul class="arrow nav nav-tabs nav-stacked">
+    @foreach (var item in Model)
+    {
+        if (item.RecursiveId != null)
+        {
+            <li><a href="/Home/@item.Value">@item.Title</a></li>
+        }
+    }
+</ul>

@@ -22,15 +22,12 @@ namespace WebApplication1.Areas.BackStage.Controllers
         private DbModel db = new DbModel();
 
         //public DirectoryBackViewModel DirectoryBackLayoutViewData { get; set; }
-
         //public HomeController()
         //{
         //    this.DirectoryBackLayoutViewData = new DirectoryBackViewModel();   //has property PageTitle
         //    this.DirectoryBackLayoutViewData.DirectoryHTML = DirectoryBackViewModel.GetSideBarDirectoryHtml();
         //    this.ViewBag.DirectoryHTML = this.DirectoryBackLayoutViewData.DirectoryHTML;
         //}
-
-
         // Return PartialMenuView
         public ActionResult _PartialMenuView()  // 他怎麼知道我要鏈結哪個partialview
         {
@@ -52,8 +49,8 @@ namespace WebApplication1.Areas.BackStage.Controllers
             } 
         }
 
-        // GET: BackStage/Home/Index
-        public ActionResult Index()
+
+        public ActionResult Index()  // GET: BackStage/Home/Index
         {
             string username = User.Identity.Name;
             var user = db.Member.Where(x => x.Account == username)?.FirstOrDefault();
