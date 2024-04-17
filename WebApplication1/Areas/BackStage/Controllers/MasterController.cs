@@ -22,7 +22,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
         private const int DataSizeInPage = 2;   //設定一頁幾筆
 
         // GET: BackStage/Master
-        [CheckPremission("P02")]
+        //[CheckPremission("P02")]
         public ActionResult Index(int? page,string nameName)    // 包含搜尋和分頁
         {
             int currentPageIndex = page.HasValue ? page.Value - 1 : 0;   // 現在第幾頁(當前頁面的索引值)
