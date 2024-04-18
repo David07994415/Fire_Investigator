@@ -1,15 +1,12 @@
-﻿@{
+﻿@model WebApplication1.Models.WebContent
+
+@{
     ViewBag.Title = "About";
     ViewBag.PageTitle = "協會介紹";
     Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
 
-<h2 class="page-title">關於我們</h2>
-<hr class="botmargin-min">
-
-<div class="clearfix _2pi4">
-    YES 關於我們
-</div>
+@Html.Raw(Model.HTMLContent)
 
 @section bannerText {
     @Html.Action("_PartialBanner", "Home", new { action = ViewBag.Title })

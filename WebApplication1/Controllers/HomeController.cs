@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.Routing;
 using System.Xml.Linq;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
@@ -38,7 +39,9 @@ namespace WebApplication1.Controllers
 
         public ActionResult About()
         {
-            return View();
+            string controllerName = RouteData.Values["action"].ToString();
+            var HtmlContent = db.Directory.FirstOrDefault(x => x.Value == controllerName).WebContentTable.FirstOrDefault();
+            return View(HtmlContent);
         }
 
         public ActionResult Master(int? id)
@@ -57,7 +60,7 @@ namespace WebApplication1.Controllers
             }
             else     // 如果有路由沒有指定 Id=> 要看 Master 總覽
             {
-                var MasterList = db.Master.ToList();
+                var MasterList = db.Master.Where(x=>x.IsShow==true).ToList();
                 return View(MasterList);
             }
         }

@@ -17,6 +17,7 @@ namespace WebApplication1.Models
         public virtual DbSet<Business> Business { get; set; }
         public virtual DbSet<BusinessCategory> BusinessCategory { get; set; }
         public virtual DbSet<Directory> Directory { get; set; }
+        public virtual DbSet<WebContent> WebContent { get; set; }
         public virtual DbSet<Master> Master { get; set; }
 
 

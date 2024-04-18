@@ -38,5 +38,9 @@ namespace WebApplication1.Models
 
         [Display(Name = "權限子成員")]
         public virtual ICollection<Directory> ChildTable { get; set; }
+
+        [Display(Name = "HTML內容表單成員")]
+        public virtual ICollection<WebContent> WebContentTable { get; set; }
+
     }
 }

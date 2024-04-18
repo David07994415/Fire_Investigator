@@ -3,10 +3,10 @@
 @model MvcPaging.IPagedList<WebApplication1.Models.Master>
 
 @{
-    ViewBag.Title = "專家 Index 頁面";
+    ViewBag.Title = "專家介紹頁面";
     Layout = "~/Areas/BackStage/Views/Shared/_LayoutBackMainPage.cshtml";
 }
-<h2>專家 Index 頁面</h2>
+<h2>專家介紹頁面</h2>
 
 
 @using (Html.BeginForm())
@@ -29,13 +29,6 @@
     </p>
         
 
-
-
-
-
-
-
-
     </div>
 
 }
@@ -55,8 +48,11 @@
             @Html.DisplayNameFor(model => model.FirstOrDefault().PhotoPath)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().PersonCkContent)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().IsShow)
         </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().PersonCkContent)
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().UpdateUser)
         </th>
@@ -85,8 +81,11 @@
                 @Html.DisplayFor(modelItem => item.PhotoPath)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PersonCkContent)
+            @Html.DisplayFor(modelItem => item.IsShow)
             </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.PersonCkContent)
+        </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.UpdateUser)
             </td>

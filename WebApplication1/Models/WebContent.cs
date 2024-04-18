@@ -8,33 +8,25 @@ using System.Web.Mvc;
 
 namespace WebApplication1.Models
 {
-    [Table("Master")]
-    public class Master
+    [Table("WebContent")]
+    public class WebContent
     {
         [Key]
         [Display(Name = "編號")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Display(Name = "姓名")]
-        [Required]
-        [MaxLength(100)]
-        public string Name { get; set; }
-
-        [Display(Name = "職業")]
-        [Required]
-        [MaxLength(500)]
-        public string Ocupation { get; set; }
-
-        [Display(Name = "相片路徑")]
-        public string PhotoPath { get; set; }
-
         [AllowHtml]
-        [Display(Name = "CKeditor內容")]
-        public string PersonCkContent { get; set; }
+        [Display(Name = "HTML內容")]
+        public string HTMLContent { get; set; }
 
-        [Display(Name = "是否顯示標籤")]
-        public bool? IsShow { get; set; }
+        [Required]
+        [Display(Name = "目錄外鍵")]
+        public int DirectroyId { get; set; }
+        [ForeignKey("DirectroyId")]
+        [Display(Name = "目錄表單")]
+        public virtual Directory DirectoryTable { get; set; }//virtual=虛擬資料，會跟資料庫的對應資料相對應
+
 
         [Display(Name = "更新資料之使用者")]
         public int UpdateUser { get; set; }

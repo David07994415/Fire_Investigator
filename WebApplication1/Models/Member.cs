@@ -48,8 +48,8 @@ namespace WebApplication1.Models
         public DateTime? CreateTime { get; set; }
 
         [Display(Name = "更新資料之時間")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]//進行編輯操作時能夠看到適當格式的日期時間
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]//進行編輯操作時能夠看到適當格式的日期時間
+        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         //[DataType(DataType.DateTime)]//送出時驗證是不是時間格式
         public DateTime? UpdateTime { get; set; }
     }
