@@ -60,7 +60,7 @@ namespace WebApplication1.Controllers
             }
             else     // 如果有路由沒有指定 Id=> 要看 Master 總覽
             {
-                var MasterList = db.Master.ToList();
+                var MasterList = db.Master.Where(x=>x.IsShow==true).ToList();
                 return View(MasterList);
             }
         }

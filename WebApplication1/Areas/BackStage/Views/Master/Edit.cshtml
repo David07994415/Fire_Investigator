@@ -40,12 +40,27 @@
         </div>
     </div>
 
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsShow, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <label class="checkbox-inline checkbox01">
+                @Html.RadioButtonFor(model => model.IsShow, "true", htmlAttributes: new { @class = "radiostyle01", @name = "IsShow", @id = "true" })
+                顯示於前台
+            </label>
+            <label class="checkbox-inline checkbox01">
+                @Html.RadioButtonFor(model => model.IsShow, "false", htmlAttributes: new { @class = "radiostyle01", @name = "IsShow", @id = "false" })
+                不顯示於前台
+            </label>
+            @Html.ValidationMessageFor(model => model.IsShow, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
     @if (!String.IsNullOrEmpty(Model.PhotoPath))
     {
         <div class="form-group">
             @Html.LabelFor(model => model.PhotoPath, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                    <img src="~/Uploads/master/@Model.PhotoPath" alt="圖片" class="img-responsive" />
+                <img src="~/Uploads/master/@Model.PhotoPath" alt="圖片" class="img-responsive" />
             </div>
         </div>
     }

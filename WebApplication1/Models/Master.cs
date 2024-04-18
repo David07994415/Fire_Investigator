@@ -33,6 +33,9 @@ namespace WebApplication1.Models
         [Display(Name = "CKeditor內容")]
         public string PersonCkContent { get; set; }
 
+        [Display(Name = "是否顯示標籤")]
+        public bool? IsShow { get; set; }
+
         [Display(Name = "更新資料之使用者")]
         public int UpdateUser { get; set; }
 

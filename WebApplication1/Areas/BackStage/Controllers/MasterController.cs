@@ -97,6 +97,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 NewCreateMaster.Ocupation =  Profile.Ocupation;
                 NewCreateMaster.CreateUser= UserId;
                 NewCreateMaster.UpdateUser= UserId;
+                NewCreateMaster.IsShow = Profile.IsShow;
                 
                 db.Master.Add(NewCreateMaster);
                 db.SaveChanges();
@@ -145,6 +146,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 MasterData.Name = EditProfile.Name;
                 MasterData.Ocupation = EditProfile.Ocupation;
                 MasterData.PersonCkContent = EditProfile.PersonCkContent;
+                MasterData.IsShow= EditProfile.IsShow;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
