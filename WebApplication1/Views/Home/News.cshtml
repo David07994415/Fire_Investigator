@@ -29,11 +29,15 @@
             <div class="col-md-9 col-sm-12 col-xs-12">
                 <div class="post-body">
                     <div class="entry-header">
-                        <span class="post-meta-date"><i class="fa fa fa-clock-o"></i> 2016-03-28</span>
+                        <span class="post-meta-date"><i class="fa fa fa-clock-o"></i> @item.IssueTime.Value.ToString("yyyy/MM/dd")</span>
                         <h3 class="entry-title">
                             <a href="/Home/News/@item.Id">@item.Title</a>
                         </h3>
-                        <p>@item.NewsCkContent.Substring(0, 100)</p>
+                        @{ var replaceInput = item.NewsCkContent.Replace("<p>", "").Replace("</p>", "").Replace("<br>"," ");
+                            var replaceInputLength = replaceInput.Length;
+                            if (replaceInputLength > 50) { replaceInputLength = 50; }
+                            <p>@replaceInput.Substring(0, replaceInputLength-1)</p>
+                            }
                     </div>
                     <!-- header end -->
                     <div class="post-footer">

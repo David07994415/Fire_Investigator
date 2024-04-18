@@ -11,7 +11,6 @@ namespace WebApplication1.Models
     [Table("News")]
     public class News
     {
-
             [Key]
             [Display(Name = "編號")]
             [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -32,7 +31,7 @@ namespace WebApplication1.Models
             [Display(Name = "是否顯示標籤")]
             public bool? IsShow { get; set; }
 
-            [Display(Name = "是否顯示標籤")]
+            [Display(Name = "是否置頂標籤")]
             public bool? IsTop { get; set; }
 
             [Display(Name = "發布資料之時間")]
