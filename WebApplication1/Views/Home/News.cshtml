@@ -7,13 +7,12 @@
     Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
 
-@section bannerText {
+@*@section bannerText {
     @Html.Action("_PartialBanner", "Home", new { action = ViewBag.Title })
 }
-
 @section sidebar {
     @Html.Action("_PartialSideBar", "Home", new { action = ViewBag.Title })
-}
+}*@
 
 
 
@@ -49,6 +48,8 @@
         </div>
     </div>
 }
+
+
 
 <!--分頁開始-->
 <div class="pager">

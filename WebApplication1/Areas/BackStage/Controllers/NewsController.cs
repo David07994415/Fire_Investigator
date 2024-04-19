@@ -10,6 +10,7 @@ using WebApplication1.Models;
 using MvcPaging;
 using System.IO;
 using WebApplication1.Models.ViewModels;
+using WebApplication1.Filter;
 
 namespace WebApplication1.Areas.BackStage.Controllers
 {

@@ -1,8 +1,8 @@
-﻿
+﻿@model WebApplication1.Models.News
 @{
-    ViewBag.Title = "NewsDetail";
+    ViewBag.Title = "News-Detail";
+    ViewBag.PageTitle = "消息介紹";
     Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
 
-<h2>NewsDetail</h2>
-
+@Html.Raw(Model.NewsCkContent)

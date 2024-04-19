@@ -14,25 +14,28 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Xml.Linq;
+using WebApplication1.Filter;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.Controllers
 {
+    [AddLayoutBreadcrumb("action")]
+    [AddLayoutSidebar("action")]
+    [AddLayoutMenu]
     public class HomeController : Controller
     {
         private DbModel db = new DbModel();
 
-        public DirectoryFrontViewModel DirectoryLayoutViewData { get; set; }
+        //public DirectoryFrontViewModel DirectoryLayoutViewData { get; set; }
+        //public HomeController()
+        //{
+        //    this.DirectoryLayoutViewData = new DirectoryFrontViewModel();   //has property PageTitle
+        //    this.DirectoryLayoutViewData.DirectoryHTML = DirectoryFrontViewModel.GetDirectoryHtml();
+        //    this.ViewBag.DirectoryHTML = this.DirectoryLayoutViewData.DirectoryHTML;
+        //}
 
-        public HomeController()
-        {
-            this.DirectoryLayoutViewData = new DirectoryFrontViewModel();   //has property PageTitle
-            this.DirectoryLayoutViewData.DirectoryHTML = DirectoryFrontViewModel.GetDirectoryHtml();
-            this.ViewBag.DirectoryHTML = this.DirectoryLayoutViewData.DirectoryHTML;
-        }
-
-
+        
         public ActionResult Index()
         {
             return View();
@@ -93,19 +96,19 @@ namespace WebApplication1.Controllers
 
 
 
-        public ActionResult _PartialBanner(string action) 
-        {
-            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
-            var NodeDirectoryList = db.Directory.Where( x=>x.Id== ParentDirectoryId || x.Value == action).ToList();
-            return PartialView(NodeDirectoryList);
-        }
+        //public ActionResult _PartialBanner(string action) 
+        //{
+        //    var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
+        //    var NodeDirectoryList = db.Directory.Where( x=>x.Id== ParentDirectoryId || x.Value == action).ToList();
+        //    return PartialView(NodeDirectoryList);
+        //}
 
-        public ActionResult _PartialSideBar(string action)
-        {
-            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
-            var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
-            return PartialView(NodeDirectoryList);
-        }
+        //public ActionResult _PartialSideBar(string action)
+        //{
+        //    var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
+        //    var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
+        //    return PartialView(NodeDirectoryList);
+        //}
 
 
 
@@ -192,6 +195,8 @@ namespace WebApplication1.Controllers
             }
         }
 
-
+        private class ExcludeFilterAttribute : Attribute
+        {
+        }
     }
 }
