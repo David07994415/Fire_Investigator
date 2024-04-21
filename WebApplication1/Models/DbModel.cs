@@ -20,6 +20,7 @@ namespace WebApplication1.Models
         public virtual DbSet<WebContent> WebContent { get; set; }
         public virtual DbSet<Master> Master { get; set; }
         public virtual DbSet<News> News { get; set; }
+        public virtual DbSet<Knowledge> Knowledge { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
