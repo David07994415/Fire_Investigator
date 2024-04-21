@@ -8,9 +8,11 @@ using WebApplication1.Models.ViewModels;
 using WebApplication1.Models;
 using System.Web.Routing;
 using System.Data.Entity;
+using WebApplication1.Areas.BackStage.Filter;
 
 namespace WebApplication1.Areas.BackStage.Controllers
 {
+    [AddBackLayoutComponent]
     public class AboutController : Controller
     {
         private DbModel db = new DbModel();

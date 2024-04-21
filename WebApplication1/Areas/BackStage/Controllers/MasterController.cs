@@ -15,6 +15,7 @@ using WebApplication1.Areas.BackStage.Filter;
 
 namespace WebApplication1.Areas.BackStage.Controllers
 {
+    [AddBackLayoutComponent]
     public class MasterController : Controller
     {
         private DbModel db = new DbModel();

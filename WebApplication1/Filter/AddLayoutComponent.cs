@@ -14,7 +14,6 @@ namespace WebApplication1.Filter
     public class AddLayoutComponent
     {
     }
-
     public class AddLayoutSidebar : ActionFilterAttribute
     {
         private DbModel db = new DbModel();

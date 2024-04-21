@@ -11,9 +11,11 @@ using MvcPaging;
 using System.IO;
 using WebApplication1.Models.ViewModels;
 using WebApplication1.Filter;
+using WebApplication1.Areas.BackStage.Filter;
 
 namespace WebApplication1.Areas.BackStage.Controllers
 {
+    [AddBackLayoutComponent]
     public class NewsController : Controller
     {
         private DbModel db = new DbModel();
