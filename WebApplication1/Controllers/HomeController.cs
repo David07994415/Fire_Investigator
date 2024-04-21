@@ -117,10 +117,6 @@ namespace WebApplication1.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-            //string directoryhtml = DirectoryFrontViewModel.GetDirectoryHtml();
-            //return View(new HomeFrontViewModel { DirectoryHTML = directoryhtml });
-            ////還有其他contact data?
-
             return View();
         }
 
@@ -194,6 +190,13 @@ namespace WebApplication1.Controllers
                 client.Disconnect(true);
             }
         }
+
+        public ActionResult Calendar()
+        {
+            ViewBag.Message = "Your contact page.";
+            return View();
+        }
+
 
         private class ExcludeFilterAttribute : Attribute
         {
