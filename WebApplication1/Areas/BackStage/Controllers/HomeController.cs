@@ -12,6 +12,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using WebApplication1.Areas.BackStage.Filter;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
 
@@ -49,7 +50,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
             } 
         }
 
-
+        [AddBackLayoutComponent]
         public ActionResult Index()  // GET: BackStage/Home/Index
         {
             string username = User.Identity.Name;

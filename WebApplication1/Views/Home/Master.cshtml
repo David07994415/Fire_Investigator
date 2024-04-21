@@ -5,9 +5,16 @@
     Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
 
+@*@section bannerText {
+    @Html.Action("_PartialBanner", "Home", new { action = ViewBag.Title })
+}
+@section sidebar {
+    @Html.Action("_PartialSideBar", "Home", new { action = ViewBag.Title })
+}*@
+
 <div class="row">
 
-    @*已經寫好了*@
+    @*以下已經寫好了*@
 
     @foreach (var item in Model)
     {
@@ -26,7 +33,7 @@
         </div><!-- Col 1 end -->
     }
 
-    @*已經寫好了*@
+    @*以上已經寫好了*@
 
     <div class="col-md-4">
         <div class="ts-service-wrapper">
@@ -116,4 +123,3 @@
 
 
 </div><!-- Content row 1 end -->
-

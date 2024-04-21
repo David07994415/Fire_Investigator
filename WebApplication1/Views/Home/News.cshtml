@@ -1,0 +1,63 @@
+﻿@*@model IEnumerable<WebApplication1.Models.News>*@
+@using MvcPaging;
+@model MvcPaging.IPagedList<WebApplication1.Models.News>
+@{
+    ViewBag.Title = "News";
+    ViewBag.PageTitle = "最新消息";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+@*@section bannerText {
+    @Html.Action("_PartialBanner", "Home", new { action = ViewBag.Title })
+}
+@section sidebar {
+    @Html.Action("_PartialSideBar", "Home", new { action = ViewBag.Title })
+}*@
+
+
+
+@foreach (var item in Model)
+{
+    <div class="post">
+        <div class="row">
+            <div class="col-md-3 col-sm-12 col-xs-12">
+                <div class="post-media post-image">
+                    <a href="/Home/News/@item.Id"><img alt="img" src="~/Uploads/news/@item.PhotoPath" class="img-responsive"></a>
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="post-body">
+                    <div class="entry-header">
+                        <span class="post-meta-date"><i class="fa fa fa-clock-o"></i> @item.IssueTime.Value.ToString("yyyy/MM/dd")</span>
+                        <h3 class="entry-title">
+                            <a href="/Home/News/@item.Id">@item.Title</a>
+                        </h3>
+                        @{ var replaceInput = item.NewsCkContent.Replace("<p>", "").Replace("</p>", "").Replace("<br>"," ");
+                            var replaceInputLength = replaceInput.Length;
+                            if (replaceInputLength > 50) { replaceInputLength = 50; }
+                            <p>@replaceInput.Substring(0, replaceInputLength-1)</p>
+                            }
+                    </div>
+                    <!-- header end -->
+                    <div class="post-footer">
+                        <a href="/Home/News/@item.Id" class="btn btn-primary">more</a>
+                    </div>
+                </div>
+                <!-- post-body end -->
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<!--分頁開始-->
+<div class="pager">
+    <div class="pages">
+        <div class="pagination">
+            @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+        </div>
+        <div class="page_boxR"> 資料筆數：@ViewBag.count  　</div>
+    </div>
+</div>
+<!--分頁結束-->

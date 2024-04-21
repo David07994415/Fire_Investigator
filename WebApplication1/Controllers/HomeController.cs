@@ -1,6 +1,7 @@
 ﻿using MailKit.Net.Smtp;
 using Microsoft.Ajax.Utilities;
 using MimeKit;
+using MvcPaging;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
@@ -13,25 +14,28 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Xml.Linq;
+using WebApplication1.Filter;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.Controllers
 {
+    [AddLayoutBreadcrumb("action")]
+    [AddLayoutSidebar("action")]
+    [AddLayoutMenu]
     public class HomeController : Controller
     {
         private DbModel db = new DbModel();
 
-        public DirectoryFrontViewModel DirectoryLayoutViewData { get; set; }
+        //public DirectoryFrontViewModel DirectoryLayoutViewData { get; set; }
+        //public HomeController()
+        //{
+        //    this.DirectoryLayoutViewData = new DirectoryFrontViewModel();   //has property PageTitle
+        //    this.DirectoryLayoutViewData.DirectoryHTML = DirectoryFrontViewModel.GetDirectoryHtml();
+        //    this.ViewBag.DirectoryHTML = this.DirectoryLayoutViewData.DirectoryHTML;
+        //}
 
-        public HomeController()
-        {
-            this.DirectoryLayoutViewData = new DirectoryFrontViewModel();   //has property PageTitle
-            this.DirectoryLayoutViewData.DirectoryHTML = DirectoryFrontViewModel.GetDirectoryHtml();
-            this.ViewBag.DirectoryHTML = this.DirectoryLayoutViewData.DirectoryHTML;
-        }
-
-
+        
         public ActionResult Index()
         {
             return View();
@@ -48,7 +52,7 @@ namespace WebApplication1.Controllers
         {
             if (id != null)  // 如果有路由有指定Id => 要看 Master Detail
             {
-                var MasterDetail=db.Master.Where(x=>x.Id==id)?.FirstOrDefault();
+                var MasterDetail=db.Master.Where(x=>x.Id== id && x.IsShow == true)?.FirstOrDefault();
                 if(MasterDetail != null)  // 如果資料庫有 Id
                 {
                     return View("MasterDetail", "_LayoutPage", MasterDetail);  // 返回至新的 View => MasterDeatil View
@@ -65,20 +69,46 @@ namespace WebApplication1.Controllers
             }
         }
 
-
-        public ActionResult _PartialBanner(string action) 
+        public ActionResult News(int? id, int? page)
         {
-            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
-            var NodeDirectoryList = db.Directory.Where( x=>x.Id== ParentDirectoryId || x.Value == action).ToList();
-            return PartialView(NodeDirectoryList);
+            const int DataSizeInPage = 2;   //設定一頁幾筆
+            int currentPageIndex = page.HasValue ? page.Value - 1 : 0;   // 現在第幾頁(當前頁面的索引值)
+
+            if (id != null)  // 如果有路由有指定Id => 要看 News Detail
+            {
+                var NewsDetail = db.News.Where(x => x.Id == id && x.IsShow==true)?.FirstOrDefault();
+                if (NewsDetail != null)  // 如果資料庫有 Id
+                {
+                    return View("NewsDetail", "_LayoutPage", NewsDetail);  // 返回至新的 View => NewsDeatil View
+                }
+                else                           // 如果資料庫內沒有Id
+                {
+                    return RedirectToAction("News", "Home");  // 返回至原本 News 網址
+                }
+            }
+            else     // 如果有路由沒有指定 Id=> 要看 News 總覽 (有包含分頁)
+            {
+                var NewsList = db.News.Where(x => x.IsShow == true).ToList();
+                ViewBag.Count = NewsList.Count();
+                return View(db.News.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
+            }
         }
 
-        public ActionResult _PartialSideBar(string action)
-        {
-            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
-            var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
-            return PartialView(NodeDirectoryList);
-        }
+
+
+        //public ActionResult _PartialBanner(string action) 
+        //{
+        //    var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
+        //    var NodeDirectoryList = db.Directory.Where( x=>x.Id== ParentDirectoryId || x.Value == action).ToList();
+        //    return PartialView(NodeDirectoryList);
+        //}
+
+        //public ActionResult _PartialSideBar(string action)
+        //{
+        //    var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == action).RecursiveId;
+        //    var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
+        //    return PartialView(NodeDirectoryList);
+        //}
 
 
 
@@ -165,6 +195,8 @@ namespace WebApplication1.Controllers
             }
         }
 
-
+        private class ExcludeFilterAttribute : Attribute
+        {
+        }
     }
 }
