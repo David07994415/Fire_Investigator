@@ -203,7 +203,7 @@ namespace WebApplication1.Controllers
 
             var KnowkedgeList = db.Knowledge.Where(x => x.IsShow == true).OrderBy(x=>x.IsTop).ToList();
             ViewBag.Count = KnowkedgeList.Count();
-            return View(db.News.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
+            return View(db.Knowledge.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
         }
 
 
