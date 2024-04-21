@@ -35,7 +35,7 @@ namespace WebApplication1.Controllers
         //    this.ViewBag.DirectoryHTML = this.DirectoryLayoutViewData.DirectoryHTML;
         //}
 
-        
+
         public ActionResult Index()
         {
             return View();
@@ -52,8 +52,8 @@ namespace WebApplication1.Controllers
         {
             if (id != null)  // 如果有路由有指定Id => 要看 Master Detail
             {
-                var MasterDetail=db.Master.Where(x=>x.Id== id && x.IsShow == true)?.FirstOrDefault();
-                if(MasterDetail != null)  // 如果資料庫有 Id
+                var MasterDetail = db.Master.Where(x => x.Id == id && x.IsShow == true)?.FirstOrDefault();
+                if (MasterDetail != null)  // 如果資料庫有 Id
                 {
                     return View("MasterDetail", "_LayoutPage", MasterDetail);  // 返回至新的 View => MasterDeatil View
                 }
@@ -64,7 +64,7 @@ namespace WebApplication1.Controllers
             }
             else     // 如果有路由沒有指定 Id=> 要看 Master 總覽
             {
-                var MasterList = db.Master.Where(x=>x.IsShow==true).ToList();
+                var MasterList = db.Master.Where(x => x.IsShow == true).ToList();
                 return View(MasterList);
             }
         }
@@ -76,7 +76,7 @@ namespace WebApplication1.Controllers
 
             if (id != null)  // 如果有路由有指定Id => 要看 News Detail
             {
-                var NewsDetail = db.News.Where(x => x.Id == id && x.IsShow==true)?.FirstOrDefault();
+                var NewsDetail = db.News.Where(x => x.Id == id && x.IsShow == true)?.FirstOrDefault();
                 if (NewsDetail != null)  // 如果資料庫有 Id
                 {
                     return View("NewsDetail", "_LayoutPage", NewsDetail);  // 返回至新的 View => NewsDeatil View
@@ -196,9 +196,14 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public ActionResult Knowledge()
+        public ActionResult Knowledge(int? page)
         {
-            return View();
+            const int DataSizeInPage = 2;   //設定一頁幾筆
+            int currentPageIndex = page.HasValue ? page.Value - 1 : 0;   // 現在第幾頁(當前頁面的索引值)
+
+            var KnowkedgeList = db.Knowledge.Where(x => x.IsShow == true).OrderBy(x=>x.IsTop).ToList();
+            ViewBag.Count = KnowkedgeList.Count();
+            return View(db.News.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
         }
 
 

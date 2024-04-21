@@ -1,0 +1,29 @@
+﻿@*@model WebApplication1.Models.Knowledge*@
+
+@using MvcPaging;
+@model MvcPaging.IPagedList<WebApplication1.Models.Knowledge>
+
+@{
+    ViewBag.Title = "Knowledge";
+    ViewBag.PageTitle = "知識庫下載";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<h2>Knowledge</h2>
+
+
+
+
+
+
+
+<!--分頁開始-->
+<div class="pager">
+    <div class="pages">
+        <div class="pagination">
+            @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+        </div>
+        <div class="page_boxR"> 資料筆數：@ViewBag.count  　</div>
+    </div>
+</div>
+<!--分頁結束-->
