@@ -1,4 +1,5 @@
-﻿using MvcPaging;
+﻿using Microsoft.Ajax.Utilities;
+using MvcPaging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -90,7 +91,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 NewCreateKnows.UpdateUser = UserId;
                 NewCreateKnows.CreateUser = UserId;
                 NewCreateKnows.UpdateTime = DateTime.Now;
-                NewCreateKnows.UpdateTime = DateTime.Now;
+                NewCreateKnows.CreateTime = DateTime.Now;
 
                 db.Knowledge.Add(NewCreateKnows);
                 db.SaveChanges();
@@ -152,15 +153,66 @@ namespace WebApplication1.Areas.BackStage.Controllers
         // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,FileName,IsShow,IsTop,IssueTime,UpdateUser,UpdateTime,CreateUser,CreateTime")] Knowledge knowledge)
+        public ActionResult Edit(int id,CreateBackKnowledgeViewModel Profile, HttpPostedFileBase UploadFile)
         {
+            String UserName = User.Identity.Name;
+            var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+
             if (ModelState.IsValid)
             {
-                db.Entry(knowledge).State = EntityState.Modified;
+                var UpdateKnowsData = db.Knowledge.FirstOrDefault(x => x.Id == id);
+                UpdateKnowsData.Title = Profile.Title;
+                UpdateKnowsData.IsTop = Profile.IsTop;
+                UpdateKnowsData.IsShow = Profile.IsShow;
+                UpdateKnowsData.IssueTime = Profile.IssueTime;
+                UpdateKnowsData.UpdateUser = UserId;
+                UpdateKnowsData.UpdateTime = DateTime.Now;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                if (UploadFile != null && UploadFile.ContentLength > 0)
+                {
+                    // 確認檔案的型別
+                    string fileType = UploadFile.ContentType;
+                    string fileName = Path.GetFileName(UploadFile.FileName);
+                    string fileExtent = Path.GetExtension(UploadFile.FileName);
+                    if (fileExtent == ".pdf")
+                    {
+                        var KnowsDataRe = db.Knowledge.FirstOrDefault(x => x.Id == id);
+                        KnowsDataRe.FileName = fileName;
+                        KnowsDataRe.UpdateUser = UserId;
+                        KnowsDataRe.UpdateTime = DateTime.Now;
+                        db.SaveChanges();
+
+                        string targetPath = Server.MapPath("~/Uploads/knowledge/");
+                        string uploadPath = Path.Combine(targetPath, fileName);
+                        UploadFile.SaveAs(uploadPath);
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("UploadFile", "檔案不吻合格式");
+                        return View();
+                    }
+                }
+                else
+                {
+                    var UpdateKnowsCheck = db.Knowledge.FirstOrDefault(x => x.Id == id);
+                    if (UpdateKnowsCheck.FileName == null)
+                    {
+                        ModelState.AddModelError("UploadFile", "尚未上傳檔案");
+                        return View();
+                    }
+                    else
+                    {
+                        return View();
+                    }
+                }
             }
-            return View(knowledge);
+            else
+            {
+                ModelState.AddModelError("", "必填");
+                return View();
+            }
         }
 
         // GET: BackStage/Knowledges/Delete/5
@@ -184,6 +236,14 @@ namespace WebApplication1.Areas.BackStage.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Knowledge knowledge = db.Knowledge.Find(id);
+
+            string FileName=knowledge.FileName;
+            string targetPath = Server.MapPath("~/Uploads/knowledge/");
+            string uploadPath = Path.Combine(targetPath, FileName);
+            if (System.IO.File.Exists(uploadPath))
+            {
+                System.IO.File.Delete(uploadPath);
+            }
             db.Knowledge.Remove(knowledge);
             db.SaveChanges();
             return RedirectToAction("Index");
