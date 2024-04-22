@@ -15,6 +15,7 @@ using WebApplication1.Areas.BackStage.Filter;
 
 namespace WebApplication1.Areas.BackStage.Controllers
 {
+    [Authorize]
     [AddBackLayoutComponent]
     public class MasterController : Controller
     {
