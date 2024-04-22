@@ -45,8 +45,6 @@
 
 
 
-
-
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -60,8 +58,8 @@
             @Html.LabelFor(model => model.Permission, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.Permission, new { htmlAttributes = new { @class = "form-control" } })
-                @*@Html.ValidationMessageFor(model => model.Permission, "", new { @class = "text-danger" })*@
-                @*@Html.DisplayFor(model => model.UpdateTime, new { htmlAttributes = new { @class = "form-control" } })*@
+                @*@Html.HiddenFor(model => model.Permission, new { htmlAttributes = new { @class = "form-control" } })*@
+                <div class="PremissionTree"></div>
             </div>
         </div>
 
@@ -74,7 +72,32 @@
         @*</div>*@
     }
 </div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/TreeViewJS/tree.min.js"></script>
+    <script>
+        let dataArray =@Html.Raw(ViewBag.TreeViewData);
+        //let data = [{ "id": "0", "text": "node-0", "children": [{ "id": "0-0", "text": "node-0-0", "children": [{ "id": "0-0-0", "text": "node-0-0-0" }, { "id": "0-0-1", "text": "node-0-0-1" }, { "id": "0-0-2", "text": "node-0-0-2" }] }, { "id": "0-1", "text": "node-0-1", "children": [{ "id": "0-1-0", "text": "node-0-1-0" }, { "id": "0-1-1", "text": "node-0-1-1" }, { "id": "0-1-2", "text": "node-0-1-2" }] }, { "id": "0-2", "text": "node-0-2", "children": [{ "id": "0-2-0", "text": "node-0-2-0" }, { "id": "0-2-1", "text": "node-0-2-1" }, { "id": "0-2-2", "text": "node-0-2-2" }] }] }, { "id": "1", "text": "node-1", "children": [{ "id": "1-0", "text": "node-1-0", "children": [{ "id": "1-0-0", "text": "node-1-0-0" }, { "id": "1-0-1", "text": "node-1-0-1" }, { "id": "1-0-2", "text": "node-1-0-2" }] }, { "id": "1-1", "text": "node-1-1", "children": [{ "id": "1-1-0", "text": "node-1-1-0" }, { "id": "1-1-1", "text": "node-1-1-1" }, { "id": "1-1-2", "text": "node-1-1-2" }] }, { "id": "1-2", "text": "node-1-2", "children": [{ "id": "1-2-0", "text": "node-1-2-0" }, { "id": "1-2-1", "text": "node-1-2-1" }, { "id": "1-2-2", "text": "node-1-2-2" }] }] }, { "id": "2", "text": "node-2", "children": [{ "id": "2-0", "text": "node-2-0", "children": [{ "id": "2-0-0", "text": "node-2-0-0" }, { "id": "2-0-1", "text": "node-2-0-1" }, { "id": "2-0-2", "text": "node-2-0-2" }] }, { "id": "2-1", "text": "node-2-1", "children": [{ "id": "2-1-0", "text": "node-2-1-0" }, { "id": "2-1-1", "text": "node-2-1-1" }, { "id": "2-1-2", "text": "node-2-1-2" }] }, { "id": "2-2", "text": "node-2-2", "children": [{ "id": "2-2-0", "text": "node-2-2-0" }, { "id": "2-2-1", "text": "node-2-2-1" }, { "id": "2-2-2", "text": "node-2-2-2" }] }] }];
+
+            let tree = new Tree('.PremissionTree',{
+                //data: [{ id: '-1', text: 'root', children: data }],
+                data: dataArray,
+        closeDepth: 3,
+        loaded: function () {
+            this.values = @Html.Raw(ViewBag.TreeViewCurrentPermission);
+            console.log(this.selectedNodes);
+            console.log(this.values);
+            //this.disables = ['0-0-0', '0-0-1', '0-0-2']
+        },
+        onChange: function () {
+            console.log(this.values);
+            $("#Permission").val(this.values);
+        }
+    })
+    </script>
+}

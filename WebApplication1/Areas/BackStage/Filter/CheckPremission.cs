@@ -25,8 +25,8 @@ namespace WebApplication1.Areas.BackStage.Filter
             bool authorize = false;
             String UserName = httpContext.User.Identity.Name;
             var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
-            if (UserId != null)
-            {
+            //if (UserId != null)
+            //{
                 var userRole = db.Member.FirstOrDefault(x => x.Id == UserId).Permission;
                 string[] rolelist = userRole.Split(',');
                 foreach (var role in rolelist)
@@ -36,7 +36,7 @@ namespace WebApplication1.Areas.BackStage.Filter
                         return true;
                     }
                 }
-            }
+            //}
             return authorize;
         }
 

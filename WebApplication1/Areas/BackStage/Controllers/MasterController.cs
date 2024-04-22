@@ -287,9 +287,10 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 try
                 {
                     HttpFileCollectionBase files = Request.Files;
-                    for (int i = 0; i < files.Count;i++)
+                    if(files.Count==1)
+                    //for (int i = 0; i < files.Count; i++)
                     {
-                        HttpPostedFileBase file = files[i];
+                        HttpPostedFileBase file = files[0];//files[i];
                         string fileName = Path.GetFileName(file.FileName);
                         string fileExtent = Path.GetExtension(file.FileName);
                         if (fileExtent == ".png" || fileExtent == ".jpg")

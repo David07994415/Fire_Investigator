@@ -20,6 +20,8 @@ namespace WebApplication1.Areas.BackStage.Controllers
             var memberList = db.Member.ToList();
             return View(memberList);
         }
+
+        [UpdateMemberPremission]
         public ActionResult Edit(int? id)
         {
             if (!id.HasValue) 
@@ -36,10 +38,10 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 return View(member);
             }
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // 組合字串 filter
-        public ActionResult Edit(int? id, string test)
+        public ActionResult Edit(int? id, string Permission)
         {
             if (!id.HasValue)
             {
@@ -52,7 +54,12 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 {
                     return RedirectToAction("Index");
                 }
-                return View(member);
+                else
+                {
+                    member.Permission= Permission;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Edit", "Back_Premission", new { id=id});
             }
         }
 
