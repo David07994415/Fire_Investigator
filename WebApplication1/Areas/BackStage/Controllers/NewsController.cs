@@ -15,6 +15,7 @@ using WebApplication1.Areas.BackStage.Filter;
 
 namespace WebApplication1.Areas.BackStage.Controllers
 {
+    [Authorize]
     [AddBackLayoutComponent]
     public class NewsController : Controller
     {
@@ -90,7 +91,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 NewCreateNews.UpdateUser = UserId;
                 NewCreateNews.CreateUser = UserId;
                 NewCreateNews.UpdateTime = DateTime.Now;
-                NewCreateNews.UpdateTime = DateTime.Now;
+                NewCreateNews.CreateTime = DateTime.Now;
 
                 db.News.Add(NewCreateNews);
                 db.SaveChanges();
@@ -190,7 +191,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         string uploadPath = Path.Combine(targetPath, fileName);
                         PhotoFile.SaveAs(uploadPath);
                         return RedirectToAction("Edit", new { id = NewsId });
-
                     }
                     ModelState.AddModelError("PhotoPath", "檔案不吻合格式");
                     return RedirectToAction("Edit", new { id = NewsId });

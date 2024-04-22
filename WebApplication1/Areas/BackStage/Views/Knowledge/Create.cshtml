@@ -1,0 +1,83 @@
+﻿@model WebApplication1.Models.Knowledge
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/BackStage/Views/Shared/_LayoutBackMainPage.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("Create", "Knowledge", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Knowledge</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("UploadFile", "", new { type = "file" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsShow, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <label class="checkbox-inline checkbox01">
+                @Html.RadioButtonFor(model => model.IsShow, "true", htmlAttributes: new { @class = "radiostyle01", @name = "IsShow", @id = "true" })
+                顯示於頁面
+            </label>
+            <label class="checkbox-inline checkbox01">
+                @Html.RadioButtonFor(model => model.IsShow, "false", htmlAttributes: new { @class = "radiostyle01", @name = "IsShow", @id = "false" })
+                不顯示於頁面
+            </label>
+            @Html.ValidationMessageFor(model => model.IsShow, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsTop, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <label class="checkbox-inline checkbox01">
+                @Html.RadioButtonFor(model => model.IsTop, "true", htmlAttributes: new { @class = "radiostyle01", @name = "IsTop", @id = "true" })
+                顯示於置頂
+            </label>
+            <label class="checkbox-inline checkbox01">
+                @Html.RadioButtonFor(model => model.IsTop, "false", htmlAttributes: new { @class = "radiostyle01", @name = "IsTop", @id = "false" })
+                不顯示於置頂
+            </label>
+            @Html.ValidationMessageFor(model => model.IsTop, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IssueTime, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.IssueTime, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+            @Html.ValidationMessageFor(model => model.IssueTime, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

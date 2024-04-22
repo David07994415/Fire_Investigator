@@ -1,0 +1,52 @@
+﻿@*@model WebApplication1.Models.Knowledge*@
+
+@using MvcPaging;
+@model MvcPaging.IPagedList<WebApplication1.Models.Knowledge>
+
+@{
+    ViewBag.Title = "Knowledge";
+    ViewBag.PageTitle = "知識庫下載";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+
+<table class="table table-striped career-table download-table">
+    <thead>
+        <tr>
+            <th>日期</th>
+            <th><span class="text-left">標題</span></th>
+            <th>檔案</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IssueTime)
+                </td>
+                <td><span class="text-left">@item.Title</span></td>
+                <td><a href="~/Uploads/knowledge/@item.FileName" class="btn btn-primary" download="@item.FileName" ><i class="fa fa-download"></i> 下載</a></td>
+            </tr>
+        }
+        @*<tr>
+            <td>2016-04-15</td>
+            <td><span class="text-left">國際縱火調查人員協會105學分班招生簡章</span></td>
+            <td><a href="#" class="btn btn-primary"><i class="fa fa-download"></i> 下載</a></td>
+        </tr>*@
+
+    </tbody>
+</table>
+
+
+
+<!--分頁開始-->
+<div class="pager">
+    <div class="pages">
+        <div class="pagination">
+            @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+        </div>
+        <div class="page_boxR"> 資料筆數：@ViewBag.count  　</div>
+    </div>
+</div>
+<!--分頁結束-->
