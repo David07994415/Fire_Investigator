@@ -113,17 +113,16 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         string targetPath = Server.MapPath("~/Uploads/knowledge/"); // 將檔案保存到 "knowledge" 資料夾中
                         string uploadPath = Path.Combine(targetPath, fileName);
                         UploadFile.SaveAs(uploadPath);
-                        return RedirectToAction("Edit", new { id = KnowsId });
-
+                        return RedirectToAction("Index");
                     }
                     ModelState.AddModelError("UploadFile", "檔案不吻合格式");
-                    return RedirectToAction("Edit", new { id = KnowsId });
+                    return View();
                     // 執行相應的處理邏輯...
 
                     // 返回適當的視圖或其他操作
                 }
                 ModelState.AddModelError("UploadFile", "檔案為空");
-                return RedirectToAction("Edit", new { id = KnowsId });
+                return RedirectToAction("Index");
                 // 如果檔案無效，返回相應的視圖或其他操作
             }
             else

@@ -16,7 +16,6 @@ namespace WebApplication1.Models
         [MaxLength(100)]
         public string Title { get; set; }
 
-        [Required]
         [Display(Name = "檔案名稱")]
         public string FileName { get; set; }
 

@@ -22,9 +22,11 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.IssueTime</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IssueTime)
+                </td>
                 <td><span class="text-left">@item.Title</span></td>
-                <td><a href="~/Uploads/knowledge/@item.FileName" class="btn btn-primary"><i class="fa fa-download"></i> 下載</a></td>
+                <td><a href="~/Uploads/knowledge/@item.FileName" class="btn btn-primary" download="@item.FileName" ><i class="fa fa-download"></i> 下載</a></td>
             </tr>
         }
         @*<tr>
