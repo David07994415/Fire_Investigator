@@ -15,6 +15,7 @@ namespace WebApplication1.Areas.BackStage.Filter
         private DbModel db = new DbModel();
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
+            
             string username= filterContext.HttpContext.User.Identity.Name;
             var user = db.Member.Where(x => x.Account == username)?.FirstOrDefault();
             string permissionString = user.Permission;
