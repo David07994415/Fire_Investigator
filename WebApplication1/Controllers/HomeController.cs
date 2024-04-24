@@ -110,6 +110,59 @@ namespace WebApplication1.Controllers
         //    return PartialView(NodeDirectoryList);
         //}
 
+        //[AddLayoutBreadcrumb("id")]
+        //[AddLayoutSidebar("id")]
+        //public ActionResult Business(string id)
+        //{
+        //    if (id == "Job" || id == "License" || id == "Consult"||id== "Survey")
+        //    {
+        //        var JobCkContent = db.BusinessCategory
+        //                                        .FirstOrDefault(x => x.Name == id)
+        //                                        .BussinessTable.FirstOrDefault().Content;
+
+        //        var DirectoryDate = db.Directory.FirstOrDefault(x => x.Value == id).Title;
+        //        ViewBag.PageTitle = DirectoryDate;
+        //        ViewBag.Title = id;
+        //        return View((object)JobCkContent);
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Index");
+        //    }
+        //}
+        public ActionResult Job()
+        {
+            string actionName = RouteData.Values["action"].ToString();
+            var CkContent = db.BusinessCategory
+                                                .FirstOrDefault(x => x.Name == actionName)
+                                                .BussinessTable.FirstOrDefault().Content;
+            return View((object)CkContent);
+        }
+        public ActionResult License()
+        {
+            string actionName = RouteData.Values["action"].ToString();
+            var CkContent = db.BusinessCategory
+                                                .FirstOrDefault(x => x.Name == actionName)
+                                                .BussinessTable.FirstOrDefault().Content;
+            return View((object)CkContent);
+        }
+        public ActionResult Consult()
+        {
+            string actionName = RouteData.Values["action"].ToString();
+            var CkContent = db.BusinessCategory
+                                                .FirstOrDefault(x => x.Name == actionName)
+                                                .BussinessTable.FirstOrDefault().Content;
+            return View((object)CkContent);
+        }
+        public ActionResult Survey()
+        {
+            string actionName = RouteData.Values["action"].ToString();
+            var CkContent = db.BusinessCategory
+                                                .FirstOrDefault(x => x.Name == actionName)
+                                                .BussinessTable.FirstOrDefault().Content;
+            return View((object)CkContent);
+        }
+
 
 
 
