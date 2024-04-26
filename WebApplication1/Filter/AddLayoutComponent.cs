@@ -34,6 +34,7 @@ namespace WebApplication1.Filter
             StringBuilder htmlString = new StringBuilder();
             var InputDirectoryId = db.Directory.FirstOrDefault(x => x.Value == TargetUrl).Id;
             RecursiveSideBarMethod(InputDirectoryId, htmlString);
+            return htmlString.ToString();
             //StringBuilder htmlString = new StringBuilder();
             //var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
             //foreach (var item in NodeDirectoryList)
@@ -53,7 +54,6 @@ namespace WebApplication1.Filter
             //}
             //htmlString.Append("</ul>");
             //return htmlString.ToString();
-            return htmlString.ToString();
         }
         public void RecursiveSideBarMethod(int InputDirectoryId, StringBuilder htmlString)
         {
