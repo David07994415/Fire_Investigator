@@ -22,11 +22,11 @@
             <div class="ts-service-wrapper">
                 <div class="ts-service-image-wrapper">
                     <span class="ts-service-image">
-                        <a href="@Url.Action("Master", "Home", new {Id=item.Id})" title='@item.Name'><img class="img-responsive" src="~/Uploads/master/@item.PhotoPath" alt="@item.Name"></a>
+                        <a href="@Url.Action("Index", "Master", new {Id=item.Id})" title='@item.Name'><img class="img-responsive" src="~/Uploads/master/@item.PhotoPath" alt="@item.Name"></a>
                     </span>
                 </div>
                 <div class="ts-service-info">
-                    <h3><a href="master_show.html">@item.Name</a></h3>
+                    <h3><a href="/Master/Index/@item.Id">@item.Name</a></h3>
                     <p>現職：@item.Ocupation </p>
                 </div>
             </div>
