@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
+using System.Web.Mvc;
 
 namespace WebApplication1.Models
 {
@@ -17,6 +18,7 @@ namespace WebApplication1.Models
         public int Id { get; set; }
 
         [Required]
+        [AllowHtml]
         [Display(Name = "業務內容")]
         public string Content { get; set; }
 

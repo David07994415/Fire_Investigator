@@ -5,14 +5,30 @@ using System.Security;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using WebApplication1.Models;
 
 namespace WebApplication1.Areas.BackStage.Filter
 {
-    public class UpdateMemberPremission:ActionFilterAttribute
+    public class UpdateMemberPremission: ActionFilterAttribute  // ActionFilterAttribute   IActionFilter
     {
-        // private DbModel db = new DbModel(); //不能用全域
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        //private DbModel db = new DbModel(); //不能用全域
+
+        //private readonly IDependencyResolver _service;
+
+        //public UpdateMemberPremission(IDependencyResolver service)
+        //{
+        //    _service = service;
+        //}
+
+
+
+        //public void OnActionExecuted(ActionExecutedContext filterContext)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public override  void OnActionExecuting(ActionExecutingContext filterContext)  //override
         {
             DbModel db = new DbModel();
 
@@ -55,7 +71,6 @@ namespace WebApplication1.Areas.BackStage.Filter
 
         public void TreeViewRecurive(Permission node, StringBuilder data)
         {
-            DbModel db = new DbModel();
 
             data.Append($@"{{ 'id': '{node.Value}',  'text': '{node.Title}'");
             if (node.ChildTable.Count > 0)
@@ -85,4 +100,23 @@ namespace WebApplication1.Areas.BackStage.Filter
         }
 
     }
+    //public class UpdateMemberCustomFilterProvider : IFilterProvider
+    //{
+
+    //    private readonly IDependencyResolver _resolver;
+    //    public UpdateMemberCustomFilterProvider(IDependencyResolver resolver)
+    //    {
+    //        _resolver = resolver;
+    //    }
+
+    //    public IEnumerable<System.Web.Mvc.Filter> GetFilters(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
+    //    {
+
+    //        var filter = _resolver.GetService(typeof(UpdateMemberPremission)) as UpdateMemberPremission;
+
+    //        //var filter = new UpdateMemberPremission(); // Create a new instance of your custom filter
+    //        return new[] { new System.Web.Mvc.Filter(filter, FilterScope.Global, null) };
+    //    }
+
+    //}
 }

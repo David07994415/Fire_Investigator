@@ -24,15 +24,36 @@ namespace WebApplication1.Filter
         }
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
-            if (TargetUrl =="Index"){ return;}
+            //string TargetController;
+            //string TargetAction;
+            //string TargetId;
+            //string htmlSideBarResult;
+            //if (ControllerOrActionName == "action")
+            //{
+                //TargetController= filterContext.RouteData.Values["controller"].ToString();
+                string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
+                if (TargetUrl == "Index"){ return;}  //for home/index
+                //TargetId = filterContext.RouteData.Values["id"].ToString();
+                //string htmlSideBarResult = BuildSideBar(TargetURL);
+            //}
+            //else //ControllerOrActionName == "id"
+            //{
+            //    TargetController = filterContext.RouteData.Values["controller"].ToString();
+            //    TargetAction = filterContext.RouteData.Values["action"].ToString();
+            //    TargetId = filterContext.RouteData.Values[ControllerOrActionName].ToString(); ;
+            //    htmlSideBarResult = BuildSideBar(TargetUrl);
+
+            //    string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
+            //    if (TargetUrl == "Index") { return; }
+            //    string TargetUrlId = "Index";
+            //}
             string htmlSideBarResult = BuildSideBar(TargetUrl);
             filterContext.Controller.ViewBag.SideBarResult = htmlSideBarResult;
         }
         private string BuildSideBar(string actionName)
         {
             var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == actionName).RecursiveId;
-            var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.Value == actionName).ToList();
+            var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
             StringBuilder htmlString = new StringBuilder();
             foreach (var item in NodeDirectoryList)
             {
