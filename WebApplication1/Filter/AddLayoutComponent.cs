@@ -24,54 +24,55 @@ namespace WebApplication1.Filter
         }
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            //string TargetController;
-            //string TargetAction;
-            //string TargetId;
-            //string htmlSideBarResult;
-            //if (ControllerOrActionName == "action")
-            //{
-                //TargetController= filterContext.RouteData.Values["controller"].ToString();
-                string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
-                if (TargetUrl == "Index"){ return;}  //for home/index
-                //TargetId = filterContext.RouteData.Values["id"].ToString();
-                //string htmlSideBarResult = BuildSideBar(TargetURL);
-            //}
-            //else //ControllerOrActionName == "id"
-            //{
-            //    TargetController = filterContext.RouteData.Values["controller"].ToString();
-            //    TargetAction = filterContext.RouteData.Values["action"].ToString();
-            //    TargetId = filterContext.RouteData.Values[ControllerOrActionName].ToString(); ;
-            //    htmlSideBarResult = BuildSideBar(TargetUrl);
-
-            //    string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
-            //    if (TargetUrl == "Index") { return; }
-            //    string TargetUrlId = "Index";
-            //}
+            string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
+            // if (TargetUrl == "Index"){ return;}   // for home/index
             string htmlSideBarResult = BuildSideBar(TargetUrl);
             filterContext.Controller.ViewBag.SideBarResult = htmlSideBarResult;
         }
-        private string BuildSideBar(string actionName)
+        private string BuildSideBar(string TargetUrl)
         {
-            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == actionName).RecursiveId;
-            var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
             StringBuilder htmlString = new StringBuilder();
-            foreach (var item in NodeDirectoryList)
-            {
-                if (item.RecursiveId == null) 
-                {
-                    htmlString.Append($"<h2 class='widget-title'><i class='fa fa-folder-open-o'>&nbsp;</i>{item.Title}</h2>");
-                }
-            }
-            htmlString.Append("<ul class='arrow nav nav-tabs nav-stacked'>");
-            foreach (var item in NodeDirectoryList)
-            {
-                if (item.RecursiveId != null)
-                {
-                    htmlString.Append($"<li><a href='/Home/{item.Value}'>{item.Title}</a></li>");
-                }
-            }
-            htmlString.Append("</ul>");
+            var InputDirectoryId = db.Directory.FirstOrDefault(x => x.Value == TargetUrl).Id;
+            RecursiveSideBarMethod(InputDirectoryId, htmlString);
+            //StringBuilder htmlString = new StringBuilder();
+            //var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
+            //foreach (var item in NodeDirectoryList)
+            //{
+            //    if (item.RecursiveId == null) 
+            //    {
+            //        htmlString.Append($"<h2 class='widget-title'><i class='fa fa-folder-open-o'>&nbsp;</i>{item.Title}</h2>");
+            //    }
+            //}
+            //htmlString.Append("<ul class='arrow nav nav-tabs nav-stacked'>");
+            //foreach (var item in NodeDirectoryList)
+            //{
+            //    if (item.RecursiveId != null)
+            //    {
+            //        htmlString.Append($"<li><a href='/Home/{item.Value}'>{item.Title}</a></li>");
+            //    }
+            //}
+            //htmlString.Append("</ul>");
+            //return htmlString.ToString();
             return htmlString.ToString();
+        }
+        public void RecursiveSideBarMethod(int InputDirectoryId, StringBuilder htmlString)
+        {
+            var nextitem = db.Directory.Where(x => x.Id == InputDirectoryId).FirstOrDefault();
+            if (nextitem.RecursiveId == null) 
+            {
+                htmlString.Append($"<h2 class='widget-title'><i class='fa fa-folder-open-o'>&nbsp;</i>{nextitem.Title}</h2>");
+            }
+            else 
+            {
+                RecursiveSideBarMethod((int)nextitem.RecursiveId, htmlString);
+                var newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId).ToList();
+                htmlString.Append("<ul class='arrow nav nav-tabs nav-stacked'>");
+                foreach (var item in newitem)
+                {
+                    htmlString.Append($"<li><a href='/{item.Value}/'>{item.Title}</a></li>");
+                }
+                htmlString.Append("</ul>");
+            }
         }
     }
     public class AddLayoutBreadcrumb : ActionFilterAttribute
