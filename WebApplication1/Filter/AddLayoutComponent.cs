@@ -146,14 +146,14 @@ namespace WebApplication1.Filter
                     if (child.ChildTable.Count > 0)
                     {
                         html.Append("<li class='dropdown'>");
-                        html.Append($@"<a href='/Home/{child.Value}' class='dropdown-toggle' data-toggle='dropdown' title='{child.Title}'>{child.Title}<i class='fa fa-angle-down'></i></a>");
+                        html.Append($@"<a href='/{child.Value}/Index' class='dropdown-toggle' data-toggle='dropdown' title='{child.Title}'>{child.Title}<i class='fa fa-angle-down'></i></a>");
                         DirectoryRecursion(child, html);     //要有hrefHTML資料欄位==>TB DB first
                         html.Append("</li>");
                     }
                     else if (child.ChildTable.Count == 0)
                     {
                         html.Append("<li>");
-                        html.Append($@"<a href='/Home/{child.Value}'>{child.Title}</a>");
+                        html.Append($@"<a href='/{child.Value}/Index'>{child.Title}</a>");
                         html.Append("</li>");     //要有hrefHTML資料欄位==>TB DB first
                     }
                 }
