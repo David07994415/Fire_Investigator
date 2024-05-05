@@ -86,30 +86,33 @@ namespace WebApplication1.Filter
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
-            if (TargetUrl == "Index") { return; }
             string htmlBreadCrumbResult = BuildBreadcrumb(TargetUrl);
             filterContext.Controller.ViewBag.BreadcrumbResult = htmlBreadCrumbResult;
         }
-        private string BuildBreadcrumb(string actionName)
+        private string BuildBreadcrumb(string TargetUrl)
         {
-            var ParentDirectoryId = db.Directory.FirstOrDefault(x => x.Value == actionName).RecursiveId;
-            var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.Value == actionName).ToList();
             StringBuilder htmlString = new StringBuilder();
-            foreach (var item in NodeDirectoryList)
-            {
-                if (item.RecursiveId == null)
-                {
-                    htmlString.Append($"<li>{item.Title}</li>");
-                }
-                else
-                {
-                    htmlString.Append($"<li><a href ='/Home/{item.Value}'>{item.Title} </a></li>");
-                }
-            }
-            htmlString.Append("</ul>");
+            var InputDirectoryId= db.Directory.FirstOrDefault(x => x.Value == TargetUrl).Id;
+            RecursiveBreadcrumbMethod(InputDirectoryId, htmlString);
             return htmlString.ToString();
         }
+        private void RecursiveBreadcrumbMethod(int InputDirectoryId, StringBuilder htmlString)
+        {
+            var nextitem = db.Directory.Where(x => x.Id == InputDirectoryId).FirstOrDefault();
+            if (nextitem.RecursiveId == null)
+            {
+                htmlString.Append($"<li><a href='/Home/Index'>首頁</a></li>");
+                htmlString.Append($"<li>{nextitem.Title}</li>");
+            }
+            else
+            {
+                RecursiveBreadcrumbMethod((int)nextitem.RecursiveId, htmlString);
+                htmlString.Append($"<li><a href='/{nextitem.Value}/Index'>{nextitem.Title}</a></li>");
+            }
+        }
     }
+
+
     public class AddLayoutMenu: ActionFilterAttribute
     {
         private DbModel db = new DbModel();
