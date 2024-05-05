@@ -25,6 +25,9 @@ namespace WebApplication1.Models
         [Display(Name = "目錄代號")]
         public string Value { get; set; }
 
+        [Display(Name = "是否為登入後顯示")]
+        public bool? IsAuthMenu { get; set; }
+
         [Display(Name = "目錄迴圈編號")]
         public int? RecursiveId { get; set; } //可以沒有
         [ForeignKey("RecursiveId")]

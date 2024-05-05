@@ -101,7 +101,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                     string Hashstring = Convert.ToBase64String(HashArray);
                     if (Hashstring == account.Password)
                     {
-                        FormsAuthentication.SetAuthCookie(account.Account, false);
+                        FormsAuthentication.SetAuthCookie(account.Account, false); // 快速設定
                         return RedirectToAction("Index", "Home");
                     }
                     else

@@ -118,10 +118,21 @@ namespace WebApplication1.Filter
         private DbModel db = new DbModel();
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            string htmlMenuResult = BuildMenu();
+            var UserAccount = filterContext.HttpContext.User.Identity.Name;
+            if (!string.IsNullOrEmpty(UserAccount))
+            {
+                var UserPermission = db.Member.Where(x => x.Account == UserAccount).FirstOrDefault().Permission;
+                if (UserPermission.Contains("Front"))
+                {
+                    string htmlMenuResultAuth = BuildMenu(true);
+                    filterContext.Controller.ViewBag.MenuResult = htmlMenuResultAuth;
+                    return;
+                }
+            }
+            string htmlMenuResult = BuildMenu(false);
             filterContext.Controller.ViewBag.MenuResult = htmlMenuResult;
         }
-        private string BuildMenu()
+        private string BuildMenu(bool showAuthMenu)
         {
             List<Directory> DirectroyList = db.Directory.ToList();
             var roots = DirectroyList.Where(x => x.ParentTable == null);
@@ -130,13 +141,13 @@ namespace WebApplication1.Filter
             {
                 HTML.Append("<li class='dropdown'>");     //2nd start
                 HTML.Append($@"<a href='/' class='dropdown-toggle' data-toggle='dropdown' title='{root.Title}'>{root.Title}<i class='fa fa-angle-down'></i></a>");
-                DirectoryRecursion(root, HTML);  //要有hrefHTML資料欄位==>TB DB first
+                DirectoryRecursion(root, HTML, showAuthMenu);  //要有hrefHTML資料欄位==>TB DB first
                 HTML.Append("</li>");  //2nd end
             }
             HTML.Append("</ul>");  //main close
             return HTML.ToString();
         }
-        public static void DirectoryRecursion(Directory node, StringBuilder html)
+        public static void DirectoryRecursion(Directory node, StringBuilder html, bool showAuthMenu)
         {
             if (node.ChildTable.Count > 0)  //有第三層
             {
@@ -147,14 +158,23 @@ namespace WebApplication1.Filter
                     {
                         html.Append("<li class='dropdown'>");
                         html.Append($@"<a href='/{child.Value}/Index' class='dropdown-toggle' data-toggle='dropdown' title='{child.Title}'>{child.Title}<i class='fa fa-angle-down'></i></a>");
-                        DirectoryRecursion(child, html);     //要有hrefHTML資料欄位==>TB DB first
+                        DirectoryRecursion(child, html, showAuthMenu);     //要有hrefHTML資料欄位==>TB DB first
                         html.Append("</li>");
                     }
-                    else if (child.ChildTable.Count == 0)
+                    else if (child.ChildTable.Count == 0 && showAuthMenu)
                     {
                         html.Append("<li>");
                         html.Append($@"<a href='/{child.Value}/Index'>{child.Title}</a>");
                         html.Append("</li>");     //要有hrefHTML資料欄位==>TB DB first
+                    }
+                    else if (child.ChildTable.Count == 0 && !showAuthMenu)
+                    {
+                        if (child.IsAuthMenu == false) 
+                        {
+                            html.Append("<li>");
+                            html.Append($@"<a href='/{child.Value}/Index'>{child.Title}</a>");
+                            html.Append("</li>");     //要有hrefHTML資料欄位==>TB DB first
+                        }
                     }
                 }
                 html.Append("</ul>");
