@@ -26,14 +26,26 @@ namespace WebApplication1.Filter
         {
             string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
             // if (TargetUrl == "Index"){ return;}   // for home/index
-            string htmlSideBarResult = BuildSideBar(TargetUrl);
+
+            var UserAccount = filterContext.HttpContext.User.Identity.Name;
+            if (!string.IsNullOrEmpty(UserAccount))
+            {
+                var UserPermission = db.Member.Where(x => x.Account == UserAccount).FirstOrDefault().Permission;
+                if (UserPermission.Contains("Front"))
+                {
+                    string htmlSideBarResultAuth = BuildSideBar(TargetUrl,true);
+                    filterContext.Controller.ViewBag.SideBarResult = htmlSideBarResultAuth;
+                    return;
+                }
+            }
+            string htmlSideBarResult = BuildSideBar(TargetUrl,false);
             filterContext.Controller.ViewBag.SideBarResult = htmlSideBarResult;
         }
-        private string BuildSideBar(string TargetUrl)
+        private string BuildSideBar(string TargetUrl,bool ShowAuthSideBar)
         {
             StringBuilder htmlString = new StringBuilder();
             var InputDirectoryId = db.Directory.FirstOrDefault(x => x.Value == TargetUrl).Id;
-            RecursiveSideBarMethod(InputDirectoryId, htmlString);
+            RecursiveSideBarMethod(InputDirectoryId, htmlString, ShowAuthSideBar);
             return htmlString.ToString();
             //StringBuilder htmlString = new StringBuilder();
             //var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
@@ -55,7 +67,7 @@ namespace WebApplication1.Filter
             //htmlString.Append("</ul>");
             //return htmlString.ToString();
         }
-        public void RecursiveSideBarMethod(int InputDirectoryId, StringBuilder htmlString)
+        public void RecursiveSideBarMethod(int InputDirectoryId, StringBuilder htmlString,bool ShowAuthSideBar)
         {
             var nextitem = db.Directory.Where(x => x.Id == InputDirectoryId).FirstOrDefault();
             if (nextitem.RecursiveId == null) 
@@ -64,8 +76,16 @@ namespace WebApplication1.Filter
             }
             else 
             {
-                RecursiveSideBarMethod((int)nextitem.RecursiveId, htmlString);
-                var newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId).ToList();
+                RecursiveSideBarMethod((int)nextitem.RecursiveId, htmlString, ShowAuthSideBar);
+                List<Directory> newitem;
+                if (!ShowAuthSideBar)
+                {
+                    newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId&&x.IsAuthMenu==false).ToList();
+                }
+                else 
+                {
+                    newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId).ToList();
+                }
                 htmlString.Append("<ul class='arrow nav nav-tabs nav-stacked'>");
                 foreach (var item in newitem)
                 {
