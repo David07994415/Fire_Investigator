@@ -31,7 +31,7 @@ namespace WebApplication1.Filter
             if (!string.IsNullOrEmpty(UserAccount))
             {
                 var UserPermission = db.Member.Where(x => x.Account == UserAccount).FirstOrDefault().Permission;
-                if (UserPermission.Contains("Front"))
+                if (UserPermission.Contains("M03")) // M03 為前臺 Front Bulletin
                 {
                     string htmlSideBarResultAuth = BuildSideBar(TargetUrl,true);
                     filterContext.Controller.ViewBag.SideBarResult = htmlSideBarResultAuth;
@@ -142,7 +142,7 @@ namespace WebApplication1.Filter
             if (!string.IsNullOrEmpty(UserAccount))
             {
                 var UserPermission = db.Member.Where(x => x.Account == UserAccount).FirstOrDefault().Permission;
-                if (UserPermission.Contains("Front"))
+                if (UserPermission.Contains("M03"))
                 {
                     string htmlMenuResultAuth = BuildMenu(true);
                     filterContext.Controller.ViewBag.MenuResult = htmlMenuResultAuth;
