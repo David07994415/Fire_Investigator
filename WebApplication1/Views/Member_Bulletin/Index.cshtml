@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.ViewModels.FrontMemberLogin
+﻿@model IEnumerable<WebApplication1.Models.Bulletin>
 @{
     ViewBag.Title = "Membership";
     ViewBag.PageTitle = "會員留言板";
@@ -30,30 +30,33 @@
         </thead>
 
         <tbody>
-            <tr>
-                <td><span class="text-left"><a href="/Download/Details/4">可不可以用動畫</a></span></td>
-                <td>余子廉 <br>11/14/2016</td>
-                <td>
-                    李庭昀                                                 <br>
-                    2023/09/25
-                </td>
-                <td>
-                    1
-                </td>
-            </tr>
-            <tr>
+            @foreach (var BullItem in Model)
+            {
+                <tr>
+                    <td><span class="text-left"><a href="~/Member_Bulletin/Detail/@BullItem.Id">@BullItem.Theme</a></span></td>
+                    <td>@BullItem.CreateUser <br>@BullItem.CreateTime.Value.ToString("yyyy/MM/dd")</td>
+                    @if (BullItem.MessageTable.Count > 0)
+                    {
+                        <td>
+                            @BullItem.MessageTable.OrderByDescending(x => x.CreateTime).FirstOrDefault().CreateUser
+                            <br>@BullItem.MessageTable.OrderByDescending(x => x.CreateTime).FirstOrDefault().CreateTime.Value.ToString("yyyy/MM/dd")
+                        </td>
+                        <td>@BullItem.MessageTable.Count()</td>
+                    }
+                    else
+                    {
+                        <td>尚無留言</td>
+                        <td>0</td>
+                    }
+                </tr>
+            }
 
-                <td><span class="text-left"><a href="/Download/Details/3">關於協會網路業務的部分提案</a></span></td>
-                <td>余子廉 <br>11/14/2016</td>
-                <td>
-                    余子廉                                                 <br>
-                    2016/11/14
-                </td>
-                <td>
-                    1
-                </td>
-            </tr>
-
+            @*<tr>
+            <td><span class="text-left"><a href="/Download/Details/3">關於協會網路業務的部分提案</a></span></td>
+            <td>余子廉 <br>11/14/2016 </td>
+            <td>余子廉 <br> 2016/11/14 </td>
+            <td> 1 </td>
+            </tr>*@
 
         </tbody>
     </table>
