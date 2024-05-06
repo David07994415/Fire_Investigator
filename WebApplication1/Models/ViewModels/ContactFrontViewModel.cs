@@ -11,18 +11,16 @@ namespace WebApplication1.Models.ViewModels
         [Required]
         [MaxLength(60)]
         public string name { get; set; }
-        [Required]
-        public sex gender { get; set; }
+        [Required(ErrorMessage = "尚未選擇性別")]
+        public sex? gender { get; set; }
         [Required]
         public string phone { get; set; }
-        [Required]
+        [Required(ErrorMessage ="信箱格式不正確")]
         [RegularExpression(@"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]
         public string email { get; set; }
         [Required]
         [MaxLength(500)]
         public string content { get; set; }
-        [Required]
-        public string validationCode { get; set; }
     }
     public enum sex
     {
