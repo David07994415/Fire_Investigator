@@ -37,6 +37,9 @@ namespace WebApplication1.Controllers
         [AddLayoutMenu]
         public ActionResult Index()
         {
+            var newsData=db.News.OrderByDescending(x => x.IssueTime).Where(x=>x.IsTop==true).Take(3).ToList();
+            //todo
+
             return View();
         }
 
