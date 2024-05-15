@@ -5,12 +5,6 @@
     ViewBag.Title = "Home Page";
 }
 
-1. 新聞 top 3 model
-2. 宗旨
-3. 圖片上傳
-4. 超連結
-
-
 <!-- Carousel -->
 <div id="main-slide" class="carousel slide" data-ride="carousel">
 
@@ -24,13 +18,12 @@
 
         @foreach (var cover in Model.CoverData)
         {
-            <div class="item active" style="background-image:url(@cover.PhotoPath)"></div>
+            <div class="item active" style="background-image:url(/Uploads/IndexCover/@cover.PhotoPath)"></div>
         }
         <!--3. 圖片上傳
         <div class="item active" style="background-image:url(/images/slider-main-01.jpg)">
         </div>-->
     <!--/ Carousel item end -->
-
 
         <!--<div class="item" style="background-image:url(/images/slider-main-02.jpg)">
         </div>-->
@@ -76,8 +69,6 @@
                 </div><!-- 1st post col end -->
             }
 
-
-
             <!--<div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="latest-post">
                     <img class="img-responsive" src="~/images/newsimg-04.jpg" alt="img">
@@ -105,7 +96,7 @@
         <div class="container">
             <div class="row ">
                 <div class="col-md-12 fact-text">
-                @Html.Raw(Model.PurposeData)
+                @Html.Raw(Model.PurposeData.HTMLContent)
                     @*<ol>
                         <li>從事火災調查之科技與學術研究，提昇我國火災調查科技研究水準，並落實研究成果。</li>
                         <li>舉辦相關學術研討會及活動，提供技術資訊與發展之交流平台，參與並推動火災調查、預防及研究等之國內外交流活動。</li>
@@ -130,67 +121,13 @@
                 {
                     <figure class="item partner-logo">
                         <a href="@link.LinkPath">
-                            <img class="img-responsive" src="~@link.PhotoPath" alt="client">
+                            <img class="img-responsive" src="~/Uploads/IndexLink/@link.PhotoPath" alt="client">
                         </a>
                     </figure>
                 }
                 @*<figure class="item partner-logo">
                     <a href="#">
                         <img class="img-responsive" src="~/images/partner1.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner2.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner3.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner4.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner5.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner2.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner3.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner4.jpg" alt="client">
-                    </a>
-                </figure>
-
-                <figure class="item partner-logo">
-                    <a href="#">
-                        <img class="img-responsive" src="~/images/partner5.jpg" alt="client">
                     </a>
                 </figure>*@
 
