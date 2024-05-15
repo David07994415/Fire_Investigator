@@ -38,9 +38,17 @@ namespace WebApplication1.Controllers
         public ActionResult Index()
         {
             var newsData=db.News.OrderByDescending(x => x.IssueTime).Where(x=>x.IsTop==true).Take(3).ToList();
-            //todo
-
-            return View();
+            var linkData = db.IndexLink.Where(x => x.IsShow == true).ToList();
+            var CoverData= db.IndexCover.Where(x => x.IsShow == true).ToList();
+            var PurposeData = db.IndexPurpose.ToList();
+            var IndexData = new HomeDataViewModel()
+            {
+                CoverData = CoverData,
+                NewsData = newsData,
+                PurposeData = PurposeData[0],
+                LinkData = linkData
+            };
+            return View(IndexData);
         }
 
 
