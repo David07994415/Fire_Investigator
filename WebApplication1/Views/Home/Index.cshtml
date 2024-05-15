@@ -22,13 +22,19 @@
     <!-- Carousel inner -->
     <div class="carousel-inner">
 
-        3. 圖片上傳
+        @foreach (var cover in Model.CoverData)
+        {
+            <div class="item active" style="background-image:url(@cover.PhotoPath)"></div>
+        }
+        <!--3. 圖片上傳
         <div class="item active" style="background-image:url(/images/slider-main-01.jpg)">
-        </div><!--/ Carousel item end -->
+        </div>-->
+    <!--/ Carousel item end -->
 
 
-        <div class="item" style="background-image:url(/images/slider-main-02.jpg)">
-        </div><!--/ Carousel item end -->
+        <!--<div class="item" style="background-image:url(/images/slider-main-02.jpg)">
+        </div>-->
+    <!--/ Carousel item end -->
 
     </div><!-- Carousel inner end-->
     <!-- Controllers -->
@@ -48,7 +54,7 @@
 
         <div class="row">
 
-            LOOP for news
+            @*LOOP for news*@
             @foreach (var news in Model.NewsData)
             {
                 <div class="col-md-3 col-sm-6 col-xs-12">
@@ -72,7 +78,7 @@
 
 
 
-            <div class="col-md-3 col-sm-6 col-xs-12">
+            <!--<div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="latest-post">
                     <img class="img-responsive" src="~/images/newsimg-04.jpg" alt="img">
                     <div class="post-body">
@@ -87,8 +93,8 @@
                         </div>
                     </div>
                     <a href="#" class="btn btn-primary">More</a>
-                </div><!-- Latest post end -->
-            </div><!-- 4rd post col end -->
+                </div>--><!-- Latest post end -->
+            <!--</div>--><!-- 4rd post col end -->
 
         </div><!--/ Content row end -->
     </div><!--/ Container end -->
@@ -99,7 +105,8 @@
         <div class="container">
             <div class="row ">
                 <div class="col-md-12 fact-text">
-                    <ol>
+                @Html.Raw(Model.PurposeData)
+                    @*<ol>
                         <li>從事火災調查之科技與學術研究，提昇我國火災調查科技研究水準，並落實研究成果。</li>
                         <li>舉辦相關學術研討會及活動，提供技術資訊與發展之交流平台，參與並推動火災調查、預防及研究等之國內外交流活動。</li>
                         <li>發行及出版火災調查、預防及研究等相關科技研究之學術刊物、書籍及媒體等。</li>
@@ -107,7 +114,7 @@
                         <li>提昇火災預防及調查專業人員之技術，並輔導會員取得國際證照。</li>
                         <li>維護會員合法權益、端正會員職業道德與倫理、促進會員間之合作。</li>
                         <li>關懷社會並維護社會公理正義。</li>
-                    </ol>
+                    </ol>*@
                 </div><!-- Col end -->
             </div><!--/ Content row end -->
         </div><!--/ Container end -->
@@ -119,7 +126,15 @@
 
         <div class="row">
             <div id="partners-carousel" class="col-sm-12 owl-carousel owl-theme text-center partners">
-                <figure class="item partner-logo">
+                @foreach (var link in Model.LinkData)
+                {
+                    <figure class="item partner-logo">
+                        <a href="@link.LinkPath">
+                            <img class="img-responsive" src="~@link.PhotoPath" alt="client">
+                        </a>
+                    </figure>
+                }
+                @*<figure class="item partner-logo">
                     <a href="#">
                         <img class="img-responsive" src="~/images/partner1.jpg" alt="client">
                     </a>
@@ -177,7 +192,7 @@
                     <a href="#">
                         <img class="img-responsive" src="~/images/partner5.jpg" alt="client">
                     </a>
-                </figure>
+                </figure>*@
 
             </div><!--/ Owl carousel end -->
 
