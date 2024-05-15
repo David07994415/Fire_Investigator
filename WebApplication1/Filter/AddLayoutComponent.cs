@@ -26,14 +26,26 @@ namespace WebApplication1.Filter
         {
             string TargetUrl = filterContext.RouteData.Values[ControllerOrActionName].ToString();
             // if (TargetUrl == "Index"){ return;}   // for home/index
-            string htmlSideBarResult = BuildSideBar(TargetUrl);
+
+            var UserAccount = filterContext.HttpContext.User.Identity.Name;
+            if (!string.IsNullOrEmpty(UserAccount))
+            {
+                var UserPermission = db.Member.Where(x => x.Account == UserAccount).FirstOrDefault().Permission;
+                if (UserPermission.Contains("M03")) // M03 為前臺 Front Bulletin
+                {
+                    string htmlSideBarResultAuth = BuildSideBar(TargetUrl,true);
+                    filterContext.Controller.ViewBag.SideBarResult = htmlSideBarResultAuth;
+                    return;
+                }
+            }
+            string htmlSideBarResult = BuildSideBar(TargetUrl,false);
             filterContext.Controller.ViewBag.SideBarResult = htmlSideBarResult;
         }
-        private string BuildSideBar(string TargetUrl)
+        private string BuildSideBar(string TargetUrl,bool ShowAuthSideBar)
         {
             StringBuilder htmlString = new StringBuilder();
             var InputDirectoryId = db.Directory.FirstOrDefault(x => x.Value == TargetUrl).Id;
-            RecursiveSideBarMethod(InputDirectoryId, htmlString);
+            RecursiveSideBarMethod(InputDirectoryId, htmlString, ShowAuthSideBar);
             return htmlString.ToString();
             //StringBuilder htmlString = new StringBuilder();
             //var NodeDirectoryList = db.Directory.Where(x => x.Id == ParentDirectoryId || x.RecursiveId == ParentDirectoryId).ToList();
@@ -55,7 +67,7 @@ namespace WebApplication1.Filter
             //htmlString.Append("</ul>");
             //return htmlString.ToString();
         }
-        public void RecursiveSideBarMethod(int InputDirectoryId, StringBuilder htmlString)
+        public void RecursiveSideBarMethod(int InputDirectoryId, StringBuilder htmlString,bool ShowAuthSideBar)
         {
             var nextitem = db.Directory.Where(x => x.Id == InputDirectoryId).FirstOrDefault();
             if (nextitem.RecursiveId == null) 
@@ -64,8 +76,16 @@ namespace WebApplication1.Filter
             }
             else 
             {
-                RecursiveSideBarMethod((int)nextitem.RecursiveId, htmlString);
-                var newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId).ToList();
+                RecursiveSideBarMethod((int)nextitem.RecursiveId, htmlString, ShowAuthSideBar);
+                List<Directory> newitem;
+                if (!ShowAuthSideBar)
+                {
+                    newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId&&x.IsAuthMenu==false).ToList();
+                }
+                else 
+                {
+                    newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId).ToList();
+                }
                 htmlString.Append("<ul class='arrow nav nav-tabs nav-stacked'>");
                 foreach (var item in newitem)
                 {
@@ -118,10 +138,21 @@ namespace WebApplication1.Filter
         private DbModel db = new DbModel();
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            string htmlMenuResult = BuildMenu();
+            var UserAccount = filterContext.HttpContext.User.Identity.Name;
+            if (!string.IsNullOrEmpty(UserAccount))
+            {
+                var UserPermission = db.Member.Where(x => x.Account == UserAccount).FirstOrDefault().Permission;
+                if (UserPermission.Contains("M03"))
+                {
+                    string htmlMenuResultAuth = BuildMenu(true);
+                    filterContext.Controller.ViewBag.MenuResult = htmlMenuResultAuth;
+                    return;
+                }
+            }
+            string htmlMenuResult = BuildMenu(false);
             filterContext.Controller.ViewBag.MenuResult = htmlMenuResult;
         }
-        private string BuildMenu()
+        private string BuildMenu(bool showAuthMenu)
         {
             List<Directory> DirectroyList = db.Directory.ToList();
             var roots = DirectroyList.Where(x => x.ParentTable == null);
@@ -130,13 +161,13 @@ namespace WebApplication1.Filter
             {
                 HTML.Append("<li class='dropdown'>");     //2nd start
                 HTML.Append($@"<a href='/' class='dropdown-toggle' data-toggle='dropdown' title='{root.Title}'>{root.Title}<i class='fa fa-angle-down'></i></a>");
-                DirectoryRecursion(root, HTML);  //要有hrefHTML資料欄位==>TB DB first
+                DirectoryRecursion(root, HTML, showAuthMenu);  //要有hrefHTML資料欄位==>TB DB first
                 HTML.Append("</li>");  //2nd end
             }
             HTML.Append("</ul>");  //main close
             return HTML.ToString();
         }
-        public static void DirectoryRecursion(Directory node, StringBuilder html)
+        public static void DirectoryRecursion(Directory node, StringBuilder html, bool showAuthMenu)
         {
             if (node.ChildTable.Count > 0)  //有第三層
             {
@@ -147,14 +178,23 @@ namespace WebApplication1.Filter
                     {
                         html.Append("<li class='dropdown'>");
                         html.Append($@"<a href='/{child.Value}/Index' class='dropdown-toggle' data-toggle='dropdown' title='{child.Title}'>{child.Title}<i class='fa fa-angle-down'></i></a>");
-                        DirectoryRecursion(child, html);     //要有hrefHTML資料欄位==>TB DB first
+                        DirectoryRecursion(child, html, showAuthMenu);     //要有hrefHTML資料欄位==>TB DB first
                         html.Append("</li>");
                     }
-                    else if (child.ChildTable.Count == 0)
+                    else if (child.ChildTable.Count == 0 && showAuthMenu)
                     {
                         html.Append("<li>");
                         html.Append($@"<a href='/{child.Value}/Index'>{child.Title}</a>");
                         html.Append("</li>");     //要有hrefHTML資料欄位==>TB DB first
+                    }
+                    else if (child.ChildTable.Count == 0 && !showAuthMenu)
+                    {
+                        if (child.IsAuthMenu == false) 
+                        {
+                            html.Append("<li>");
+                            html.Append($@"<a href='/{child.Value}/Index'>{child.Title}</a>");
+                            html.Append("</li>");     //要有hrefHTML資料欄位==>TB DB first
+                        }
                     }
                 }
                 html.Append("</ul>");

@@ -1,0 +1,130 @@
+﻿@model WebApplication1.Models.Bulletin
+@{
+    ViewBag.Title = "Membership";
+    ViewBag.PageTitle = "主題內容";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+    <!-- 內容開始 -->
+
+    <style>
+        .entry-header {
+            background: #3c73b0;
+            color: white;
+            padding: 10px 30px;
+        }
+        .entry-header .entry-title {
+            color: white;
+        }
+        .entry-title {
+        }
+        .post-meta-date {
+        }
+        .post-content {
+            border: whitesmoke 1px solid;
+            margin-bottom: 20px;
+            box-shadow: rgba(210,210,210,.1) 2px 2px 20px;
+        }
+        .entry-content {
+        }
+        .post {
+            border: whitesmoke 1px solid;
+            padding: 0;
+        }
+        .postInfo {
+            padding: 10px 20px;
+            background: #eee;
+            text-align: right;
+        }
+        .respon {
+            margin: 20px auto;
+            display: inline-block;
+            padding: 3px 8px;
+            background: #b2b2b2;
+            color: white;
+            border-radius: 2px;
+        }
+        .post-body {
+            background: #FCFCFC;
+            padding: 30px;
+            box-shadow: rgba(210,210,210,.1) 2px 2px 20px;
+        }
+        .clear {
+            clear: both;
+        }
+        .postMan {
+            font-size: 16px;
+        }
+    </style>
+
+    <div class="post-content">
+        <div class="entry-header">
+            <h2 class="entry-title">@Model.Theme</h2>
+            <span class="postMan"> 發表人：@Model.CreateUser</span>
+        </div>
+    <!-- header end -->
+        <div class="postInfo">
+            <span class="post-meta-date">
+                <i class="fa fa fa-clock-o"></i> @Model.CreateTime.Value.ToString("yyyy/MM/dd")
+            </span>
+        </div>
+
+        <div class="post-body">
+            <div class="entry-content topmargin-min">
+                <p>@Html.Raw(Model.Content)</p>
+            </div>
+            <div class="tags-area clearfix">
+            </div>
+        </div>
+
+    </div><!-- post-body end -->
+
+    <a class="respon" href="~/Member_Bulletin/Reply/@Model.Id">回應文章</a>
+    <div class="clear"></div>
+
+    <div class="post">
+        @if (Model.MessageTable.Count > 0)
+        {
+            foreach (var message in Model.MessageTable)
+            {
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="entry-header">
+                        <div class="post-media post-image postMan">
+                            回應：@message.CreateUser
+                        </div>
+                    </div>
+                    <div class="postInfo">
+                        <span class="post-meta-date">
+                            <i class="fa fa fa-clock-o"></i>@message.CreateTime.Value.ToString("yyyy/MM/dd")
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="post-body">
+                        @Html.Raw(message.Content)
+                    </div>
+                    <!-- post-body end -->
+                </div>
+            </div>
+            }
+        }
+    </div>
+
+
+
+    <div class="paging text-center">
+        <div class="pagination">
+            <span class="disabled">«</span><span class="current">1</span><span class="disabled">»</span>
+        </div>
+    </div>
+
+    <div class="post-footer  pull-left">
+        <a onclick="history.back()" onkeypress="history.back()" class="btn btn-primary">返回列表</a>
+    </div>
+
+    <!-- Content row 1 end -->
+    <!-- 內容結束 -->
+
+
+

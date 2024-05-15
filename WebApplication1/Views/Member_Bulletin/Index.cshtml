@@ -1,0 +1,74 @@
+﻿@model IEnumerable<WebApplication1.Models.Bulletin>
+@{
+    ViewBag.Title = "Membership";
+    ViewBag.PageTitle = "會員留言板";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+    <!-- 內容開始 -->
+
+    <style>
+        .respon {
+            margin: 20px auto;
+            display: inline-block;
+            padding: 3px 8px;
+            background: #b2b2b2;
+            color: white;
+            border-radius: 2px;
+        }
+    </style>
+    <a class="respon" href="~/Member_Bulletin/Create">張貼文章</a>
+
+    <table class="table table-striped career-table download-table">
+        <thead>
+            <tr>
+                <th><span class="text-left">標題</span></th>
+                <th>發表人</th>
+                <th>最新回覆人</th>
+                <th>回覆數</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var BullItem in Model)
+            {
+                <tr>
+                    <td><span class="text-left"><a href="~/Member_Bulletin/Detail/@BullItem.Id">@BullItem.Theme</a></span></td>
+                    <td>@BullItem.CreateUser <br>@BullItem.CreateTime.Value.ToString("yyyy/MM/dd")</td>
+                    @if (BullItem.MessageTable.Count > 0)
+                    {
+                        <td>
+                            @BullItem.MessageTable.OrderByDescending(x => x.CreateTime).FirstOrDefault().CreateUser
+                            <br>@BullItem.MessageTable.OrderByDescending(x => x.CreateTime).FirstOrDefault().CreateTime.Value.ToString("yyyy/MM/dd")
+                        </td>
+                        <td>@BullItem.MessageTable.Count()</td>
+                    }
+                    else
+                    {
+                        <td>尚無留言</td>
+                        <td>0</td>
+                    }
+                </tr>
+            }
+
+            @*<tr>
+            <td><span class="text-left"><a href="/Download/Details/3">關於協會網路業務的部分提案</a></span></td>
+            <td>余子廉 <br>11/14/2016 </td>
+            <td>余子廉 <br> 2016/11/14 </td>
+            <td> 1 </td>
+            </tr>*@
+
+        </tbody>
+    </table>
+
+    <div class="paging text-center">
+        <div class="pagination">
+            <span class="disabled">«</span><span class="current">1</span><span class="disabled">»</span>
+        </div>
+    </div>
+
+
+    <!-- Content row 1 end -->
+    <!-- 內容結束 -->
+
+

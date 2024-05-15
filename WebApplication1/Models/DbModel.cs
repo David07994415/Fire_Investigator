@@ -21,6 +21,9 @@ namespace WebApplication1.Models
         public virtual DbSet<Master> Master { get; set; }
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Knowledge> Knowledge { get; set; }
+        public virtual DbSet<Bulletin> Bulletin { get; set; }
+        public virtual DbSet<Message> Message { get; set; }
+
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
