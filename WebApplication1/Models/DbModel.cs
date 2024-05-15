@@ -23,6 +23,9 @@ namespace WebApplication1.Models
         public virtual DbSet<Knowledge> Knowledge { get; set; }
         public virtual DbSet<Bulletin> Bulletin { get; set; }
         public virtual DbSet<Message> Message { get; set; }
+        public virtual DbSet<IndexLink> IndexLink { get; set; }
+        public virtual DbSet<IndexPurpose> IndexPurpose { get; set; }
+        public virtual DbSet<IndexCover> IndexCover { get; set; }
 
 
 
