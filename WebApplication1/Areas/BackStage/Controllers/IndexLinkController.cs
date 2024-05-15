@@ -16,13 +16,12 @@ namespace WebApplication1.Areas.BackStage.Controllers
     public class IndexLinkController : Controller
     {
         private DbModel db = new DbModel();
-        // GET: BackStage/IndexLink
+
         public ActionResult Index()
         {
             var LinkData = db.IndexLink.ToList();
             return View(LinkData);
         }
-
 
         public ActionResult Create()
         {
@@ -76,7 +75,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 }
                 ModelState.AddModelError("UploadPhoto", "檔案為空");
                 return View(NewCreateIndexLink);
-                // 如果檔案無效，返回相應的視圖或其他操作
             }
             else
             {
