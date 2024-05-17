@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Helpers;
@@ -38,6 +39,13 @@ namespace WebApplication1.Controllers
         public ActionResult Index()
         {
             var newsData=db.News.OrderByDescending(x => x.IssueTime).Where(x=>x.IsTop==true).Take(3).ToList();
+            for (var i = 0;i< newsData.Count();i++)
+            {
+                newsData[i].NewsCkContent = Regex.Replace(newsData[i].NewsCkContent, "<.*?>", string.Empty);
+                newsData[i].NewsCkContent = newsData[i].NewsCkContent.Length < 7 ?
+                    newsData[i].NewsCkContent + "..." :
+                    newsData[i].NewsCkContent.Substring(0, 7) + "...";
+            }
             var linkData = db.IndexLink.Where(x => x.IsShow == true).ToList();
             var CoverData= db.IndexCover.Where(x => x.IsShow == true).ToList();
             var PurposeData = db.IndexPurpose.FirstOrDefault();
