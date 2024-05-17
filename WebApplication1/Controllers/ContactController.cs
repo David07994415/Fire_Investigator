@@ -55,7 +55,7 @@ namespace WebApplication1.Controllers
                 if (ModelState.IsValid)
                 {
                     sendGmail(ContactSubmitViewModel.name, ContactSubmitViewModel.email, ContactSubmitViewModel.content);
-
+                    TempData["MailSent"] = true;
                     ModelState.Clear();  // 清空模型中的error數據
                     return View();           // 返回沒有清空資料
                 }

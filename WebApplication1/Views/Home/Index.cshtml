@@ -10,24 +10,37 @@
 
     <!-- Indicators -->
     <ol class="carousel-indicators visible-lg visible-md">
-        <li data-target="#main-slide" data-slide-to="0" class="active"></li>
+        @{
+            var CoverCounter = Model.CoverData.Count();
+            for (var i = 0; i < CoverCounter; i++)
+            {
+                if (i == 0){<li data-target="#main-slide" data-slide-to="${i}" class="active"></li>}
+                else{<li data-target="#main-slide" data-slide-to="${i}"></li>}
+            }
+        }
+        @* Fisrt item need active class
+            <li data-target="#main-slide" data-slide-to="0" class="active"></li>
         <li data-target="#main-slide" data-slide-to="1"></li>
+            *@
+
     </ol><!--/ Indicators end-->
     <!-- Carousel inner -->
     <div class="carousel-inner">
-
-        @foreach (var cover in Model.CoverData)
-        {
-            <div class="item active" style="background-image:url(/Uploads/IndexCover/@cover.PhotoPath)"></div>
+        
+    @{
+           for(var i=0; i< CoverCounter; i++)
+           {
+               if (i == 0) {<div class="item active" style="background-image:url(/Uploads/IndexCover/@Model.CoverData[i].PhotoPath)"></div>}
+               else {<div class="item" style="background-image:url(/Uploads/IndexCover/@Model.CoverData[i].PhotoPath)"></div>}
+           }
         }
-        <!--3. 圖片上傳
-        <div class="item active" style="background-image:url(/images/slider-main-01.jpg)">
-        </div>-->
-    <!--/ Carousel item end -->
-
+        <!--3. 圖片上傳 (Fisrt item need active class)
+    <div class="item active" style="background-image:url(/images/slider-main-01.jpg)">
+    </div>-->
+        <!--/ Carousel item end -->
         <!--<div class="item" style="background-image:url(/images/slider-main-02.jpg)">
-        </div>-->
-    <!--/ Carousel item end -->
+    </div>-->
+        <!--/ Carousel item end -->
 
     </div><!-- Carousel inner end-->
     <!-- Controllers -->
@@ -47,7 +60,6 @@
 
         <div class="row">
 
-            @*LOOP for news*@
             @foreach (var news in Model.NewsData)
             {
                 <div class="col-md-3 col-sm-6 col-xs-12">
@@ -55,16 +67,16 @@
                         <img class="img-responsive" src="~/images/newsimg-01.jpg" alt="img">
                         <div class="post-body">
                             <h4 class="post-title">
-                                <a href="#">@news.Title</a>
+                                <a href="~/News/Index/@news.Id">@news.Title</a>
                             </h4>
                             <span class="post-item-date">
                                 <i class="fa fa-clock-o"></i>  @news.IssueTime.Value.ToString("yyyy-MM-dd")
                             </span>
                             <div class="post-text">
-                                <p>@news.NewsCkContent.ToString().Substring(0,10)...</p>
+                                <p>@news.NewsCkContent.ToString()</p>
                             </div>
                         </div>
-                        <a href="~/News/@news.Id" class="btn btn-primary">More</a>
+                        <a href="~/News/Index/@news.Id" class="btn btn-primary">More</a>
                     </div><!-- Latest post end -->
                 </div><!-- 1st post col end -->
             }

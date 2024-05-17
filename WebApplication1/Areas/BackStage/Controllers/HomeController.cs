@@ -30,7 +30,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
         //    this.ViewBag.DirectoryHTML = this.DirectoryBackLayoutViewData.DirectoryHTML;
         //}
         // Return PartialMenuView
-        public ActionResult _PartialMenuView()  // 他怎麼知道我要鏈結哪個partialview
+        public ActionResult _PartialMenuView()
         {
             string username = User.Identity.Name;
             var user = db.Member.Where(x => x.Account == username)?.FirstOrDefault();
@@ -46,7 +46,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 ViewBag.HHH = HTMLmenu;
                 return PartialView();
                 //ViewBag.DirectoryMenuHTML = HTMLmenu;
-                //這裡傳入上面的參數，進入方法
             } 
         }
 
@@ -65,7 +64,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 string[] permissionArray=permissionString.Split(',');
                 string HTMLmenu=DirectoryBackViewModel.GetSideBarDirectoryHtml(permissionArray);
                 ViewBag.DirectoryMenuHTML = HTMLmenu;
-                //這裡傳入上面的參數，進入方法
             }
             return View();
         }
