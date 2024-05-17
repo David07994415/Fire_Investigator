@@ -12,17 +12,17 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <h2>搜尋：</h2>
+
     <div class="form-horizontal">
-        <p>
-            Name: @Html.TextBox("nameName")
-            <input type="submit" value="搜尋" class="btn btn-default" />
-            @ViewBag.ErrorMassage
-            @if (ViewBag.ErrorMassage != null)
-            {
-                @ViewBag.ErrorMassage
-            }
-        </p>
+        標題：<input name="TitleSearch" /> &nbsp
+        最近編輯者：<input name="CreatorSearch" /> &nbsp
+        開始時間：<input name="StartTimeSearch" title="更新起始時間" type="date" /> &nbsp
+        結束時間：<input name="EndTimeSearch" title="更新結束時間" type="date" /> &nbsp &nbsp
+        <input type="submit" value="搜尋" class="btn btn-default" />
+        @if (ViewBag.ErrorMassage != null)
+        {
+            <span style="color:red; font-weight:bolder; font-size:16px">@ViewBag.ErrorMassage</span>
+        }
     </div>
 }
 

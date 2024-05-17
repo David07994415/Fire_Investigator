@@ -23,30 +23,52 @@ namespace WebApplication1.Areas.BackStage.Controllers
         private const int DataSizeInPage = 2;   //設定一頁幾筆
 
         // GET: BackStage/News
-        public ActionResult Index(int? page, string SearchString)    // 包含搜尋和分頁
+        public ActionResult Index(int? page, string TitleSearch, string CreatorSearch, DateTime? StartTimeSearch, DateTime? EndTimeSearch)    // 包含搜尋和分頁
         {
             int currentPageIndex = page.HasValue ? page.Value - 1 : 0;   // 現在第幾頁(當前頁面的索引值)
-
-            if (SearchString != null)    // 有搜尋 string 的資料
+            var matchedRecords = db.News.AsQueryable();
+            if (!string.IsNullOrEmpty(TitleSearch))         // 有 TitleSearch 的資料
             {
-                var matchedRecords = db.News.Where(x => x.Title.Contains(SearchString) || x.NewsCkContent.Contains(SearchString))// or的搜尋
-                                                                                                                      //.Where(x=> x.Ocupation.Contains(nameName))  //這樣會變成 and 搜尋
-                    .OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
-                if (matchedRecords.TotalItemCount != 0) // 搜尋後資料庫內有資料
+                matchedRecords = matchedRecords.Where(x => x.Title.Contains(TitleSearch));
+            }
+            if (!string.IsNullOrEmpty(CreatorSearch))    // 有 CreatorSearch 的資料
+            {
+                int UserId;
+                if (int.TryParse(CreatorSearch, out UserId))
                 {
-                    ViewBag.Count = matchedRecords.TotalItemCount;
-                    return View(matchedRecords);
-                }
-                else     // 搜尋後資料庫內沒有資料
-                {
-                    ViewBag.ErrorMassage = "沒有找到資料";
-                    ViewBag.Count = db.News.Count();
-                    return View(db.News.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
+                    matchedRecords = matchedRecords.Where(x => x.UpdateUser == UserId);
                 }
             }
-            else                                 // 沒有搜尋 string 的資料
+            if (StartTimeSearch != null)    // 有 StartTimeSearch 的資料
             {
-                ViewBag.Count = db.News.Count();
+                matchedRecords = matchedRecords.Where(x => x.UpdateTime >= StartTimeSearch);
+            }
+            if (EndTimeSearch != null)    // 有 EndTimeSearch 的資料
+            {
+                if(StartTimeSearch != null) 
+                {
+                    if(StartTimeSearch <= EndTimeSearch) 
+                    {
+                        var EndTimeAdd = EndTimeSearch.Value.AddHours(23).AddMinutes(59).AddSeconds(58);
+                        matchedRecords = matchedRecords.Where(x => x.UpdateTime <= EndTimeAdd);
+                    }
+                    else { }   // StartTimeSearch > EndTimeSearch，不要 search EndTimeSearch
+                }
+                else  // StartTimeSearch = null，僅搜尋 EndTimeSearch
+                {
+                    matchedRecords = matchedRecords.Where(x => x.UpdateTime <= EndTimeSearch);
+                }
+            }
+            var ToPageRecords = matchedRecords.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
+            if (ToPageRecords.TotalItemCount != 0) // 搜尋後資料庫內有資料
+            {
+                ViewBag.Count = ToPageRecords.TotalItemCount;
+                return View(ToPageRecords);
+            }
+            else     // 搜尋後資料庫內沒有資料
+            {
+                ViewBag.ErrorMassage = "沒有找到資料";
+                ViewBag.Count = db.News.Count(); // 給所有資料
                 return View(db.News.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
             }
         }
@@ -66,7 +88,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
             return View(news);
         }
 
-        // GET: BackStage/News/Create
         public ActionResult Create()
         {
             return View();
@@ -111,7 +132,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         NewsData.UpdateTime = DateTime.Now;
                         db.SaveChanges();
 
-                        string targetPath = Server.MapPath("~/Uploads/news/"); // 將檔案保存到 "Uploads" 資料夾中
+                        string targetPath = Server.MapPath("~/Uploads/news/");
                         string uploadPath = Path.Combine(targetPath, fileName);
                         PhotoFile.SaveAs(uploadPath);
                         return RedirectToAction("Edit", new { id = newId });

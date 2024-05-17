@@ -10,8 +10,19 @@
     <!--<link href="css/styles.css" rel="stylesheet">-->
     @Styles.Render("~/Content/BackStageCSSFolder")
     @RenderSection("CKeditorStyle", required: false)
+    <style>
+        .WrapFlexContent {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .FlexMainContent {
+            flex: 1;
+        }
+    </style>
 </head>
-<body>
+<body >
+    <div class="WrapFlexContent">
     <div class="header">
         <div class="container">
             <div class="row">
@@ -52,7 +63,7 @@
         </div>
     </div>
 
-    <div class="page-content">
+    <div class="page-content FlexMainContent">
         <div class="row">
             <div class="col-md-2">
                 <div class="sidebar content-box" style="display: block;">
@@ -114,6 +125,6 @@
     <script src="js/custom.js"></script>-->
     @Scripts.Render("~/bundles/BackStageJSFolder")
     @RenderSection("scripts", required: false)
-
+    </div>
 </body>
 </html>
