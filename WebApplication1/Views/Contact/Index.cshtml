@@ -11,6 +11,7 @@
 @section  ReChpatura
 {
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 }
 
 
@@ -47,7 +48,7 @@
                     女
                 </label>
                 <div>
-                @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="col-sm-3">
@@ -94,8 +95,8 @@
                 }
             </div>
             @*<div class="col-sm-3">
-                <span class="alertred"><i class="fa fa-exclamation-circle"></i> 驗證必填</span>
-            </div>*@
+                    <span class="alertred"><i class="fa fa-exclamation-circle"></i> 驗證必填</span>
+                </div>*@
         </div>
 
 
@@ -184,11 +185,26 @@
     </form>*@
 
 @*<div class="tags-area clearfix">
-    <div class="share-items pull-right">
-        <ul class="post-social-icons unstyled">
-            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-        </ul>
-    </div>
-</div>*@
+        <div class="share-items pull-right">
+            <ul class="post-social-icons unstyled">
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>*@
+
+
+@section  scripts
+{
+    @if (TempData["MailSent"] != null && Convert.ToBoolean(TempData["MailSent"]) == true)
+    {
+        <script>
+        Swal.fire({
+            title: "寄郵成功！",
+            text: "請至您的信箱收信",
+            icon: "success"
+            });
+        </script>
+    }
+}
