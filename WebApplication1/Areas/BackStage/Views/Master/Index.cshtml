@@ -8,29 +8,18 @@
 }
 <h2>專家介紹頁面</h2>
 
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Master",FormMethod.Get))
 {
     @Html.AntiForgeryToken()
 
-    <h2>搜尋：</h2>
-
     <div class="form-horizontal">
-
-
-    <p>
-        Name: @Html.TextBox("nameName")
-        <input type="submit" value="搜尋" class="btn btn-default"  />
-        @ViewBag.ErrorMassage
-        @if (ViewBag.ErrorMassage != null) 
+        專家名稱: <input name="MasterName" /> &nbsp &nbsp
+        <input type="submit" value="搜尋" class="btn btn-default" />
+        @if (ViewBag.ErrorMassage != null)
         {
-            @ViewBag.ErrorMassage
+            <span style="color:red; font-weight:bolder; font-size:16px">@ViewBag.ErrorMassage</span>
         }
-    </p>
-        
-
     </div>
-
 }
 
 <p>
@@ -51,8 +40,8 @@
             @Html.DisplayNameFor(model => model.FirstOrDefault().IsShow)
         </th>
         @*<th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().PersonCkContent)
-        </th>*@
+                @Html.DisplayNameFor(model => model.FirstOrDefault().PersonCkContent)
+            </th>*@
         <th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().UpdateUser)
         </th>
@@ -81,11 +70,11 @@
                 @Html.DisplayFor(modelItem => item.PhotoPath)
             </td>
             <td>
-            @Html.DisplayFor(modelItem => item.IsShow)
+                @Html.DisplayFor(modelItem => item.IsShow)
             </td>
             @*<td>
-            @Html.DisplayFor(modelItem => item.PersonCkContent)
-        </td>*@
+                    @Html.DisplayFor(modelItem => item.PersonCkContent)
+                </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.UpdateUser)
             </td>
@@ -108,14 +97,14 @@
 
 </table>
 
-
 <!--分頁開始-->
 <div class="pager">
     <div class="pages">
         <div class="pagination">
-            @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+            @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount).Options(o => o
+            .AddRouteValue("MasterName", Request.QueryString["MasterName"]))
         </div>
-        <div class="page_boxR"> 資料筆數：@ViewBag.count  　</div>
+        <div class="page_boxR"> 資料筆數：@Model.TotalItemCount  　</div>
     </div>
 </div>
 <!--分頁結束-->

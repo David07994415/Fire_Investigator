@@ -20,8 +20,9 @@ namespace WebApplication1.Models.ViewModels
         [MaxLength(500)]
         public string Ocupation { get; set; }
 
+        [Required]
         [Display(Name = "是否顯示標籤")]
-        public bool IsShow { get; set; }
+        public bool? IsShow { get; set; }
     }
 
     public class CreateMasterPhotoViewModel
@@ -47,8 +48,9 @@ namespace WebApplication1.Models.ViewModels
         [Display(Name = "CKeditor內容")]
         public string PersonCkContent { get; set; }
 
+        [Required]
         [Display(Name = "是否顯示標籤")]
-        public bool IsShow { get; set; }
+        public bool? IsShow { get; set; }
 
     }
 }

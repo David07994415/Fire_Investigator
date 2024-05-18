@@ -178,7 +178,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
             {
                 string UserName = User.Identity.Name;
                 var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
-                int NewsId = Convert.ToInt32(RouteData.Values["id"].ToString());
 
                 NewsData.IssueTime = EditProfile.IssueTime;
                 NewsData.UpdateTime = DateTime.Now;
@@ -196,7 +195,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                     string fileExtent = Path.GetExtension(PhotoFile.FileName);
                     if (fileExtent == ".png" || fileExtent == ".jpg")
                     {
-                        var NewsDataRe = db.News.FirstOrDefault(x => x.Id == NewsId);
+                        var NewsDataRe = db.News.FirstOrDefault(x => x.Id == id);
                         NewsDataRe.PhotoPath = fileName;
                         NewsDataRe.UpdateUser = UserId;
                         NewsDataRe.UpdateTime = DateTime.Now;
