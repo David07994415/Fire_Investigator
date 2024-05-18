@@ -23,29 +23,25 @@ namespace WebApplication1.Areas.BackStage.Controllers
         private const int DataSizeInPage = 2;   //設定一頁幾筆
 
         // GET: BackStage/Knowledges
-        public ActionResult Index(int? page, string SearchString)
+        public ActionResult Index(int? page, string TitleSearch)
         {
             int currentPageIndex = page.HasValue ? page.Value - 1 : 0;   // 現在第幾頁(當前頁面的索引值)
 
-            if (SearchString != null)    // 有搜尋 string 的資料
+            var matchedRecords = db.Knowledge.AsQueryable();
+            if (TitleSearch != null)    // 有搜尋 string 的資料
             {
-                var matchedRecords = db.Knowledge.Where(x => x.Title.Contains(SearchString) || x.FileName.Contains(SearchString))// or的搜尋                        
-                    .OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
-                if (matchedRecords.TotalItemCount != 0) // 搜尋後資料庫內有資料
-                {
-                    ViewBag.Count = matchedRecords.TotalItemCount;
-                    return View(matchedRecords);
-                }
-                else     // 搜尋後資料庫內沒有資料
-                {
-                    ViewBag.ErrorMassage = "沒有找到資料";
-                    ViewBag.Count = db.Knowledge.Count();
-                    return View(db.Knowledge.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
-                }
+                matchedRecords = matchedRecords.Where(x => x.Title.Contains(TitleSearch));
             }
-            else                                 // 沒有搜尋 string 的資料
+
+            var ToPageRecords = matchedRecords.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
+
+            if (ToPageRecords.TotalItemCount != 0) // 搜尋後資料庫內有資料
             {
-                ViewBag.Count = db.Knowledge.Count();
+                return View(ToPageRecords);
+            }
+            else     // 搜尋後資料庫內沒有資料
+            {
+                ViewBag.ErrorMassage = "沒有找到資料"; // 給所有資料
                 return View(db.Knowledge.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
             }
         }
@@ -78,7 +74,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreateBackKnowledgeViewModel Profile, HttpPostedFileBase UploadFile)
         {
-            String UserName = User.Identity.Name;
+            string UserName = User.Identity.Name;
             var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
 
             if (ModelState.IsValid)
@@ -111,20 +107,16 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         KnowsData.UpdateTime = DateTime.Now;
                         db.SaveChanges();
 
-                        string targetPath = Server.MapPath("~/Uploads/knowledge/"); // 將檔案保存到 "knowledge" 資料夾中
+                        string targetPath = Server.MapPath("~/Uploads/knowledge/");
                         string uploadPath = Path.Combine(targetPath, fileName);
                         UploadFile.SaveAs(uploadPath);
                         return RedirectToAction("Index");
                     }
                     ModelState.AddModelError("UploadFile", "檔案不吻合格式");
-                    return View();
-                    // 執行相應的處理邏輯...
-
-                    // 返回適當的視圖或其他操作
+                    return RedirectToAction("Edit", new { id = KnowsId });
                 }
                 ModelState.AddModelError("UploadFile", "檔案為空");
-                return RedirectToAction("Index");
-                // 如果檔案無效，返回相應的視圖或其他操作
+                return RedirectToAction("Edit", new { id = KnowsId });
             }
             else
             {
@@ -155,12 +147,13 @@ namespace WebApplication1.Areas.BackStage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id,CreateBackKnowledgeViewModel Profile, HttpPostedFileBase UploadFile)
         {
-            String UserName = User.Identity.Name;
-            var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+            var UpdateKnowsData = db.Knowledge.FirstOrDefault(x => x.Id == id);
 
             if (ModelState.IsValid)
             {
-                var UpdateKnowsData = db.Knowledge.FirstOrDefault(x => x.Id == id);
+                string UserName = User.Identity.Name;
+                var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+
                 UpdateKnowsData.Title = Profile.Title;
                 UpdateKnowsData.IsTop = Profile.IsTop;
                 UpdateKnowsData.IsShow = Profile.IsShow;
@@ -171,7 +164,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
                 if (UploadFile != null && UploadFile.ContentLength > 0)
                 {
-                    // 確認檔案的型別
                     string fileType = UploadFile.ContentType;
                     string fileName = Path.GetFileName(UploadFile.FileName);
                     string fileExtent = Path.GetExtension(UploadFile.FileName);
@@ -191,27 +183,27 @@ namespace WebApplication1.Areas.BackStage.Controllers
                     else
                     {
                         ModelState.AddModelError("UploadFile", "檔案不吻合格式");
-                        return View();
+                        return View(UpdateKnowsData);
                     }
                 }
-                else
+                else // 沒有上傳檔案時候
                 {
                     var UpdateKnowsCheck = db.Knowledge.FirstOrDefault(x => x.Id == id);
-                    if (UpdateKnowsCheck.FileName == null)
+                    if (UpdateKnowsCheck.FileName == null)  // 沒有上傳檔案
                     {
                         ModelState.AddModelError("UploadFile", "尚未上傳檔案");
-                        return View();
+                        return View(UpdateKnowsCheck);
                     }
-                    else
+                    else  // 已經包含檔案
                     {
-                        return View();
+                        return RedirectToAction("Index");
                     }
                 }
             }
             else
             {
                 ModelState.AddModelError("", "必填");
-                return View();
+                return View(UpdateKnowsData);
             }
         }
 

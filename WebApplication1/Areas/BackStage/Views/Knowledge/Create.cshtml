@@ -14,7 +14,14 @@
 <div class="form-horizontal">
     <h4>Knowledge</h4>
     <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
     <div class="form-group">
         @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -33,14 +40,16 @@
     <div class="form-group">
         @Html.LabelFor(model => model.IsShow, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <label class="checkbox-inline checkbox01">
-                @Html.RadioButtonFor(model => model.IsShow, "true", htmlAttributes: new { @class = "radiostyle01", @name = "IsShow", @id = "true" })
-                顯示於頁面
-            </label>
-            <label class="checkbox-inline checkbox01">
-                @Html.RadioButtonFor(model => model.IsShow, "false", htmlAttributes: new { @class = "radiostyle01", @name = "IsShow", @id = "false" })
-                不顯示於頁面
-            </label>
+            <div>
+                <label class="checkbox-inline checkbox01">
+                    @Html.RadioButtonFor(model => model.IsShow, "true", htmlAttributes: new { @class = "radiostyle01", @name = "IsShow", @id = "true" })
+                    顯示於頁面
+                </label>
+                <label class="checkbox-inline checkbox01">
+                    @Html.RadioButtonFor(model => model.IsShow, "false", htmlAttributes: new { @class = "radiostyle01", @name = "IsShow", @id = "false" })
+                    不顯示於頁面
+                </label>
+            </div>
             @Html.ValidationMessageFor(model => model.IsShow, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -49,14 +58,16 @@
     <div class="form-group">
         @Html.LabelFor(model => model.IsTop, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <label class="checkbox-inline checkbox01">
-                @Html.RadioButtonFor(model => model.IsTop, "true", htmlAttributes: new { @class = "radiostyle01", @name = "IsTop", @id = "true" })
-                顯示於置頂
-            </label>
-            <label class="checkbox-inline checkbox01">
-                @Html.RadioButtonFor(model => model.IsTop, "false", htmlAttributes: new { @class = "radiostyle01", @name = "IsTop", @id = "false" })
-                不顯示於置頂
-            </label>
+            <div>
+                <label class="checkbox-inline checkbox01">
+                    @Html.RadioButtonFor(model => model.IsTop, "true", htmlAttributes: new { @class = "radiostyle01", @name = "IsTop", @id = "true" })
+                    顯示於置頂
+                </label>
+                <label class="checkbox-inline checkbox01">
+                    @Html.RadioButtonFor(model => model.IsTop, "false", htmlAttributes: new { @class = "radiostyle01", @name = "IsTop", @id = "false" })
+                    不顯示於置頂
+                </label>
+            </div>
             @Html.ValidationMessageFor(model => model.IsTop, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -69,10 +80,9 @@
         </div>
     </div>
 
-
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="建立" class="btn btn-default" />
         </div>
     </div>
 </div>
