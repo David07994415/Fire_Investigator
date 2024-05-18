@@ -45,9 +45,9 @@ namespace WebApplication1.Areas.BackStage.Controllers
             }
             if (EndTimeSearch != null)    // 有 EndTimeSearch 的資料
             {
-                if(StartTimeSearch != null) 
+                if (StartTimeSearch != null)
                 {
-                    if(StartTimeSearch <= EndTimeSearch) 
+                    if (StartTimeSearch <= EndTimeSearch)
                     {
                         var EndTimeAdd = EndTimeSearch.Value.AddHours(23).AddMinutes(59).AddSeconds(58);
                         matchedRecords = matchedRecords.Where(x => x.UpdateTime <= EndTimeAdd);
@@ -60,18 +60,18 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 }
             }
             var ToPageRecords = matchedRecords.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
-            if (ToPageRecords.TotalItemCount != 0) // 搜尋後資料庫內有資料
+
+            if (ToPageRecords.TotalItemCount != 0) // 搜尋後 資料庫內有資料
             {
-                ViewBag.Count = ToPageRecords.TotalItemCount;
                 return View(ToPageRecords);
             }
             else     // 搜尋後資料庫內沒有資料
             {
-                ViewBag.ErrorMassage = "沒有找到資料";
-                ViewBag.Count = db.News.Count(); // 給所有資料
+                ViewBag.ErrorMassage = "沒有找到資料";   // 給所有資料
                 return View(db.News.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
             }
         }
+
 
         // GET: BackStage/News/Details/5
         public ActionResult Details(int? id)
@@ -108,6 +108,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 News NewCreateNews = new News();
                 NewCreateNews.Title = Profile.Title;
                 NewCreateNews.IsTop = Profile.IsTop;
+                NewCreateNews.IsShow = false;  // 預設
                 NewCreateNews.IssueTime = Profile.IssueTime;
                 NewCreateNews.UpdateUser = UserId;
                 NewCreateNews.CreateUser = UserId;
@@ -140,14 +141,9 @@ namespace WebApplication1.Areas.BackStage.Controllers
                     }
                     ModelState.AddModelError("PhotoPath", "檔案不吻合格式");
                     return RedirectToAction("Edit", new { id = newId });
-                    // 執行相應的處理邏輯...
-
-                    // 返回適當的視圖或其他操作
                 }
                 ModelState.AddModelError("PhotoPath", "檔案為空");
                 return RedirectToAction("Edit", new { id = newId });
-
-                // 如果檔案無效，返回相應的視圖或其他操作
             }
             else
             {
@@ -155,7 +151,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 return View();
             }
         }
-
 
         // GET: BackStage/News/Edit/5
         public ActionResult Edit(int? id)
@@ -173,19 +168,19 @@ namespace WebApplication1.Areas.BackStage.Controllers
         }
 
         // POST: BackStage/News/Edit/5
-        // 若要避免過量張貼攻擊，請啟用您要繫結的特定屬性。
-        // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
-        [ValidateAntiForgeryToken] 
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, EditBackNewsViewModel EditProfile, HttpPostedFileBase PhotoFile)
         {
+            News NewsData = db.News.FirstOrDefault(x => x.Id == id);
+
             if (ModelState.IsValid)
             {
-                String UserName = User.Identity.Name;
+                string UserName = User.Identity.Name;
                 var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
                 int NewsId = Convert.ToInt32(RouteData.Values["id"].ToString());
 
-                News NewsData = db.News.FirstOrDefault(x => x.Id == id);
+                NewsData.IssueTime = EditProfile.IssueTime;
                 NewsData.UpdateTime = DateTime.Now;
                 NewsData.UpdateUser = UserId;
                 NewsData.Title = EditProfile.Title;
@@ -196,7 +191,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
                 if (PhotoFile != null && PhotoFile.ContentLength > 0)
                 {
-                    // 確認檔案的型別
                     string fileType = PhotoFile.ContentType;
                     string fileName = Path.GetFileName(PhotoFile.FileName);
                     string fileExtent = Path.GetExtension(PhotoFile.FileName);
@@ -211,19 +205,15 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         string targetPath = Server.MapPath("~/Uploads/news/"); // 將檔案保存到 "Uploads" 資料夾中
                         string uploadPath = Path.Combine(targetPath, fileName);
                         PhotoFile.SaveAs(uploadPath);
-                        return RedirectToAction("Edit", new { id = NewsId });
+                        return RedirectToAction("Index"); // 新增成功(有檔案，返回Index列表)
                     }
                     ModelState.AddModelError("PhotoPath", "檔案不吻合格式");
-                    return RedirectToAction("Edit", new { id = NewsId });
-                    // 執行相應的處理邏輯...
-
-                    // 返回適當的視圖或其他操作
+                    return View(NewsData);
                 }
-                // 如果檔案無效，返回相應的視圖或其他操作
-
-                return RedirectToAction("Edit");
+                return RedirectToAction("Index"); // 新增成功(無檔案，返回Index列表)
             }
-            return RedirectToAction("Edit");
+            ModelState.AddModelError("", "必填");
+            return View(NewsData);
         }
 
         // GET: BackStage/News/Delete/5

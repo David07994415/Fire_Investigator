@@ -15,11 +15,12 @@ namespace WebApplication1.Models.ViewModels
         [MaxLength(100)]
         public string Title { get; set; }
 
-        [Display(Name = "是否顯示標籤")]
-        public bool? IsTop { get; set; }
+        [Required]   
+        [Display(Name = "是否置頂標籤")]
+        public bool? IsTop { get; set; } // 要有?加上[Required]  ，才能限定選項必填，不然會被判定false
 
         [Display(Name = "發布資料之時間")]
-        public DateTime? IssueTime { get; set; }
+        public DateTime IssueTime { get; set; }
     }
     public class EditBackNewsViewModel
     {
@@ -33,16 +34,19 @@ namespace WebApplication1.Models.ViewModels
         public string PhotoPath { get; set; }
 
         [AllowHtml]
+        [Required]
         [Display(Name = "CKeditor內容")]
         public string NewsCkContent { get; set; }
 
+        [Required]
         [Display(Name = "是否顯示標籤")]
         public bool? IsShow { get; set; }
 
+        [Required]
         [Display(Name = "是否顯示標籤")]
         public bool? IsTop { get; set; }
 
         [Display(Name = "發布資料之時間")]
-        public DateTime? IssueTime { get; set; }
+        public DateTime IssueTime { get; set; }
     }
 }

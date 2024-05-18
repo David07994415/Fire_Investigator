@@ -15,7 +15,6 @@
 }*@
 
 
-
 @foreach (var item in Model)
 {
     <div class="post">
@@ -32,11 +31,7 @@
                         <h3 class="entry-title">
                             <a href="/News/Index/@item.Id">@item.Title</a>
                         </h3>
-                        @{ var replaceInput = item.NewsCkContent.Replace("<p>", "").Replace("</p>", "").Replace("<br>"," ");
-                            var replaceInputLength = replaceInput.Length;
-                            if (replaceInputLength > 50) { replaceInputLength = 50; }
-                            <p>@replaceInput.Substring(0, replaceInputLength-1)</p>
-                            }
+                            <p>@item.NewsCkContent.ToString()</p>
                     </div>
                     <!-- header end -->
                     <div class="post-footer">
@@ -48,8 +43,6 @@
         </div>
     </div>
 }
-
-
 
 <!--分頁開始-->
 <div class="pager">
