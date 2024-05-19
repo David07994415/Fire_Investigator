@@ -14,15 +14,15 @@
 
 <div class="row">
 
-    @*以下已經寫好了*@
-
     @foreach (var item in Model)
     {
         <div class="col-md-4">
             <div class="ts-service-wrapper">
                 <div class="ts-service-image-wrapper">
                     <span class="ts-service-image">
-                        <a href="@Url.Action("Index", "Master", new {Id=item.Id})" title='@item.Name'><img class="img-responsive" src="~/Uploads/master/@item.PhotoPath" alt="@item.Name"></a>
+                        <a href="@Url.Action("Index", "Master", new {Id=item.Id})" title='@item.Name'>
+                        <img class="img-responsive" src="~/Uploads/master/@item.PhotoPath" alt="@item.Name">
+                        </a>
                     </span>
                 </div>
                 <div class="ts-service-info">
@@ -30,10 +30,8 @@
                     <p>現職：@item.Ocupation </p>
                 </div>
             </div>
-        </div><!-- Col 1 end -->
+        </div>
     }
-
-    @*以上已經寫好了*@
 
     <!--<div class="col-md-4">
         <div class="ts-service-wrapper">
@@ -48,79 +46,5 @@
             </div>
         </div>
     </div>--><!-- Col 1 end -->
-
-    <!--<div class="col-md-4">
-        <div class="ts-service-wrapper">
-            <div class="ts-service-image-wrapper">
-                <span class="ts-service-image">
-                    <a href="master_show.html" title="黃敬德"><img class="img-responsive" src="~/images/pro2.jpg" alt="黃敬德"></a>
-                </span>
-            </div>
-            <div class="ts-service-info">
-                <h3><a href="master_show.html">黃敬德</a></h3>
-                <p>現職：中央警察大學消防系副教授 </p>
-            </div>
-        </div>
-    </div>--><!-- Col 2 end -->
-
-    <!--<div class="col-md-4">
-        <div class="ts-service-wrapper">
-            <div class="ts-service-image-wrapper">
-                <span class="ts-service-image">
-                    <a href="master_show.html" title="何三平"><img class="img-responsive" src="~/images/pro.jpg" alt="何三平"></a>
-                </span>
-            </div>
-            <div class="ts-service-info">
-                <h3><a href="master_show.html">何三平</a></h3>
-                <p>現職：長榮大學，職業安全與衛生學系，助理教授、長榮大學職業安全與職業醫學研究中心主任 </p>
-            </div>
-        </div>
-    </div>--><!-- Col 3 end -->
-
-    <!--<div class="col-md-4">
-        <div class="ts-service-wrapper">
-            <div class="ts-service-image-wrapper">
-                <span class="ts-service-image">
-                    <a href="master_show.html" title="李承龍"><img class="img-responsive" src="~/images/pro3.jpg" alt="李承龍"></a>
-                </span>
-            </div>
-            <div class="ts-service-info">
-                <h3><a href="master_show.html">李承龍</a> </h3>
-                <p>現職：臺灣警察專科學校 刑事警察科 </p>
-            </div>
-        </div>
-    </div>--><!-- Col 4 end -->
-
-    <!--<div class="col-md-4">
-        <div class="ts-service-wrapper">
-            <div class="ts-service-image-wrapper">
-                <span class="ts-service-image">
-                    <a href="master_show.html" title="張慧蓓"><img class="img-responsive" src="~/images/pro-size.jpg" alt="張慧蓓"></a>
-                </span>
-            </div>
-            <div class="ts-service-info">
-                <h3><a href="master_show.html">張慧蓓</a> </h3>
-                <p>現職：長榮大學職業安全與職業醫學研究中心副主任  </p>
-            </div>
-        </div>
-    </div>--><!-- Col 5 end -->
-
-    <!--<div class="col-md-4">
-        <div class="ts-service-wrapper">
-            <div class="ts-service-image-wrapper">
-                <span class="ts-service-image">
-                    <a href="master_show.html" title="卓經偉"><img class="img-responsive" src="~/images/pro4.jpg" alt="卓經偉"></a>
-                </span>
-            </div>
-            <div class="ts-service-info">
-                <h3><a href="master_show.html">卓經偉</a> </h3>
-                <p>現職：高雄市政府消防局第四救災救護大隊組長 </p>
-            </div>
-        </div>
-    </div>-->
-    <!-- Col 6 end -->
-
-
-
 
 </div><!-- Content row 1 end -->

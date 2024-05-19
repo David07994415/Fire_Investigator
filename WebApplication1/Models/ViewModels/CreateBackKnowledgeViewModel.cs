@@ -13,11 +13,13 @@ namespace WebApplication1.Models.ViewModels
         [MaxLength(100)]
         public string Title { get; set; }
 
-        [Display(Name = "是否顯示標籤")]
-        public bool IsTop { get; set; }
+        [Required]
+        [Display(Name = "是否置頂標籤")]
+        public bool? IsTop { get; set; }
 
+        [Required]
         [Display(Name = "是否顯示標籤")]
-        public bool IsShow { get; set; }
+        public bool? IsShow { get; set; }
 
         [Display(Name = "發布資料之時間")]
         public DateTime IssueTime { get; set; }

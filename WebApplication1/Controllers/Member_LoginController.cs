@@ -10,6 +10,7 @@ using System.Web.Security;
 using WebApplication1.Filter;
 using WebApplication1.Models.ViewModels;
 using WebApplication1.Models;
+using WebApplication1.Utility;
 
 namespace WebApplication1.Controllers
 {
@@ -19,7 +20,6 @@ namespace WebApplication1.Controllers
     [AddLayoutMenu]
     public class Member_LoginController : Controller
     {
-
         private DbModel db = new DbModel();
 
         // GET: Member_Login
@@ -28,20 +28,21 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(FrontMemberLogin LoginInput)
         {
             if (ModelState.IsValid)
             {
-                var account = db.Member.Where(x => x.Account == LoginInput.AccountName)?.FirstOrDefault();
+                var account = db.Member.Where(x => x.Account == LoginInput.AccountName)?
+                                        .Where(x=>x.IdCat== IdentityCategory.FrontOnly || x.IdCat == IdentityCategory.Both)?
+                                        .Where(x=>x.IsApproved==true)?.FirstOrDefault();
                 if (account != null)
                 {
                     string userPasswordInput = LoginInput.Password;
                     string saltInDB = account.Salt;
                     byte[] saltInDBtoArray = Convert.FromBase64String(saltInDB);
-                    byte[] HashArray = HashPassword(userPasswordInput, saltInDBtoArray);
+                    byte[] HashArray = Encrypt.HashPassword(userPasswordInput, saltInDBtoArray);
                     string Hashstring = Convert.ToBase64String(HashArray);
                     if (Hashstring == account.Password)
                     {
@@ -54,30 +55,11 @@ namespace WebApplication1.Controllers
                         return View();
                     }
                 }
-                ModelState.AddModelError("", "登入失敗，請重新登入");
+                ModelState.AddModelError("", "登入失敗，請重新登入或確認帳號是否已經開通");
                 return View();
             }
+            ModelState.AddModelError("", "登入失敗，請重新登入");
             return View();
         }
-
-        // Hash 處理加鹽的密碼功能
-        //將使用者的密碼和產生的鹽作為輸入，使用 Argon2 演算法執行密碼雜湊
-        private byte[] HashPassword(string password, byte[] salt)
-        {
-            var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password));
-
-            //底下這些數字會影響運算時間，而且驗證時要用一樣的值
-            //設定之前生成的鹽
-            argon2.Salt = salt;
-            argon2.DegreeOfParallelism = 8; // 4 核心就設成 8
-            argon2.Iterations = 2; // 迭代運算次數，更高的迭代次數可以提高安全性
-            argon2.MemorySize = 1024; // 1 GB，定義演算法要使用的記憶體大小（以位元組為單位）
-
-            //Argon2 演算法產生 16 位元組雜湊並將其作為位元組數組傳回
-            return argon2.GetBytes(16);
-        }
-
-
-
     }
 }

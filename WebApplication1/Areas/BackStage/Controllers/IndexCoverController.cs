@@ -13,7 +13,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
 {
     [Authorize]
     [AddBackLayoutComponent]
-
     public class IndexCoverController : Controller
     {
         private DbModel db = new DbModel();
@@ -52,7 +51,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
                 if (UploadPhoto != null && UploadPhoto.ContentLength > 0)
                 {
-                    // 確認檔案的型別
                     string fileType = UploadPhoto.ContentType;
                     string fileName = Path.GetFileName(UploadPhoto.FileName);
                     string fileExtent = Path.GetExtension(UploadPhoto.FileName);
@@ -70,11 +68,11 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         return RedirectToAction("Index");
                     }
                     ModelState.AddModelError("UploadPhoto", "檔案不吻合格式");
-                    return View(NewCreateIndexCover);
+                    return RedirectToAction("Edit", "IndexCover", new { id= IndexCoverId });
 
                 }
                 ModelState.AddModelError("UploadPhoto", "檔案為空");
-                return View(NewCreateIndexCover);
+                return RedirectToAction("Edit", "IndexCover", new { id = IndexCoverId });
             }
             else
             {
@@ -82,7 +80,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 return View();
             }
         }
-
 
         public ActionResult Edit(int? id)
         {
@@ -102,12 +99,13 @@ namespace WebApplication1.Areas.BackStage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, CreateBackIndexCoverViewModel Profile, HttpPostedFileBase UploadPhoto)
         {
-            string UserName = User.Identity.Name;
-            var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+            var CoverUpdateData = db.IndexCover.FirstOrDefault(x => x.Id == id);
 
             if (ModelState.IsValid)
             {
-                var CoverUpdateData = db.IndexCover.FirstOrDefault(x => x.Id == id);
+                string UserName = User.Identity.Name;
+                var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+
                 CoverUpdateData.CoverName = Profile.CoverName;
                 CoverUpdateData.IsShow = Profile.IsShow;
                 CoverUpdateData.UpdateUser = UserId;
@@ -116,7 +114,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
                 if (UploadPhoto != null && UploadPhoto.ContentLength > 0)
                 {
-                    // 確認檔案的型別
                     string fileType = UploadPhoto.ContentType;
                     string fileName = Path.GetFileName(UploadPhoto.FileName);
                     string fileExtent = Path.GetExtension(UploadPhoto.FileName);
@@ -139,25 +136,24 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         return View(CoverUpdateData);
                     }
                 }
-                else
+                else  // 如果沒有上傳檔案
                 {
                     var UpdateCoverDataCheck = db.IndexCover.FirstOrDefault(x => x.Id == id);
                     if (UpdateCoverDataCheck.PhotoPath == null)
                     {
-                        ModelState.AddModelError("PhotoPath", "尚未上傳檔案");
+                        ModelState.AddModelError("UploadPhoto", "尚未上傳檔案");
                         return View(UpdateCoverDataCheck);
                     }
-                    else
+                    else  // 如果有存在檔案
                     {
-                        return View(UpdateCoverDataCheck);
+                        return RedirectToAction("Index");
                     }
                 }
             }
             else
             {
-                var UpdateCoverDataCheck = db.IndexCover.FirstOrDefault(x => x.Id == id);
                 ModelState.AddModelError("", "必填");
-                return View(UpdateCoverDataCheck);
+                return View(CoverUpdateData);
             }
         }
 

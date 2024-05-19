@@ -21,8 +21,9 @@ namespace WebApplication1.Controllers
             string ControllerName = RouteData.Values["controller"].ToString();
             var CkContent = db.BusinessCategory
                                                 .FirstOrDefault(x => x.Name == ControllerName)
-                                                .BussinessTable.FirstOrDefault().Content;
-            return View((object)CkContent);
+                                                .BussinessTable.FirstOrDefault();
+
+            return View(CkContent);
         }
     }
 }

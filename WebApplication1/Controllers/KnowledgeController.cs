@@ -24,9 +24,10 @@ namespace WebApplication1.Controllers
             const int DataSizeInPage = 2;   //設定一頁幾筆
             int currentPageIndex = page.HasValue ? page.Value - 1 : 0;   // 現在第幾頁(當前頁面的索引值)
 
-            var KnowkedgeList = db.Knowledge.Where(x => x.IsShow == true).OrderBy(x => x.IsTop).ToList();
-            ViewBag.Count = KnowkedgeList.Count();
-            return View(db.Knowledge.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage));
+            var KnowkedgeList = db.Knowledge.Where(x => x.IsShow == true).Where(x=>x.FileName!=null).AsQueryable();
+            var ToPageRecords = KnowkedgeList.OrderByDescending(x => x.CreateTime).ToPagedList(currentPageIndex, DataSizeInPage);
+            
+            return View(ToPageRecords);
         }
     }
 }

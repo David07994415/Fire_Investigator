@@ -1,9 +1,8 @@
-﻿@model string
+﻿@model WebApplication1.Models.Business
 @{
     ViewBag.Title = "Consult";
     ViewBag.PageTitle = "諮詢、顧問";
     Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
 
-@*<h2>Consult</h2>*@
-@Html.Raw(@Model)
+@Html.Raw(Model.Content)

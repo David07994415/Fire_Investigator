@@ -21,8 +21,6 @@ using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    //[AddLayoutBreadcrumb("action")]
-    //[AddLayoutSidebar("action")]
     public class HomeController : Controller
     {
         private DbModel db = new DbModel();
@@ -38,17 +36,21 @@ namespace WebApplication1.Controllers
         [AddLayoutMenu]
         public ActionResult Index()
         {
-            var newsData=db.News.OrderByDescending(x => x.IssueTime).Where(x=>x.IsTop==true).Take(3).ToList();
-            for (var i = 0;i< newsData.Count();i++)
+            var newsData=db.News.OrderByDescending(x => x.IssueTime).
+                Where(x=>x.IsTop==true).Where(x=>x.IsShow==true).Take(4).ToList();
+
+            for (var i = 0;i< newsData.Count();i++)  // 進行 正規表達式取代
             {
                 newsData[i].NewsCkContent = Regex.Replace(newsData[i].NewsCkContent, "<.*?>", string.Empty);
-                newsData[i].NewsCkContent = newsData[i].NewsCkContent.Length < 7 ?
+                newsData[i].NewsCkContent = newsData[i].NewsCkContent.Length < 10 ?
                     newsData[i].NewsCkContent + "..." :
-                    newsData[i].NewsCkContent.Substring(0, 7) + "...";
+                    newsData[i].NewsCkContent.Substring(0, 10) + "...";
             }
+
             var linkData = db.IndexLink.Where(x => x.IsShow == true).ToList();
             var CoverData= db.IndexCover.Where(x => x.IsShow == true).ToList();
             var PurposeData = db.IndexPurpose.FirstOrDefault();
+
             var IndexData = new HomeDataViewModel()
             {
                 CoverData = CoverData,
@@ -58,7 +60,6 @@ namespace WebApplication1.Controllers
             };
             return View(IndexData);
         }
-
 
 
         //public ActionResult _PartialBanner(string action) 

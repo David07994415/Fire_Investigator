@@ -11,6 +11,7 @@ namespace WebApplication1.Models.ViewModels
     {
         [Required]
         [AllowHtml]
+        [Display(Name ="CKediotor內容")]
         public string HTMLContent { get; set; }
     }
 }

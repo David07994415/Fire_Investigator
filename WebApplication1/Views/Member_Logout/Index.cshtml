@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Membership";
+    ViewBag.PageTitle = "登出";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h2>是否確認登出？</h2>
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="登出" class="btn btn-default" />&nbsp;&nbsp;
+                <a href="/Member_Bulletin/Index">取消</a>
+            </div>
+        </div>
+
+    </div>
+}

@@ -13,10 +13,9 @@ namespace WebApplication1.Models.ViewModels
         [MaxLength(100)]
         public string CoverName { get; set; }
 
-        [Display(Name = "相片路徑")]
-        public string PhotoPath { get; set; }
-
+        [Required]
         [Display(Name = "是否顯示標籤")]
-        public bool IsShow { get; set; }
+        public bool? IsShow { get; set; }
     }
+
 }

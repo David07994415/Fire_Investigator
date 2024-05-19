@@ -11,6 +11,7 @@ namespace WebApplication1.Models.ViewModels
     {
         [AllowHtml]
         [Display(Name = "CKeditor內容")]
+        [Required]
         public string HTMLContent { get; set; }
     }
 }

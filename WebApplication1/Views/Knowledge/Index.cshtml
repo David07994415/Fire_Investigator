@@ -1,5 +1,4 @@
 ﻿@*@model WebApplication1.Models.Knowledge*@
-
 @using MvcPaging;
 @model MvcPaging.IPagedList<WebApplication1.Models.Knowledge>
 
@@ -8,7 +7,6 @@
     ViewBag.PageTitle = "知識庫下載";
     Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
-
 
 <table class="table table-striped career-table download-table">
     <thead>
@@ -46,7 +44,7 @@
         <div class="pagination">
             @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
         </div>
-        <div class="page_boxR"> 資料筆數：@ViewBag.count  　</div>
+        <div class="page_boxR"> 資料筆數：@Model.TotalItemCount 　</div>
     </div>
 </div>
 <!--分頁結束-->

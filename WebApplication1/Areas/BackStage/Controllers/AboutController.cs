@@ -9,6 +9,7 @@ using WebApplication1.Models;
 using System.Web.Routing;
 using System.Data.Entity;
 using WebApplication1.Areas.BackStage.Filter;
+using System.Net.Http;
 
 namespace WebApplication1.Areas.BackStage.Controllers
 {
@@ -28,21 +29,28 @@ namespace WebApplication1.Areas.BackStage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(EditBackAboutViewModel editBackAboutViewModel)
         {
+            string controllerName = RouteData.Values["controller"].ToString();
+            var WebContentObj = db.Directory.FirstOrDefault(x => x.Value == controllerName).WebContentTable.FirstOrDefault();
+
             if (ModelState.IsValid)
             {
-                String UserName = User.Identity.Name;
+                string UserName = User.Identity.Name;
                 var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
-
-                string controllerName = RouteData.Values["controller"].ToString();
-                var WebContentObj = db.Directory.FirstOrDefault(x => x.Value == controllerName).WebContentTable.FirstOrDefault();
 
                 WebContentObj.HTMLContent = editBackAboutViewModel.HTMLContent;
                 WebContentObj.UpdateTime = DateTime.Now;
                 WebContentObj.UpdateUser = UserId;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                TempData["UpdateCompleted"] = true;
+
+                return View(WebContentObj);
             }
-            return RedirectToAction("Index");
+            else 
+            {
+                ModelState.AddModelError("HTMLContent", "CK Editor必填相關內容");
+                return View(WebContentObj);
+            }
         }
     }
 }

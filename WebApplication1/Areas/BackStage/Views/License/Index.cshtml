@@ -9,25 +9,27 @@
             min-height: 500px;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 }
-<h2>License</h2>
+<h2>License 頁面</h2>
 
-@using (Html.BeginForm("Index", "License", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h4>編輯區</h4>
+    <hr />
 
-    <div class="form-horizontal">
-        <h4>Master</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @using (Html.BeginForm("Index", "License", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CategoryTable.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2"></div>
             <div class="col-md-10">
-                @Html.DisplayFor(model => model.CategoryTable.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
         </div>
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -56,35 +58,45 @@
                 <input type="submit" value="保存" class="btn btn-default" />
             </div>
         </div>
-    </div>
-}
+    }
+</div>
 
 @section Scripts
 {
     <script src="~/Ck5/ckeditor.js"></script>
     <script>
-            ClassicEditor
-                .create(document.querySelector('#editor')
-                    , {
-                        //extraPlugins: [MyCustomUploadAdapterPlugin]
-                        ckfinder: {
-                            uploadUrl: '/BackStage/Master/UploadPhotockeditor'
-                        },
-                        htmlSupport: {
-                            allow: [
-                                {
-                                    name: /^(div|span|img|h3|br|table|tbody|thead|th|tr|td)$/,                  // 全部允許  /.*/,   /^(div|span|img|h3|br)$/,
-                                    attributes: true,
-                                    classes: true,
-                                    styles: true
-                                }
-                            ]
-                        }
+        ClassicEditor
+            .create(document.querySelector('#editor')
+                , {
+                    //extraPlugins: [MyCustomUploadAdapterPlugin]
+                    ckfinder: {
+                        uploadUrl: '/BackStage/Master/UploadPhotockeditor'
+                    },
+                    htmlSupport: {
+                        allow: [
+                            {
+                                name: /^(div|span|img|h3|br|table|tbody|thead|th|tr|td)$/,                  // 全部允許  /.*/,   /^(div|span|img|h3|br)$/,
+                                attributes: true,
+                                classes: true,
+                                styles: true
+                            }
+                        ]
                     }
-                )
-                .catch(error => {
-                    console.error(error);
-                });
+                }
+            )
+            .catch(error => {
+                console.error(error);
+            });
     </script>
+    @if (TempData["UpdateCompleted"] != null && Convert.ToBoolean(TempData["UpdateCompleted"]) == true)
+    {
+        <script>
+            Swal.fire({
+                title: "修改完成！",
+                text: "",
+                icon: "success"
+            });
+        </script>
+    }
 }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Areas.BackStage.Filter;
@@ -24,7 +26,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
         [UpdateMemberPremission]
         public ActionResult Edit(int? id)
         {
-            if (!id.HasValue) 
+            if (!id.HasValue)
             {
                 return RedirectToAction("Index");
             }
@@ -41,26 +43,28 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? id, string Permission)
+        public ActionResult Edit(int id, string Permission, [Required]bool IsApproved)
         {
-            if (!id.HasValue)
+            var user = User.Identity.Name;
+            var userId = db.Member.FirstOrDefault(x => x.Account == user).Id;
+
+            var member = db.Member.Find(id);
+            if (member == null)
             {
                 return RedirectToAction("Index");
             }
             else
             {
-                var member = db.Member.Find(id);
-                if (member == null)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    member.Permission= Permission;
-                    db.SaveChanges();
-                }
-                return RedirectToAction("Edit", "Back_Premission", new { id=id});
+                member.Permission = Permission;
+                member.IsApproved = IsApproved;
+                member.UpdateTime = DateTime.Now;
+                member.UpdateUser = userId;
+
+                TempData["UpdateCompleted"] = true;
+
+                db.SaveChanges();
             }
+            return RedirectToAction("Edit", "Back_Premission", new { id = id });
         }
 
 

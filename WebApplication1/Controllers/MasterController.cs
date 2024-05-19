@@ -20,7 +20,9 @@ namespace WebApplication1.Controllers
         {
             if (id != null)  // 如果有路由有指定Id => 要看 Master Detail
             {
-                var MasterDetail = db.Master.Where(x => x.Id == id && x.IsShow == true)?.FirstOrDefault();
+                var MasterDetail = db.Master.Where(x => x.Id == id)
+                                                .Where(x=>x.IsShow == true)?.FirstOrDefault();
+
                 if (MasterDetail != null)  // 如果資料庫有 Id
                 {
                     return View("MasterDetail", "_LayoutPage", MasterDetail);  // 返回至新的 View => MasterDeatil View
@@ -30,7 +32,7 @@ namespace WebApplication1.Controllers
                     return RedirectToAction("Index", "Master");  // 返回至原本 Master 網址
                 }
             }
-            else     // 如果有路由沒有指定 Id=> 要看 Master 總覽
+            else  // 如果有路由沒有指定 Id=> 要看 Master 總覽
             {
                 var MasterList = db.Master.Where(x => x.IsShow == true).ToList();
                 return View(MasterList);
