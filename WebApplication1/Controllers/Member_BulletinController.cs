@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Filter;
@@ -24,10 +25,17 @@ namespace WebApplication1.Controllers
             return View(bullList);
         }
 
-
-        public ActionResult Detail(int Id)
+        public ActionResult Detail(int? id)
         {
-            var OneBulletin = db.Bulletin.Find(Id);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var OneBulletin = db.Bulletin.Find(id);
+            if (OneBulletin == null)
+            {
+                return HttpNotFound();
+            }
             return View(OneBulletin);
         }
 
@@ -36,6 +44,8 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreateBulletinMain BulletinInput)
@@ -60,12 +70,22 @@ namespace WebApplication1.Controllers
             }
             else
             {
+                ModelState.AddModelError("", "請填寫必填項目");
                 return View();
             }
         }
 
-        public ActionResult Reply(int Id)
+        public ActionResult Reply(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var OneBulletin = db.Bulletin.Find(id);
+            if (OneBulletin == null)
+            {
+                return HttpNotFound();
+            }
             return View();
         }
 
@@ -94,14 +114,9 @@ namespace WebApplication1.Controllers
             }
             else
             {
+                ModelState.AddModelError("", "請填寫必填項目");
                 return View();
             }
-        }
-
-
-        public ActionResult Edit()
-        {
-            return View();
         }
     }
 }
