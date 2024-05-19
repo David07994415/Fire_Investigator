@@ -23,10 +23,10 @@ namespace WebApplication1.Models
         [Required]
         [Display(Name = "目錄外鍵")]
         public int DirectroyId { get; set; }
+
         [ForeignKey("DirectroyId")]
         [Display(Name = "目錄表單")]
         public virtual Directory DirectoryTable { get; set; }//virtual=虛擬資料，會跟資料庫的對應資料相對應
-
 
         [Display(Name = "更新資料之使用者")]
         public int UpdateUser { get; set; }
