@@ -17,8 +17,9 @@ namespace WebApplication1.Models.ViewModels
         [Required]
         public string LinkPath { get; set; }
 
+        [Required]
         [Display(Name = "是否顯示標籤")]
-        public bool IsShow { get; set; }
+        public bool? IsShow { get; set; }
 
     }
 }

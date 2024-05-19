@@ -32,11 +32,11 @@ namespace WebApplication1.Areas.BackStage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreateBackIndexLinkViewModel Profile, HttpPostedFileBase UploadPhoto)
         {
-            string UserName = User.Identity.Name;
-            var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
-
             if (ModelState.IsValid)
             {
+                string UserName = User.Identity.Name;
+                var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+
                 IndexLink NewCreateIndexLink = new IndexLink();
                 NewCreateIndexLink.LinkName = Profile.LinkName;
                 NewCreateIndexLink.LinkPath = Profile.LinkPath;
@@ -52,11 +52,10 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
                 if (UploadPhoto != null && UploadPhoto.ContentLength > 0)
                 {
-                    // 確認檔案的型別
                     string fileType = UploadPhoto.ContentType;
                     string fileName = Path.GetFileName(UploadPhoto.FileName);
                     string fileExtent = Path.GetExtension(UploadPhoto.FileName);
-                    if (fileExtent == ".jpg"|| fileExtent == ".png"||fileExtent == ".jpeg")
+                    if (fileExtent == ".jpg" || fileExtent == ".png" || fileExtent == ".jpeg")
                     {
                         var LinkData = db.IndexLink.FirstOrDefault(x => x.Id == IndexLinkId);
                         LinkData.PhotoPath = fileName;
@@ -70,11 +69,11 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         return RedirectToAction("Index");
                     }
                     ModelState.AddModelError("UploadPhoto", "檔案不吻合格式");
-                    return View(NewCreateIndexLink);
+                    return RedirectToAction("Edit", "IndexLink", new { id = IndexLinkId });
 
                 }
                 ModelState.AddModelError("UploadPhoto", "檔案為空");
-                return View(NewCreateIndexLink);
+                return RedirectToAction("Edit", "IndexLink", new { id = IndexLinkId });
             }
             else
             {
@@ -84,7 +83,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
         }
 
 
-        public ActionResult Edit(int? id) 
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -100,14 +99,15 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id,CreateBackIndexLinkViewModel Profile, HttpPostedFileBase UploadPhoto)
+        public ActionResult Edit(int id, CreateBackIndexLinkViewModel Profile, HttpPostedFileBase UploadPhoto)
         {
-            String UserName = User.Identity.Name;
-            var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+            var LinkUpdateData = db.IndexLink.FirstOrDefault(x => x.Id == id);
 
             if (ModelState.IsValid)
             {
-                var LinkUpdateData = db.IndexLink.FirstOrDefault(x => x.Id == id);
+                string UserName = User.Identity.Name;
+                var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+
                 LinkUpdateData.LinkName = Profile.LinkName;
                 LinkUpdateData.LinkPath = Profile.LinkPath;
                 LinkUpdateData.IsShow = Profile.IsShow;
@@ -117,7 +117,6 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
                 if (UploadPhoto != null && UploadPhoto.ContentLength > 0)
                 {
-                    // 確認檔案的型別
                     string fileType = UploadPhoto.ContentType;
                     string fileName = Path.GetFileName(UploadPhoto.FileName);
                     string fileExtent = Path.GetExtension(UploadPhoto.FileName);
@@ -145,19 +144,19 @@ namespace WebApplication1.Areas.BackStage.Controllers
                     var UpdateLinkDataCheck = db.IndexLink.FirstOrDefault(x => x.Id == id);
                     if (UpdateLinkDataCheck.PhotoPath == null)
                     {
-                        ModelState.AddModelError("PhotoPath", "尚未上傳檔案");
+                        ModelState.AddModelError("UploadPhoto", "尚未上傳檔案");
                         return View(UpdateLinkDataCheck);
                     }
                     else
                     {
-                        return View(UpdateLinkDataCheck);
+                        return RedirectToAction("Index");
                     }
                 }
             }
             else
             {
                 ModelState.AddModelError("", "必填");
-                return View();
+                return View(LinkUpdateData);
             }
         }
 
@@ -184,7 +183,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
         {
             var LinkData = db.IndexLink.Find(id);
             string PhotoName = LinkData.PhotoPath;
-            if (!string.IsNullOrEmpty(PhotoName)) 
+            if (!string.IsNullOrEmpty(PhotoName))
             {
                 string targetPath = Server.MapPath("~/Uploads/IndexLink/");
                 string TargetPath = Path.Combine(targetPath, PhotoName);

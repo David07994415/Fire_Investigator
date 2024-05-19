@@ -7,15 +7,22 @@
 
 <h2>Edit</h2>
 
-@using(Html.BeginForm("Edit", "IndexLink", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "IndexLink", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
-    <h4>IndexLink</h4>
+    <h4>封面連結編輯</h4>
     <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
     @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.LinkName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -34,15 +41,15 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.PhotoPath, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.Label("當前圖片", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @if (String.IsNullOrEmpty(Model.PhotoPath))
+            @if (!String.IsNullOrEmpty(Model.PhotoPath))
             {
-                <p>目前沒有上傳連結圖片</p>
+                <img width="800" src="~/Uploads/IndexLink/@Model.PhotoPath">
             }
-            else 
+            else
             {
-                <img src="~/Uploads/IndexLink/@Model.PhotoPath">
+                <span style="color:red;font-size:large;font-weight:bolder">目前沒有上傳連結圖片！</span>
             }
         </div>
     </div>

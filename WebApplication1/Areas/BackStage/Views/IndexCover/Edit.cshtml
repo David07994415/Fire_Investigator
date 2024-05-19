@@ -7,15 +7,22 @@
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "IndexCover", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
-    <h4>IndexCover</h4>
+    <h4>封面照片編輯</h4>
     <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
     @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.CoverName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -26,15 +33,15 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.PhotoPath, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.Label("當前封面", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @if (String.IsNullOrEmpty(Model.PhotoPath))
+            @if (!String.IsNullOrEmpty(Model.PhotoPath))
             {
-                <p>目前沒有上傳連結圖片</p>
+                <img width="800" src="~/Uploads/IndexCover/@Model.PhotoPath">
             }
             else
             {
-                <img width="800" src="~/Uploads/IndexCover/@Model.PhotoPath">
+                <span style="color:red;font-size:large;font-weight:bolder">目前沒有上傳封面圖片！</span>
             }
         </div>
     </div>
@@ -57,10 +64,9 @@
         </div>
     </div>
 
-
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+            <input type="submit" value="保存" class="btn btn-default" />
         </div>
     </div>
 </div>

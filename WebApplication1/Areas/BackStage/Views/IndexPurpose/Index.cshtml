@@ -9,23 +9,25 @@
             min-height: 500px;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 }
-<h2>Index Purpose Setting</h2>
 
-@using (Html.BeginForm("Index", "IndexPurpose", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
+<h2>Home Page 宗旨設定</h2>
 
-    <div class="form-horizontal">
-        <h4>首頁組織宗旨</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-horizontal">
+    <h4>編輯區</h4>
+    <hr />
+
+    @using (Html.BeginForm("Index", "IndexPurpose", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2"></div>
             <div class="col-md-10">
-                @Html.DisplayFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -56,29 +58,39 @@
                 <input type="submit" value="保存" class="btn btn-default" />
             </div>
         </div>
-    </div>
-}
+    }
+</div>
 
 @section Scripts
 {
     <script src="~/Ck5/ckeditor.js"></script>
     <script>
-            ClassicEditor
-                .create(document.querySelector('#editor')
-                    , {
-                        htmlSupport: {
-                            allow: [
-                                {
-                                    name: /^(div|ol|li)$/                  // 全部允許  /.*/,   /^(div|span|img|h3|br)$/,
-                                }
-                            ]
-                        }
+        ClassicEditor
+            .create(document.querySelector('#editor')
+                , {
+                    htmlSupport: {
+                        allow: [
+                            {
+                                name: /^(div|ol|li)$/                  // 全部允許  /.*/,   /^(div|span|img|h3|br)$/,
+                            }
+                        ]
                     }
-                )
-                .catch(error => {
-                    console.error(error);
-                });
+                }
+            )
+            .catch(error => {
+                console.error(error);
+            });
     </script>
+    @if (TempData["UpdateCompleted"] != null && Convert.ToBoolean(TempData["UpdateCompleted"]) == true)
+    {
+        <script>
+            Swal.fire({
+                title: "修改完成！",
+                text: "",
+                icon: "success"
+            });
+        </script>
+    }
 }
 
 

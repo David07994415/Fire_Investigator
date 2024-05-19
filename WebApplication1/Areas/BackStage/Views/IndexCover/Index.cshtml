@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<WebApplication1.Models.IndexCover>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "首頁封面設定";
     Layout = "~/Areas/BackStage/Views/Shared/_LayoutBackMainPage.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Home Page 封面設定</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -14,9 +14,6 @@
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.CoverName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhotoPath)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.IsShow)
@@ -40,9 +37,6 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.CoverName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PhotoPath)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.IsShow)

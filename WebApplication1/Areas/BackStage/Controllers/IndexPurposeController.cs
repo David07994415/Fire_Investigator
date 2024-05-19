@@ -28,31 +28,27 @@ namespace WebApplication1.Areas.BackStage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index( EditBackIndexPurposeViewModel input)
         {
-            string UserName = User.Identity.Name;
-            var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
-
-
             string ckcontent = input.HTMLContent;
             var PurposeData = db.IndexPurpose.FirstOrDefault();
 
-            if (PurposeData == null)
+            if (ModelState.IsValid)
             {
-                var PurposeData_New = new IndexPurpose();
-                PurposeData_New.CreateUser = UserId;
-                PurposeData_New.CreateTime = DateTime.Now;
-                PurposeData_New.HTMLContent = ckcontent;
-                PurposeData_New.UpdateUser = UserId;
-                PurposeData_New.UpdateTime = DateTime.Now;
-                db.IndexPurpose.Add( PurposeData_New );
+                string UserName = User.Identity.Name;
+                var UserId = db.Member.FirstOrDefault(x => x.Account == UserName).Id;
+
+                PurposeData.HTMLContent = input.HTMLContent;
+                PurposeData.UpdateUser = UserId;
+                PurposeData.UpdateTime = DateTime.Now;
+
                 db.SaveChanges();
-                return View(PurposeData_New);
+
+                TempData["UpdateCompleted"] = true;
+
+                return View(PurposeData);
             }
             else
             {
-                PurposeData.HTMLContent = ckcontent;
-                PurposeData.UpdateUser = UserId;
-                PurposeData.UpdateTime = DateTime.Now;
-                db.SaveChanges();
+                ModelState.AddModelError("HTMLContent", "CK Editor必填相關內容");
                 return View(PurposeData);
             }
         }
