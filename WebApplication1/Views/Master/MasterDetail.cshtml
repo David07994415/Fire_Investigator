@@ -1,0 +1,8 @@
+﻿@model WebApplication1.Models.Master 
+@{
+    ViewBag.Title = "Master-Detail";
+    ViewBag.PageTitle = "專家介紹";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+@Html.Raw(Model.PersonCkContent)

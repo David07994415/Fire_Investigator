@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>火災調查網站後台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <!--<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+    <!-- styles -->
+    <!--<link href="css/styles.css" rel="stylesheet">-->
+    @Styles.Render("~/Content/BackStageCSSFolder")
+    @RenderSection("CKeditorStyle", required: false)
+    <style>
+        .WrapFlexContent {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .FlexMainContent {
+            flex: 1;
+        }
+    </style>
+</head>
+<body >
+    <div class="WrapFlexContent">
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <h1>
+                            @Html.ActionLink("火箭隊後端專題後台", "Index", "Home", new { area = "BackStage" },null)
+                        </h1>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button">Search</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="navbar navbar-inverse" role="banner">
+                        <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+                                    <ul class="dropdown-menu animated fadeInUp" style="">
+                                        <li><a href="#">Profile</a></li>
+                                        <li>
+                                            @using (Html.BeginForm("Logout", "Home", FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button  type="submit">Logout</button>
+                                            }
+                                            @*<a href="">Logout</a>*@
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content FlexMainContent">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="sidebar content-box" style="display: block;">
+                    <ul class="nav">
+                        <!-- Main menu -->
+
+                        @Html.Raw(@ViewBag.SideBar)
+                        @*@{Html.RenderAction("_PartialMenuView", "Home");}
+                        @Html.Raw(@ViewBag.DirectoryMenuHTML)*@
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10">
+
+                @RenderBody()
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+
+            <div class="copy text-center">
+                Copyright 2024 Rocket BackEnd <a href="#">Website</a>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!--<script src="https://code.jquery.com/jquery.js"></script>-->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!--<script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/custom.js"></script>-->
+    @Scripts.Render("~/bundles/BackStageJSFolder")
+    @RenderSection("scripts", required: false)
+    </div>
+</body>
+</html>

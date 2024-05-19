@@ -1,0 +1,113 @@
+﻿@*@model IEnumerable<WebApplication1.Models.Master>*@
+@using MvcPaging;
+@model MvcPaging.IPagedList<WebApplication1.Models.News>
+
+@{
+    ViewBag.Title = "消息公告頁面";
+    Layout = "~/Areas/BackStage/Views/Shared/_LayoutBackMainPage.cshtml";
+}
+
+<h2>消息公告頁面</h2>
+
+@using (Html.BeginForm("Index","News",FormMethod.Get))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        標題：<input name="TitleSearch" /> &nbsp
+        最近編輯者：<input name="CreatorSearch" /> &nbsp
+        開始時間：<input name="StartTimeSearch" title="更新起始時間" type="date" /> &nbsp
+        結束時間：<input name="EndTimeSearch" title="更新結束時間" type="date" /> &nbsp &nbsp
+        <input type="submit" value="搜尋" class="btn btn-default" />
+        @if (ViewBag.ErrorMassage != null)  
+        {
+            <span style="color:red; font-weight:bolder; font-size:16px">@ViewBag.ErrorMassage</span>
+        }
+    </div>
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().IsShow)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().IsTop)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().IssueTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().UpdateUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().UpdateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().CreateUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().CreateTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsShow)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsTop)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssueTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateTime)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<!--分頁開始-->
+<div class="pager">
+    <div class="pages">
+        <div class="pagination">
+            @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount).Options(o => o
+                .AddRouteValue("TitleSearch", Request.QueryString["TitleSearch"]) 
+                .AddRouteValue("CreatorSearch", Request.QueryString["CreatorSearch"])
+                .AddRouteValue("StartTimeSearch", Request.QueryString["StartTimeSearch"])
+                .AddRouteValue("EndTimeSearch", Request.QueryString["EndTimeSearch"]))
+        </div>
+        <div class="page_boxR"> 資料筆數：@Model.TotalItemCount </div>
+
+    </div>
+</div>
+<!--分頁結束-->

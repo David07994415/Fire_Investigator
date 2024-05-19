@@ -1,0 +1,181 @@
+﻿@*@model WebApplication1.Models.ViewModels.DirectoryFrontViewModel*@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <meta charset="utf-8">
+
+
+    <!-- Mobile Specific Metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Favicons
+    ================================================== -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+
+    <title>國際縱火調查人員協會臺灣分會-@ViewBag.Title</title>
+    @Styles.Render("~/Content/SampleCSSFolder")
+
+
+</head>
+
+<body>
+
+    <div class="body-inner">
+        <!-- Header start -->
+        <header id="header" class="header-solid">
+            <div class="container">
+                <div class="row">
+                    <div class="logo col-md-6 col-sm-7 col-xs-12 ">
+                        <a href="/Home/Index">
+                            <img src="/images/logo.png" alt="國際縱火調查人員協會臺灣分會" title="國際縱火調查人員協會臺灣分會">
+                        </a>
+                    </div><!-- logo end -->
+
+                    <div class="col-md-6 col-sm-5 col-xs-12 header-right">
+
+                        <ul class="top-info">
+                            <li>
+                                <div class="info-box">
+                                    <a href="#top" title="粉絲專頁">
+                                        <i class="fa fa-facebook">&nbsp;</i>
+                                        <div class="info-box-content">
+                                            <p class="info-box-title">粉絲專頁</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="info-box">
+                                    <a href="#top" title="English">
+                                        <i class="fa fa-globe">&nbsp;</i>
+                                        <div class="info-box-content">
+                                            <p class="info-box-title">English</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div><!-- header right end -->
+                </div><!-- Row end -->
+            </div><!-- Container end -->
+        </header>
+        <!--/ Header end -->
+        <!--Navigation start -->
+        <nav class="site-navigation navigation">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="site-nav-inner">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse navbar-responsive-collapse">
+
+                              @Html.Raw(@ViewBag.MenuResult)
+                                <!--<ul class="nav navbar-nav">
+                                <li class="dropdown active">
+                                    <a href="about.html" class="dropdown-toggle" data-toggle="dropdown" title="關於我們">關於我們 <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="active"><a href="about.html">協會介紹</a></li>
+                                        <li><a href="master.html">專家介紹</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="news.html" class="dropdown-toggle" data-toggle="dropdown" title="訊息發佈">訊息發佈 <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="news.html">最新消息</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="member.html" class="dropdown-toggle" data-toggle="dropdown" title="會員專區">會員專區 <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="member_login.html">會員登入</a></li>
+                                        <li><a href="member_dl.html">檔案下載</a></li>
+                                        <li><a href="member_reg.html">會員註冊</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="business.html" class="dropdown-toggle" data-toggle="dropdown" title="協會業務">協會業務 <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="business.html">協會業務</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="knowledge.html" class="dropdown-toggle" data-toggle="dropdown" title="知識庫">知識庫 <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="knowledge.html">知識庫下載</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="calendar.html" class="dropdown-toggle" data-toggle="dropdown" title="行事曆">行事曆 <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="calendar.html">協會行事曆</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="contact.html" class="dropdown-toggle" data-toggle="dropdown" title="聯絡我們">聯絡我們 <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="contact.html">聯絡我們</a></li>
+                                    </ul>
+                                </li>
+                            </ul>-->
+                                <!--/ Nav ul end -->
+
+                            </div><!--/ Collapse end -->
+                        </div><!-- Site Navbar inner end -->
+                    </div><!--/ Col end -->
+                </div><!--/ Row end -->
+            </div><!--/ Container end -->
+        </nav><!--/ Navigation end -->
+
+
+        @RenderBody()
+
+
+        <!-- Footer start -->
+        <footer id="footer" class="footer">
+            <div class="container">
+
+                <div class="row copyright">
+                    <div class="col-xs-12 col-sm-7">
+                        <div class="copyright-info">
+                            <span>
+                                火箭隊後端專題實作<br>
+                                Copyright © 2024 Rocket Team Backend Project. All Rights Reserved.
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-push-1">
+
+                        <div class="footer-menu">
+                            <a class="btn btn-dark" href="#" title="財產權宣告">財產權宣告</a>
+                        </div>
+                    </div>
+                </div><!-- Copyright end -->
+
+                <div id="back-to-top" data-spy="affix" data-offset-top="10" class="back-to-top affix">
+                    <a class="btn btn-primary" title="Back to Top" href="#top">
+                        <i class="fa fa-angle-double-up"></i>
+                    </a>
+                </div>
+
+            </div><!--/ Container end -->
+        </footer><!-- Footer end -->
+        <!-- Javascript Files
+    ================================================== -->
+        @Scripts.Render("~/bundles/SampeJSFolder")
+        @RenderSection("scripts", required: false)
+    </div><!-- Body inner end -->
+</body>
+</html>
+

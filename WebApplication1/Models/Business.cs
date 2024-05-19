@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
+using System.Web.Mvc;
 
 namespace WebApplication1.Models
 {
@@ -17,15 +18,13 @@ namespace WebApplication1.Models
         public int Id { get; set; }
 
         [Required]
+        [AllowHtml]
         [Display(Name = "業務內容")]
         public string Content { get; set; }
 
         [Display(Name = "更新資料之使用者")]
         public int UpdateUser { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]//進行編輯操作時能夠看到適當格式的日期時間
-        //[DataType(DataType.DateTime)]//送出時驗證是不是時間格式
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Display(Name = "更新資料之時間")]
         public DateTime? UpdateTime { get; set; }
 

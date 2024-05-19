@@ -1,0 +1,62 @@
+﻿@model WebApplication1.Models.ViewModels.FrontMemberLogin
+@{
+    ViewBag.Title = "Membership";
+    ViewBag.PageTitle = "會員登入";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <h3 class="title-normal">請輸入您的帳號及密碼</h3>
+
+    <div class="form-group">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("帳　號：", htmlAttributes: new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-8">
+            @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { placeholder = "請輸入帳號", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.AccountName, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-sm-2">
+            @*<span class="alertred"><i class="fa fa-exclamation-circle"></i> 姓名必填</span>*@
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.Label("密　碼：", htmlAttributes: new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-8">
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { placeholder = "請輸入帳號", @class = "form-control", @type = "password" } })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-sm-2">
+            @*<span class="alertred"><i class="fa fa-exclamation-circle"></i> 姓名必填</span>*@
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit" value="登入" class="btn btn-primary solid blank" />
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="text-left">
+        <a href="~/Member_Register/Index">尚未註冊</a>
+    </div>
+
+</div>
+}
+
+

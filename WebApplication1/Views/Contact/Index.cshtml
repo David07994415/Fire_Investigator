@@ -1,0 +1,128 @@
+﻿@model WebApplication1.Models.ViewModels.ContactFrontViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    ViewBag.Title = "Contact";
+}
+@using System.Configuration;
+@{
+    string _googlesitekey = ConfigurationManager.AppSettings["RecaptchaSiteKey"];
+}
+@section  ReChpatura
+{
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-sm-2"></div>
+            <div class="col-md-10">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("姓　名：", htmlAttributes: new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-7">
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { placeholder = "請輸入姓名", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-3">
+                <span class="alertred"><i class="fa fa-exclamation-circle"></i> 姓名必填</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("性　別：", htmlAttributes: new { @class = "col-sm-2 control-label", @for = "male" })
+            <div class="col-sm-7">
+                @*@Html.Label("男", htmlAttributes: new { @class = "checkbox-inline checkbox01" })*@
+                <label class="checkbox-inline checkbox01">
+                    @Html.RadioButtonFor(model => model.gender, "男", htmlAttributes: new { @class = "radiostyle01", @name = "gender", @id = "male" })
+                    男
+                </label>
+                @*@Html.Label("女", htmlAttributes: new { @class = "checkbox-inline checkbox01", @for = "female" })*@
+                <label class="checkbox-inline checkbox01">
+                    @Html.RadioButtonFor(model => model.gender, "女", htmlAttributes: new { @class = "radiostyle01", @name = "gender", @id = "female" })
+                    女
+                </label>
+                <div>
+                    @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <span class="alertred"><i class="fa fa-exclamation-circle"></i> 性別必填</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("聯絡電話：", htmlAttributes: new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-7">
+                @Html.EditorFor(model => model.phone, new { htmlAttributes = new { placeholder = "請輸入聯絡電話", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-3">
+                <span class="alertred"><i class="fa fa-exclamation-circle"></i> 聯絡電話必填</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("E-mail：", htmlAttributes: new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-7">
+                @Html.EditorFor(model => model.email, new { htmlAttributes = new { placeholder = "請輸入E-mail", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-3">
+                <span class="alertred"><i class="fa fa-exclamation-circle"></i> E-mail必填</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("詢問內容：", htmlAttributes: new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextAreaFor(model => model.content, new { placeholder = "請輸入詢問內容", @class = "form-control form-control-message", @rows = "10", @required = "required" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("驗證：", htmlAttributes: new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-4">
+                <div class="g-recaptcha" data-sitekey=@_googlesitekey></div>
+                @if (ViewBag.Message != null)
+                {
+                    <label class="text-danger alertred">@ViewBag.Message</label>
+                }
+            </div>
+            @*<div class="col-sm-3">
+                    <span class="alertred"><i class="fa fa-exclamation-circle"></i> 驗證必填</span>
+                </div>*@
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="送出" class="btn btn-primary solid blank" />
+            </div>
+        </div>
+    </div>
+}
+
+@section  scripts
+{
+    @if (TempData["MailSent"] != null && Convert.ToBoolean(TempData["MailSent"]) == true)
+    {
+        <script>
+        Swal.fire({
+            title: "寄郵成功！",
+            text: "請至您的信箱收信",
+            icon: "success"
+            });
+        </script>
+    }
+}
