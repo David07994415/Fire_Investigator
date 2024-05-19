@@ -1,7 +1,5 @@
  <p align="center">
-  <a href="https://sun-live.vercel.app">
-    <img width="1200" height="800" src ="https://github.com/JHANGMING/SunLive/blob/main/public/images/cover.png">
-  </a>
+    <img width="1200" src ="https://raw.githubusercontent.com/David07994415/Fire_Investigator/main/WebApplication1/ReadmeCover.png">
 </p>
  
 <h1 align="center" style="font-weight: 700"><img alt="MVC5" src="https://img.shields.io/badge/.Net_Framework-MVC_5-Green"> 消防協會組織網站  | .Net Framework MVC 5 </h1>
