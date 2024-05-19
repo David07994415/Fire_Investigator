@@ -14,6 +14,7 @@ namespace WebApplication1.Filter
     public class AddLayoutComponent
     {
     }
+
     public class AddLayoutSidebar : ActionFilterAttribute
     {
         private DbModel db = new DbModel();
@@ -80,11 +81,13 @@ namespace WebApplication1.Filter
                 List<Directory> newitem;
                 if (!ShowAuthSideBar)
                 {
-                    newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId&&x.IsAuthMenu==false).ToList();
+                    newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId)
+                        .Where(x=>x.IsAuthMenu==LoginAuth.Both||x.IsAuthMenu==LoginAuth.BeforeLogin).ToList();
                 }
                 else 
                 {
-                    newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId).ToList();
+                    newitem = db.Directory.Where(x => x.RecursiveId == (int)nextitem.RecursiveId)
+                          .Where(x => x.IsAuthMenu == LoginAuth.Both || x.IsAuthMenu == LoginAuth.AfterLogin).ToList();
                 }
                 htmlString.Append("<ul class='arrow nav nav-tabs nav-stacked'>");
                 foreach (var item in newitem)
@@ -131,7 +134,6 @@ namespace WebApplication1.Filter
             }
         }
     }
-
 
     public class AddLayoutMenu: ActionFilterAttribute
     {
@@ -183,13 +185,16 @@ namespace WebApplication1.Filter
                     }
                     else if (child.ChildTable.Count == 0 && showAuthMenu)
                     {
-                        html.Append("<li>");
-                        html.Append($@"<a href='/{child.Value}/Index'>{child.Title}</a>");
-                        html.Append("</li>");     //要有hrefHTML資料欄位==>TB DB first
+                        if (child.IsAuthMenu == LoginAuth.Both || child.IsAuthMenu == LoginAuth.AfterLogin)
+                        {
+                            html.Append("<li>");
+                            html.Append($@"<a href='/{child.Value}/Index'>{child.Title}</a>");
+                            html.Append("</li>");     //要有hrefHTML資料欄位==>TB DB first
+                        }
                     }
                     else if (child.ChildTable.Count == 0 && !showAuthMenu)
                     {
-                        if (child.IsAuthMenu == false) 
+                        if (child.IsAuthMenu == LoginAuth.Both|| child.IsAuthMenu == LoginAuth.BeforeLogin) 
                         {
                             html.Append("<li>");
                             html.Append($@"<a href='/{child.Value}/Index'>{child.Title}</a>");

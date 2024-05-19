@@ -19,7 +19,7 @@ namespace WebApplication1.Filter
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             bool authorize = false;
-            String UserName = httpContext.User.Identity.Name;
+            string UserName = httpContext.User.Identity.Name;
             if (string.IsNullOrEmpty(UserName))
             {
                 return false;

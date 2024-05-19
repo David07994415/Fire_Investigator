@@ -26,14 +26,14 @@ namespace WebApplication1.Models
         public string Value { get; set; }
 
         [Display(Name = "是否為登入後顯示")]
-        public bool? IsAuthMenu { get; set; }
+        public LoginAuth? IsAuthMenu { get; set; }
 
         [Display(Name = "目錄迴圈編號")]
-        public int? RecursiveId { get; set; } //可以沒有
+        public int? RecursiveId { get; set; } 
+
         [ForeignKey("RecursiveId")]
         [Display(Name = "權限父成員")]
-        public virtual Directory ParentTable { get; set; }//virtual=虛擬資料，會跟資料庫的對應資料相對應
-
+        public virtual Directory ParentTable { get; set; }
 
         [Display(Name = "創立時間")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
@@ -44,6 +44,13 @@ namespace WebApplication1.Models
 
         [Display(Name = "HTML內容表單成員")]
         public virtual ICollection<WebContent> WebContentTable { get; set; }
-
     }
+
+    public enum LoginAuth 
+    {
+        Both=0,
+        BeforeLogin=1,
+        AfterLogin=2,
+    }
+
 }
