@@ -31,24 +31,25 @@ namespace WebApplication1.Areas.BackStage.Controllers
         //    this.ViewBag.DirectoryHTML = this.DirectoryBackLayoutViewData.DirectoryHTML;
         //}
         // Return PartialMenuView
-        public ActionResult _PartialMenuView()
-        {
-            string username = User.Identity.Name;
-            var user = db.Member.Where(x => x.Account == username)?.FirstOrDefault();
-            if (user == null)
-            {
-                return RedirectToAction("Login");
-            }
-            else
-            {
-                string permissionString = user.Permission;
-                string[] permissionArray = permissionString.Split(',');
-                string HTMLmenu = DirectoryBackViewModel.GetSideBarDirectoryHtml(permissionArray);
-                ViewBag.HHH = HTMLmenu;
-                return PartialView();
-                //ViewBag.DirectoryMenuHTML = HTMLmenu;
-            } 
-        }
+
+        //public ActionResult _PartialMenuView()
+        //{
+        //    string username = User.Identity.Name;
+        //    var user = db.Member.Where(x => x.Account == username)?.FirstOrDefault();
+        //    if (user == null)
+        //    {
+        //        return RedirectToAction("Login");
+        //    }
+        //    else
+        //    {
+        //        string permissionString = user.Permission;
+        //        string[] permissionArray = permissionString.Split(',');
+        //        string HTMLmenu = DirectoryBackViewModel.GetSideBarDirectoryHtml(permissionArray);
+        //        ViewBag.HHH = HTMLmenu;
+        //        return PartialView();
+        //        //ViewBag.DirectoryMenuHTML = HTMLmenu;
+        //    } 
+        //}
 
         [AddBackLayoutComponent]
         public ActionResult Index()  // GET: BackStage/Home/Index
@@ -82,14 +83,8 @@ namespace WebApplication1.Areas.BackStage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login([Bind(Include = "Account,Password")] LoginBackViewModel LoginInput)
         {
-
             if (ModelState.IsValid)
             {
-                //if (LoginInput.Account == "test" && LoginInput.Password == "test")  // for testing login
-                //{
-                //    FormsAuthentication.SetAuthCookie("test", false);
-                //    return RedirectToAction("Index","Home");                       
-                //}
                 var account = db.Member.Where(x => x.Account == LoginInput.Account)?.FirstOrDefault();
                 if (account != null)
                 {
@@ -112,158 +107,72 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 ModelState.AddModelError("", "登入失敗，請重新登入");
                 return View();
             }
+            ModelState.AddModelError("", "登入失敗，請重新登入");
             return View();
         }
 
 
-        
-
-        // GET: BackStage/Admin/Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        // Post: BackStage/Admin/Register
-        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Register([Bind(Include = "Account,Password,PasswordAgain,NickName")] RegisterBackViewModel RegisterInput)
+        public ActionResult Logout()
         {
-            if (ModelState.IsValid)
-            {
-                if (RegisterInput.Password != RegisterInput.PasswordAgain) 
-                {
-                    ModelState.AddModelError("Password", "帳號不同，請再次確認！");
-                    return View();
-                }
-
-                var User = db.Member.Any(x => x.Account == RegisterInput.Account);
-                if (User == false)  // 帳號未曾註冊過
-                {
-                    string userPasswordInput = RegisterInput.Password;
-                    byte[] saltArray = Encrypt.CreateSalt();
-                    byte[] passwordArray = Encrypt.HashPassword(userPasswordInput, saltArray);
-                    string saltString = Convert.ToBase64String(saltArray);
-                    string passwordString = Convert.ToBase64String(passwordArray);
-
-                    var register = new Member
-                    {
-                        Account = RegisterInput.Account,
-                        Password = passwordString,
-                        Salt = saltString,
-                        Guid = Guid.NewGuid(),
-                        NickName = RegisterInput.NickName
-                    };
-                    db.Member.Add(register);
-                    db.SaveChanges();
-
-                    return RedirectToAction("Login");
-                }
-                else 
-                {
-                    ModelState.AddModelError("Account", "帳號已存在，請再次確認！");
-                    return View();
-                }
-            }
-            return View();
+            FormsAuthentication.SignOut();
+            Session.Clear();
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
-        // GET: BackStage/Home/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Member member = db.Member.Find(id);
-            if (member == null)
-            {
-                return HttpNotFound();
-            }
-            return View(member);
-        }
+        //[AllowAnonymous] 
+        //public ActionResult Register()
+        //{
+        //    return View();
+        //}
 
-        // GET: BackStage/Home/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: BackStage/Home/Create
-        // 若要避免過量張貼攻擊，請啟用您要繫結的特定屬性。
-        // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Account,Password,Salt,NickName,Guid,Permission,CreateTime,UpdateTime")] Member member)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Member.Add(member);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+        //[AllowAnonymous]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Register([Bind(Include = "Account,Password,PasswordAgain,NickName")] RegisterBackViewModel RegisterInput)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (RegisterInput.Password != RegisterInput.PasswordAgain) 
+        //        {
+        //            ModelState.AddModelError("Password", "帳號不同，請再次確認！");
+        //            return View();
+        //        }
 
-            return View(member);
-        }
+        //        var User = db.Member.Any(x => x.Account == RegisterInput.Account);
+        //        if (User == false)  // 帳號未曾註冊過
+        //        {
+        //            string userPasswordInput = RegisterInput.Password;
+        //            byte[] saltArray = Encrypt.CreateSalt();
+        //            byte[] passwordArray = Encrypt.HashPassword(userPasswordInput, saltArray);
+        //            string saltString = Convert.ToBase64String(saltArray);
+        //            string passwordString = Convert.ToBase64String(passwordArray);
 
-        // GET: BackStage/Home/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Member member = db.Member.Find(id);
-            if (member == null)
-            {
-                return HttpNotFound();
-            }
-            return View(member);
-        }
+        //            var register = new Member
+        //            {
+        //                Account = RegisterInput.Account,
+        //                Password = passwordString,
+        //                Salt = saltString,
+        //                Guid = Guid.NewGuid(),
+        //                NickName = RegisterInput.NickName
+        //            };
+        //            db.Member.Add(register);
+        //            db.SaveChanges();
 
-        // POST: BackStage/Home/Edit/5
-        // 若要避免過量張貼攻擊，請啟用您要繫結的特定屬性。
-        // 如需詳細資料，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Account,Password,Salt,NickName,Guid,Permission,CreateTime,UpdateTime")] Member member)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(member).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(member);
-        }
+        //            return RedirectToAction("Login");
+        //        }
+        //        else 
+        //        {
+        //            ModelState.AddModelError("Account", "帳號已存在，請再次確認！");
+        //            return View();
+        //        }
+        //    }
+        //    ModelState.AddModelError("", "註冊失敗，請再次確認！");
+        //    return View();
+        //}
 
-        // GET: BackStage/Home/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Member member = db.Member.Find(id);
-            if (member == null)
-            {
-                return HttpNotFound();
-            }
-            return View(member);
-        }
-
-        // POST: BackStage/Home/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Member member = db.Member.Find(id);
-            db.Member.Remove(member);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
         protected override void Dispose(bool disposing)
         {
