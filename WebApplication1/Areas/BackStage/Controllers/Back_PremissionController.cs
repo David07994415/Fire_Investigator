@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Areas.BackStage.Filter;
@@ -41,14 +42,11 @@ namespace WebApplication1.Areas.BackStage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? id, string Permission)
+        public ActionResult Edit(int id, string Permission)
         {
-            if (!id.HasValue)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
+                var user = User.Identity.Name;
+                var userId = db.Member.FirstOrDefault(x => x.Account == user).Id;
+
                 var member = db.Member.Find(id);
                 if (member == null)
                 {
@@ -57,10 +55,13 @@ namespace WebApplication1.Areas.BackStage.Controllers
                 else
                 {
                     member.Permission= Permission;
+                    member.UpdateTime = DateTime.Now;
+                    
+                    TempData["UpdateCompleted"] = true; 
+
                     db.SaveChanges();
                 }
                 return RedirectToAction("Edit", "Back_Premission", new { id=id});
-            }
         }
 
 
