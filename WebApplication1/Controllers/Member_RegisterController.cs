@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(FrontMemberRegister RegisterInput)
+        public ActionResult Index(FrontMemberRegister RegisterInput)
         {
             if (ModelState.IsValid)
             {
@@ -56,19 +56,29 @@ namespace WebApplication1.Controllers
                         Password = passwordString,
                         Salt = saltString,
                         Guid = Guid.NewGuid(),
-                        NickName = RegisterInput.NickName
+                        NickName = RegisterInput.NickName,
+                        IsApproved = false,
+                        IdCat = IdentityCategory.FrontOnly,
+                        UpdateTime = DateTime.Now,
+                        CreateTime = DateTime.Now,
                     };
                     db.Member.Add(register);
                     db.SaveChanges();
+                    var registerId = register.Id;
+
+                    var UserUpdate = db.Member.Find(registerId);
+                    UserUpdate.UpdateUser = registerId;
+                    UserUpdate.CreateUser= registerId;
 
                     return RedirectToAction("Index", "Member_Login");
                 }
-                else
+                else // 帳號註冊過了
                 {
                     ModelState.AddModelError("Account", "帳號已存在，請再次確認！");
                     return View();
                 }
             }
+            ModelState.AddModelError("", "請填入必要選項！");
             return View();
         }
 

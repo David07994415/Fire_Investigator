@@ -16,7 +16,13 @@
             @Html.DisplayNameFor(model => model.NickName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Permission)
+            @Html.DisplayNameFor(model => model.IdCat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsApproved)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdateUser)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.UpdateTime)
@@ -34,7 +40,13 @@
                 @Html.DisplayFor(modelItem => item.NickName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Permission)
+                @Html.DisplayFor(modelItem => item.IdCat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsApproved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateUser)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UpdateTime)

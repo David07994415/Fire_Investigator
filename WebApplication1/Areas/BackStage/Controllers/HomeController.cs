@@ -85,7 +85,10 @@ namespace WebApplication1.Areas.BackStage.Controllers
         {
             if (ModelState.IsValid)
             {
-                var account = db.Member.Where(x => x.Account == LoginInput.Account)?.FirstOrDefault();
+                var account = db.Member.Where(x => x.Account == LoginInput.Account)?
+                                        .Where(x=>x.IdCat== IdentityCategory.Both || x.IdCat == IdentityCategory.BackOnly)
+                                        .Where(x=>x.IsApproved==true).FirstOrDefault();
+
                 if (account != null)
                 {
                     string userPasswordInput = LoginInput.Password;
@@ -104,7 +107,7 @@ namespace WebApplication1.Areas.BackStage.Controllers
                         return View();
                     }
                 }
-                ModelState.AddModelError("", "登入失敗，請重新登入");
+                ModelState.AddModelError("", "登入失敗，請重新登入或確認帳號是否已經開通");
                 return View();
             }
             ModelState.AddModelError("", "登入失敗，請重新登入");

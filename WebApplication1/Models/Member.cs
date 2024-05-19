@@ -69,9 +69,14 @@ namespace WebApplication1.Models
 
     public enum IdentityCategory
     {
-        Both=0,
-        FrontOnly=1,
-        BackOnly=2
+        [Display(Name = "Both Sides")]
+        Both =0,
+
+        [Display(Name = "Front End Only")]
+        FrontOnly =1,
+
+        [Display(Name = "Back End Only")]
+        BackOnly =2
     }
     
 }

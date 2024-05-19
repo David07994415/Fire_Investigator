@@ -5,14 +5,6 @@
     Layout = "~/Views/Shared/_LayoutPage.cshtml";
 }
 
-@*<h2>Index</h2>
-
-    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-
-        <h2 class="page-title">會員登入</h2>
-        <hr class="botmargin-min">*@
-<!-- 內容開始 -->
-
 
 @using (Html.BeginForm())
 {
@@ -20,10 +12,14 @@
 
 <div class="form-horizontal">
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
     <h3 class="title-normal">請輸入您的帳號及密碼</h3>
 
+    <div class="form-group">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
     <div class="form-group">
         @Html.Label("帳　號：", htmlAttributes: new { @class = "col-sm-2 control-label" })
@@ -40,7 +36,7 @@
     <div class="form-group">
         @Html.Label("密　碼：", htmlAttributes: new { @class = "col-sm-2 control-label" })
         <div class="col-sm-8">
-            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { placeholder = "請輸入帳號", @class = "form-control",@type = "password" } })
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { placeholder = "請輸入帳號", @class = "form-control", @type = "password" } })
             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
         </div>
         <div class="col-sm-2">
@@ -63,6 +59,4 @@
 </div>
 }
 
-    <!-- Content row 1 end -->
-    <!-- 內容結束 -->
 
